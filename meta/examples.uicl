@@ -1,0 +1,1769 @@
+uicl "1.0"
+
+example #example_1 "01-hello"
+  path: "examples/01-hello.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    app "你好"
+      ui.text "我的第一个 UICL 应用"
+  ```
+
+example #example_2 "02-counter"
+  path: "examples/02-counter.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    app #counter "计数器"
+      state #count
+        value: 0
+      ui.text
+        value: $count
+      ui.button #increase "加一"
+        on click
+          set
+            target: @count
+            value: = $count + 1
+  ```
+
+example #example_3 "03-device-notes"
+  path: "examples/03-device-notes.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    app #notes_app "随手记"
+      collection #notes
+        storage: device
+        operations:
+          - read
+          - create
+        field "content"
+          type: text
+          min: 1
+      form #editor "新增便签"
+        create: @notes
+      list #entries
+        source: @notes
+        empty_text: "尚无便签。"
+  ```
+
+example #example_4 "04-design-system"
+  path: "examples/04-design-system.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    design #brand "通用阅读设计系统"
+      mode: system
+      tokens:
+        color:
+          brand: "#315BEA"
+          surface: "#FFFFFF"
+          text: "#172033"
+        spacing:
+          normal: 16
+        radius:
+          card: 12
+      locales:
+        - "zh-CN"
+        - en
+      breakpoints:
+        - name: wide
+          min_width: 840
+          columns: 2
+      theme "dark"
+        tokens:
+          color:
+            surface: "#111827"
+            text: "#F9FAFB"
+      style #panel "panel"
+        values:
+          padding: 16
+          radius: 12
+      a11y
+        target: "wcag-2.2-aa"
+        reduce_motion: respect_system
+        keyboard: true
+    
+    app #design_demo "设计预览"
+      design: @brand
+      ui.card
+        style: @panel
+        ui.heading "产品概览"
+        ui.text "目标声明需要通过实际检查才能成为达标证据。"
+  ```
+
+example #example_5 "05-component"
+  path: "examples/05-component.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    component #metric "指标卡"
+      props:
+        title: text
+        value: int
+      events: {}
+      ui.card
+        ui.heading
+          value: $props.title
+        ui.text
+          value: $props.value
+    
+    app #dashboard "仪表板"
+      page #home "首页"
+        route: "/"
+        component.use
+          component: @metric
+          props:
+            title: "今日任务"
+            value: 8
+  ```
+
+example #example_6 "06-mobile-targets"
+  path: "examples/06-mobile-targets.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    target #uni
+      adapter: "mobile.uniapp_x"
+      framework: uniapp_x
+      platforms:
+        - android
+        - ios
+      toolchain: locked
+    
+    target #rn
+      adapter: "mobile.react_native"
+      framework: react_native
+      platforms:
+        - android
+        - ios
+      toolchain: locked
+    
+    app #mobile_notes "跨端便签"
+      targets:
+        - @uni
+        - @rn
+      collection #notes
+        storage: device
+        field "content"
+          type: text
+          min: 1
+      form #editor "新增"
+        create: @notes
+      list #entries
+        source: @notes
+  ```
+
+example #example_7 "07-mobile-camera"
+  path: "examples/07-mobile-camera.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.mobile@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    target #uni
+      adapter: "mobile.uniapp_x"
+      platforms: [android, ios]
+      toolchain: locked
+    
+    target #rn
+      adapter: "mobile.react_native"
+      platforms: [android, ios]
+      toolchain: locked
+    
+    mobile.permission #camera_permission "camera"
+      usage: foreground
+      request: user_gesture
+      on_denied: explain_and_stop
+      on_unavailable: show_unavailable
+    
+    mobile.capability #camera
+      interface: "device.camera.capture@1"
+      permission: @camera_permission
+      bindings:
+        - target: @uni
+          implementation: "host.uts.camera"
+        - target: @rn
+          implementation: "host.rn.camera"
+      input: {}
+      output: "Artifact<image>"
+      lifecycle: cancel_on_unmount
+      errors: [CANCELLED, PERMISSION_DENIED, UNAVAILABLE]
+    
+    app #camera_app "拍照示例"
+      targets: [@uni, @rn]
+      ui.button #capture "拍照"
+        on click
+          invoke #photo
+            capability: @camera
+            args: {}
+  ```
+
+example #example_8 "08-windows-native"
+  path: "examples/08-windows-native.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.native@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    target #windows
+      adapter: "desktop.wpf"
+      platform: windows
+      framework: wpf
+      language: csharp
+      architectures: [x64, arm64]
+      toolchain: locked
+      build_host: windows
+      ui_privilege: as_invoker
+    
+    file #native_source "原生接口待实现边界"
+      media: "text/x-csharp"
+      source: @"../assets/ServiceActions.cs"
+    
+    native.operation #set_start_mode
+      interface: "windows.service.set_start_mode@1"
+      implementation: @native_source
+      entry: "ServiceActions.SetStartMode"
+      input:
+        service: text
+        mode: text
+      output: unit
+      effects: [os.service.configure]
+      policy:
+        allowed_objects: [DemoMaintenanceService]
+        execution: elevated_broker
+        approval: each_invocation
+      recovery:
+        capture_before: true
+        restore: compare_and_set
+      threading: worker
+      errors: [DENIED, NOT_FOUND, CONFLICT, INDETERMINATE]
+    
+    app #maintenance "桌面维护工具"
+      target: @windows
+      ui.text "只允许修改由本示例管理的演示服务。"
+      ui.button #manual "设为手动启动"
+        on click
+          invoke
+            capability: @set_start_mode
+            args:
+              service: "DemoMaintenanceService"
+              mode: manual
+  ```
+
+example #example_9 "09-postgresql"
+  path: "examples/09-postgresql.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0", "uicl.postgresql@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    pg.database #business
+      name: "business"
+      engine_major: 18
+      schema: public
+    
+      pg.table #customers
+        name: "customers"
+        columns:
+          - name: id
+            type: uuid
+            nullable: false
+          - name: email
+            type: text
+            nullable: false
+        primary_key: [id]
+        unique:
+          - columns: [email]
+    
+      pg.table #orders
+        name: "orders"
+        columns:
+          - name: id
+            type: uuid
+            nullable: false
+          - name: customer_id
+            type: uuid
+            nullable: false
+          - name: amount
+            type: "numeric(12,2)"
+            nullable: false
+          - name: status
+            type: text
+            nullable: false
+            default: "pending"
+        primary_key: [id]
+        foreign_keys:
+          - columns: [customer_id]
+            target: @customers
+            target_columns: [id]
+            on_delete: restrict
+        checks:
+          - name: amount_nonnegative
+            sql: "amount >= 0"
+        indexes:
+          - name: pending_orders_by_customer
+            columns: [customer_id]
+            method: btree
+            where_sql: "status = 'pending'"
+            build: concurrently
+    
+    pg.migration #index_migration
+      database: @business
+      from_version: "1"
+      to_version: "2"
+      atomic: split_allowed
+      destructive: deny
+      lock_timeout_ms: 5000
+      statement_timeout_ms: 120000
+      steps:
+        - operation: create_index
+          target: @orders
+          name: "pending_orders_by_customer"
+          build: concurrently
+  ```
+
+example #example_10 "10-cloudflare"
+  path: "examples/10-cloudflare.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.cloudflare@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    parameter #account_id "Cloudflare 账号"
+      type: text
+    
+    secret #cloudflare_token "资源管理 Token"
+      source: runtime_prompt
+      scope: [cloudflare_adapter]
+    
+    cloudflare.provider #cf
+      account_id: $account_id
+      token: @cloudflare_token
+      adapter_binding: "cloudflare_adapter"
+    
+    file #worker_bundle "Worker 源码"
+      source: @"../assets/worker.mjs"
+      media: "text/javascript"
+    
+    cloudflare.r2_bucket #uploads
+      provider: @cf
+      name: "uicl-example-uploads"
+      on_remove: retain
+    
+    cloudflare.d1_database #db
+      provider: @cf
+      name: "uicl-example-db"
+      on_remove: retain
+    
+    cloudflare.worker #api
+      provider: @cf
+      name: "uicl-example-api"
+      entry: @worker_bundle
+      compatibility_date: "2026-09-01"
+      workers_dev: true
+      bindings:
+        DB: @db
+        FILES: @uploads
+    
+    deployment #production "Cloudflare 示例"
+      resources: [@uploads, @db, @api]
+      state:
+        binding: "infra-state:cloudflare-example"
+        locking: required
+        encryption: required
+      existing_resources: require_import
+      approval: required
+  ```
+
+example #example_11 "11-ecs-ssh"
+  path: "examples/11-ecs-ssh.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.host@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    parameter #server_ip "ECS IP"
+      type: text
+    parameter #ssh_user "SSH 用户"
+      type: text
+    parameter #host_fingerprint "可信主机指纹"
+      type: text
+    
+    secret #ssh_password "SSH 密码"
+      source: runtime_prompt
+      scope: [ssh_adapter]
+    
+    ops.ssh_host #ecs
+      address: $server_ip
+      user: $ssh_user
+      port: 22
+      authentication:
+        method: password
+        credential: @ssh_password
+      host_key:
+        policy: pinned
+        fingerprint: $host_fingerprint
+      expected:
+        os: linux
+        architecture: x86_64
+        service_manager: systemd
+      privilege:
+        method: sudo
+        mode: noninteractive
+    
+    // 此处是外部产物定位声明，不随包提供可执行文件。
+    artifact #release
+      media: "application/gzip"
+      source: @"artifact://host-supplied/example-api"
+    
+    ops.service_release #api
+      host: @ecs
+      artifact: @release
+      service_name: "example-api"
+      run_as: "example-api"
+      directory: "/opt/example-api"
+      executable: "bin/api"
+      retain_releases: 3
+      health:
+        url: "http://127.0.0.1:8080/health"
+        expected_status: 200
+        timeout_ms: 30000
+      recovery:
+        on_unhealthy: previous_binary
+        on_disconnect: reconcile
+        database: no_automatic_rollback
+      approval: required
+    
+    deployment #production "已有 Linux ECS"
+      resources: [@ecs, @api]
+      state:
+        binding: "ops-state:ecs-example"
+        locking: required
+      existing_resources: require_import
+      approval: required
+  ```
+
+example #example_12 "12-aigc-image"
+  path: "examples/12-aigc-image.uicl"
+  profiles: ["uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    image #cover "咖啡海报"
+      prompt: "一杯冰咖啡，干净背景，顶部为精确标题留白。"
+      size: [1200, 1600]
+      prefer:
+        lighting: "柔和侧光"
+        palette:
+          - "奶油白"
+          - "咖啡棕"
+      scene
+        background: "浅色无纹理背景"
+        subject "冰咖啡"
+          count: 1
+          region: [0.25, 0.25, 0.5, 0.6]
+      overlay
+        overlay.text "夏日限定"
+          region: [0.1, 0.05, 0.8, 0.12]
+          font: "licensed-font:headline"
+          font_px: 72
+          align: center
+      require
+        check "media.dimensions"
+          equals: [1200, 1600]
+        check "media.mime"
+          equals: "image/png"
+      review
+        criterion "主要杯子只有一个，标题不遮挡主体。"
+    
+    generate #render
+      from: @cover
+      phase: build
+      output: "image/png"
+      binding: "image_generation"
+      limits:
+        timeout_ms: 90000
+        attempts: 1
+        max_cost_minor: 100
+        currency: USD
+      approval: required
+  ```
+
+example #example_13 "13-aigc-text"
+  path: "examples/13-aigc-text.uicl"
+  profiles: ["uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    file #facts "产品事实"
+      source: @"../assets/product-facts.md"
+      media: "text/markdown"
+    
+    text #article "产品介绍文章"
+      prompt: "根据提供的资料写产品介绍，未提供的性能数据不要补写。"
+      language: "zh-CN"
+      sources: [@facts]
+      prefer:
+        tone: "平实"
+        sections:
+          - "适用场景"
+          - "使用过程"
+          - "已知限制"
+      require
+        check "text.max_unicode_scalars"
+          max: 2000
+      review
+        criterion "事实陈述能够追溯到输入资料。"
+    
+    generate #draft
+      from: @article
+      phase: build
+      output: "text/markdown"
+      binding: "text_generation"
+      limits:
+        timeout_ms: 60000
+        attempts: 1
+      approval: required
+  ```
+
+example #example_14 "14-aigc-video"
+  path: "examples/14-aigc-video.uicl"
+  profiles: ["uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    video #promo "八秒产品短片"
+      size: [1080, 1920]
+      fps: {num: 24, den: 1}
+      frames: 192
+      track #main
+        kind: video
+        overlap: forbid
+        shot #opening
+          start_frame: 0
+          frames: 72
+          prompt: "产品由暗到亮，缓慢推进。"
+        shot #detail
+          start_frame: 72
+          frames: 120
+          prompt: "展示细节，结尾停稳。"
+      track #captions
+        kind: subtitles
+        overlap: forbid
+        cue "看见每个细节"
+          start_frame: 72
+          frames: 96
+      require
+        check "video.frames"
+          equals: 192
+      review
+        criterion "两个镜头中的产品身份保持一致。"
+    
+    generate #video_build
+      from: @promo
+      phase: build
+      output: "video/mp4"
+      binding: "video_generation"
+      limits:
+        timeout_ms: 300000
+        attempts: 1
+      approval: required
+  ```
+
+example #example_15 "15-aigc-deck"
+  path: "examples/15-aigc-deck.uicl"
+  profiles: ["uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    deck #proposal "产品介绍"
+      ratio: "16:9"
+      editable: true
+      slide #intro "产品定位"
+        layout: title_and_body
+        slide.text "减少整理内容所需的重复操作。"
+        notes: "这里不承诺未验证的效率提升数值。"
+      slide #features "核心能力"
+        layout: three_columns
+        slide.text "创建内容"
+        slide.text "检查规则"
+        slide.text "保留来源"
+      require
+        check "deck.slide_count"
+          equals: 2
+        check "deck.text_editable"
+          equals: true
+    
+    generate #deck_build
+      from: @proposal
+      phase: build
+      output: "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+      binding: "deck_export"
+      limits:
+        timeout_ms: 120000
+        attempts: 1
+      approval: required
+  ```
+
+example #example_16 "16-aigc-audio"
+  path: "examples/16-aigc-audio.uicl"
+  profiles: ["uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    audio #voiceover "产品旁白"
+      text: "先描述目标，再检查约束，最后审阅产物。"
+      voice_binding: "licensed-voice:narrator"
+      sample_rate: 48000
+      channels: 1
+      require
+        check "audio.sample_rate"
+          equals: 48000
+      review
+        criterion "语句清楚，没有未经允许模仿具体个人的声音。"
+    
+    generate #audio_build
+      from: @voiceover
+      phase: build
+      output: "audio/wav"
+      binding: "audio_generation"
+      limits:
+        timeout_ms: 120000
+        attempts: 1
+      approval: required
+  ```
+
+example #example_17 "17-design-canvas"
+  path: "examples/17-design-canvas.uicl"
+  profiles: ["uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    design.canvas #screen "登录页设计稿"
+      size: [390, 844]
+      editable: true
+      design.layer #background "背景"
+        kind: shape
+        bounds: [0, 0, 390, 844]
+        fill: "#FFFFFF"
+      design.layer #title "标题"
+        kind: text
+        bounds: [24, 80, 342, 56]
+        text: "欢迎回来"
+        fill: "#172033"
+      design.layer #button "按钮区域"
+        kind: shape
+        bounds: [24, 300, 342, 48]
+        fill: "#315BEA"
+  ```
+
+example #example_18 "18-document-spec"
+  path: "examples/18-document-spec.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.document@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    document.spec #guide "使用指南"
+      language: "zh-CN"
+      output: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      editable: true
+      doc.section #purpose "用途"
+        format: markdown
+        body: |
+          本工具用于**整理资料**与检查约束。
+          不会在打开文档时自动调用付费服务。
+      doc.section #steps "使用步骤"
+        body: |
+          1. 准备输入。
+          2. 审阅计划。
+          3. 授权执行。
+      require
+        check "document.text_editable"
+          equals: true
+  ```
+
+example #example_19 "19-agent"
+  path: "examples/19-agent.uicl"
+  profiles: ["uicl.agent@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    type #Answer "检索回答"
+      field "text"
+        type: text
+        min: 1
+      field "needs_review"
+        type: bool
+    
+    tool #search "知识库检索"
+      adapter: mcp
+      binding: "knowledge.search"
+      input:
+        query: text
+      output: "list<text>"
+      effects: [data.read]
+      permissions: [knowledge.read]
+    
+    agent #researcher "资料助理"
+      input:
+        question: text
+      output: @Answer
+      model_binding: "assistant_model"
+      tools: [@search]
+      instructions: |
+        先检索资料，再根据资料回答。
+        无法证实时明确说明，并设置 needs_review。
+      memory:
+        scope: session
+        retention_days: 1
+        secrets: deny
+      limits:
+        timeout_ms: 60000
+        attempts: 1
+        max_steps: 8
+        max_tool_calls: 4
+      policy:
+        tool_scope: declared_only
+        external_writes: deny
+        delegation_depth: 0
+        data_egress: approved_only
+      on_exhausted: human_review
+    
+    agent.run #answer
+      agent: @researcher
+      args:
+        question: "资料中描述了哪些明确限制？"
+      approval: required
+  ```
+
+example #example_20 "20-hybrid-classification"
+  path: "examples/20-hybrid-classification.uicl"
+  profiles: ["uicl.agent@1.0.0", "uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.hybrid@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    type #Category "工单分类"
+      enum: [refund, delivery, product, other]
+    
+    capability #classifier
+      interface: "ticket.classify@1"
+      binding: "classification_model"
+      input:
+        text: text
+      output: @Category
+      effects: [model.infer, network]
+      permissions: [model.invoke]
+      limits:
+        timeout_ms: 30000
+        attempts: 1
+      errors: [REFUSED, INVALID_OUTPUT, TIMEOUT]
+    
+    action #manual "人工审核"
+      returns: text
+      allow: = $actor.authenticated
+      transaction: none
+      idempotency: none
+      run
+        return
+          value: "manual_review"
+    
+    action #refund "退款审核入口"
+      returns: text
+      allow: = $actor.authenticated
+      transaction: none
+      idempotency: none
+      run
+        return
+          value: "refund_review"
+    
+    action #delivery "物流帮助"
+      returns: text
+      allow: = $actor.authenticated
+      transaction: none
+      idempotency: none
+      run
+        return
+          value: "delivery_help"
+    
+    action #product "产品帮助"
+      returns: text
+      allow: = $actor.authenticated
+      transaction: none
+      idempotency: none
+      run
+        return
+          value: "product_help"
+    
+    action #route_ticket "分类后进入固定路径"
+      input "text"
+        type: text
+        min: 1
+      returns: text
+      allow: = $actor.authenticated
+      transaction: none
+      idempotency: none
+      run
+        infer #classification
+          using: @classifier
+          args:
+            text: $input.text
+          on_error: @manual
+        dispatch
+          value: $classification
+          routes:
+            refund: @refund
+            delivery: @delivery
+            product: @product
+            other: @manual
+          on_unknown: @manual
+  ```
+
+example #example_21 "21-dynamic-image"
+  path: "examples/21-dynamic-image.uicl"
+  profiles: ["uicl.agent@1.0.0", "uicl.aigc@1.0.0", "uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.hybrid@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    file #fallback
+      source: @"../assets/fallback.svg"
+      media: "image/svg+xml"
+    
+    generator #hero_generator
+      input:
+        topic: text
+      output: "Artifact<image>"
+      binding: "image_generation"
+      instructions: "根据输入主题生成横幅；不生成脚本或网络请求。"
+      limits:
+        timeout_ms: 90000
+        attempts: 1
+      constraints:
+        size: [1200, 630]
+        media: "image/png"
+    
+    app #reader "主题阅读"
+      state #topic
+        value: "咖啡与清晨"
+      ui.slot #hero
+        generator: @hero_generator
+        args:
+          topic: $topic
+        trigger: explicit
+        fallback: @fallback
+        response_policy: latest_wins
+      ui.button #regenerate "生成新封面"
+        on click
+          refresh
+            target: @hero
+  ```
+
+example #example_22 "22-dynamic-ui-wasm"
+  path: "examples/22-dynamic-ui-wasm.uicl"
+  profiles: ["uicl.agent@1.0.0", "uicl.aigc@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.hybrid@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    file #fallback
+      media: "text/plain"
+      body: "这里显示静态说明。"
+    
+    generator #panel_generator
+      input:
+        topic: text
+      output: "Artifact<ui.tree>"
+      binding: "ui_tree_model"
+      instructions: "用受限组件解释主题，并展示两个示例。"
+      limits:
+        timeout_ms: 60000
+        attempts: 1
+      constraints:
+        components: [ui.column, ui.heading, ui.text, ui.card]
+        max_nodes: 40
+        max_depth: 6
+        actions: []
+    
+    artifact #verified_component
+      media: "application/wasm"
+      source: @"artifact://host-supplied/verified-example-component"
+    
+    wasm.sandbox #mini_app
+      artifact: @verified_component
+      interface: "example.ui_bridge@1"
+      imports: [ui.render, ui.events]
+      network: deny
+      filesystem: deny
+      memory_mib: 64
+      fuel: 5000000
+      timeout_ms: 3000
+      max_nesting: 1
+      approval: required
+  ```
+
+example #example_23 "23-files-and-code"
+  path: "examples/23-files-and-code.uicl"
+  profiles: ["uicl.core@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ````uicl
+    uicl "1.0"
+    
+    file #json_config "JSON 原文"
+      media: "application/json"
+      body: ```json
+        {"enabled": true, "literal": "$not_a_binding"}
+      ```
+    
+    file #python_code "Python 原文"
+      media: "text/x-python"
+      body: ```python
+        def add(a: int, b: int) -> int:
+            return a + b
+      ```
+    
+    file #go_code "Go 原文"
+      media: "text/x-go"
+      body: ```go
+        package main
+        func Add(a, b int) int { return a + b }
+      ```
+    
+    file #typescript_code "TypeScript 原文"
+      media: "text/typescript"
+      body: ```typescript
+        export const add = (a: number, b: number): number => a + b;
+      ```
+    
+    file #php_code "PHP 原文"
+      media: "text/x-php"
+      body: ```php
+        <?php
+        function add(int $a, int $b): int { return $a + $b; }
+      ```
+    
+    file #existing_binary "任意二进制引用"
+      source: @"file:///C:/Example/native.dll"
+      media: "application/octet-stream"
+    
+    projection #binary_view
+      source: @existing_binary
+      adapter: "host.binary-inspector"
+      fidelity: semantic
+      editable: false
+      known_loss:
+        - "仅展示适配器能够验证的节区与依赖，不恢复原始源码。"
+  ````
+
+example #example_24 "24-hexl"
+  path: "examples/24-hexl.uicl"
+  profiles: ["uicl.core@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    bytes #sample
+      media: "application/octet-stream"
+      transport: hexl1
+      body: |
+        !hexl 1 hex 12
+        0000000000000000:5549434c0a00010203040506
+        000000000000000c:0708090a0b0c0d0e0f
+        !end 21 2 sha256:70a3d6f3a08d8b10863f4973059c7ddc2bb12d3946be079d24fcd9c90f4b9a7f
+  ```
+
+example #example_25 "25-dataset"
+  path: "examples/25-dataset.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.dataset@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    file #input_spec
+      source: @"../assets/product-facts.md"
+      media: "text/markdown"
+    
+    artifact #output_text
+      source: @"../assets/example-answer.md"
+      media: "text/markdown"
+    
+    dataset #samples "文本样例集"
+      purpose: "格式加载器测试，不是自动获得训练许可。"
+      split_policy: source_group
+      permission: unverified
+      loader: "native-modality-with-uicl-contract"
+      sample #one
+        source_group: "product-example-1"
+        input: @input_spec
+        output: @output_text
+        license: "unverified"
+        consent: "unverified"
+        sensitivity: "public-demo"
+  ```
+
+example #example_26 "26-workflow"
+  path: "examples/26-workflow.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    model #Request "审批申请"
+      field "requester"
+        type: id
+        immutable: true
+      field "status"
+        type: text
+        enum: [pending, approved, rejected]
+        default: pending
+      policy
+        read: = $actor.authenticated and $row.requester == $actor.id
+        create: = $actor.authenticated and $new.requester == $actor.id
+        update: = $actor.authenticated and "reviewer" in $actor.roles
+        delete: false
+    
+    workflow #approval
+      model: @Request
+      state_field: status
+      initial: pending
+      terminal: [approved, rejected]
+      transition #approve "approve"
+        from: pending
+        to: approved
+        allow: = $actor.authenticated and "reviewer" in $actor.roles and $old.requester != $actor.id
+      transition #reject "reject"
+        from: pending
+        to: rejected
+        allow: = $actor.authenticated and "reviewer" in $actor.roles and $old.requester != $actor.id
+  ```
+
+example #example_27 "27-http-service"
+  path: "examples/27-http-service.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    action #greet "问候"
+      input "name"
+        type: text
+        normalize: trim
+        min: 1
+        max: 40
+      returns: text
+      allow: true
+      transaction: none
+      idempotency: none
+      run
+        return
+          value: = "你好，" + $input.name
+    
+    endpoint #hello
+      method: POST
+      path: "/api/hello"
+      action: @greet
+      auth: public
+      body: json
+      rate_limit:
+        requests: 30
+        window_seconds: 60
+        key: ip
+  ```
+
+example #example_28 "28-fullstack-entry"
+  path: "examples/28-fullstack-entry.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.host@1.0.0", "uicl.lifecycle@1.0.0", "uicl.meta@1.0.0", "uicl.postgresql@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    use #demo
+      source: @"./fullstack/project.uicl"
+    
+    // 该声明只引用项目入口，不会自动构建或部署。
+    file #project_source "全流程示例入口"
+      source: @"./fullstack/project.uicl"
+      media: "text/plain"
+  ```
+
+example #example_29 "backend"
+  path: "examples/fullstack/backend.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #backend_module
+      exports: [Task, my_tasks, add_task, complete_task, create_api, list_api, complete_api, service, go_target]
+    
+    target #go_target
+      adapter: "backend.go"
+      language: go
+      platform: linux
+      architecture: x86_64
+      toolchain: locked
+    
+    model #Task "待办"
+      field "title"
+        type: text
+        min: 1
+        max: 120
+      field "done"
+        type: bool
+        default: false
+      field "owner"
+        type: id
+        immutable: true
+      policy
+        read: = $actor.authenticated and $row.owner == $actor.id
+        create: = $actor.authenticated and $new.owner == $actor.id
+        update: = $actor.authenticated and $old.owner == $actor.id and $new.owner == $old.owner
+        delete: false
+    
+    query #my_tasks
+      model: @Task
+      allow: = $actor.authenticated
+      where: = $row.done == false
+      select: [id, title, done, version, created_at]
+      order: ["created_at desc", "id desc"]
+      page_size: 50
+    
+    action #add_task "新增待办"
+      input "title"
+        type: text
+        normalize: trim
+        min: 1
+        max: 120
+      returns: @Task
+      allow: = $actor.authenticated
+      transaction: required
+      idempotency: required
+      run
+        create #created
+          model: @Task
+          values:
+            title: $input.title
+            owner: $actor.id
+        return
+          value: $created
+    
+    action #complete_task "完成待办"
+      input "id"
+        type: id
+      input "version"
+        type: int
+        min: 1
+      returns: @Task
+      allow: = $actor.authenticated
+      transaction: required
+      idempotency: required
+      run
+        update #updated
+          model: @Task
+          id: $input.id
+          expect_version: $input.version
+          values:
+            done: true
+        return
+          value: $updated
+    
+    endpoint #create_api
+      method: POST
+      path: "/api/tasks"
+      action: @add_task
+      auth: authenticated
+      body: json
+    
+    endpoint #list_api
+      method: GET
+      path: "/api/tasks"
+      query: @my_tasks
+      auth: authenticated
+    
+    endpoint #complete_api
+      method: POST
+      path: "/api/tasks/complete"
+      action: @complete_task
+      auth: authenticated
+      body: json
+    
+    service #service "待办服务"
+      target: @go_target
+      models: [@Task]
+      endpoints: [@create_api, @list_api, @complete_api]
+      identity_binding: "host.verified_identity"
+      health_path: "/health"
+  ```
+
+example #example_30 "build"
+  path: "examples/fullstack/build.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #build_module
+      exports: [web_build, release_build]
+    use #ui
+      source: @"./ui.uicl"
+    use #backend
+      source: @"./backend.uicl"
+    
+    build #web_build
+      source: @ui::app
+      target: @ui::web_target
+      artifact_type: "application/zip"
+      toolchain_binding: "web_toolchain"
+    
+    build #release_build
+      source: @backend::service
+      target: @backend::go_target
+      artifact_type: "application/gzip"
+      embed: [@web_build.output]
+      toolchain_binding: "go_api_with_static_bundle"
+      entrypoint: "bin/api"
+      static_mount: "/"
+  ```
+
+example #example_31 "database"
+  path: "examples/fullstack/database.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0", "uicl.postgresql@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #database_module
+      exports: [database, tasks_table, mapping]
+    
+    use #backend
+      source: @"./backend.uicl"
+    
+    secret #connection "数据库连接凭据"
+      source: credential_store
+      binding: "demo.database"
+      scope: [postgres_adapter]
+    
+    pg.database #database
+      name: "uicl_demo"
+      engine_major: 18
+      schema: public
+      connection: @connection
+    
+      pg.table #tasks_table
+        name: "tasks"
+        columns:
+          - name: id
+            type: uuid
+            nullable: false
+          - name: title
+            type: text
+            nullable: false
+          - name: done
+            type: boolean
+            nullable: false
+            default: false
+          - name: owner
+            type: text
+            nullable: false
+          - name: version
+            type: bigint
+            nullable: false
+            default: 1
+          - name: created_at
+            type: timestamptz
+            nullable: false
+          - name: updated_at
+            type: timestamptz
+            nullable: false
+        primary_key: [id]
+        checks:
+          - name: title_length
+            sql: "char_length(title) BETWEEN 1 AND 120"
+          - name: positive_version
+            sql: "version >= 1"
+        indexes:
+          - name: tasks_owner_created
+            columns: [owner, created_at, id]
+            method: btree
+            build: normal
+    
+      pg.mapping #mapping
+        model: @backend::Task
+        table: @tasks_table
+        id_conversion: uuid_string
+        fields:
+          id: id
+          title: title
+          done: done
+          owner: owner
+          version: version
+          created_at: created_at
+          updated_at: updated_at
+  ```
+
+example #example_32 "deploy"
+  path: "examples/fullstack/deploy.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.host@1.0.0", "uicl.lifecycle@1.0.0", "uicl.meta@1.0.0", "uicl.postgresql@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #deploy_module
+      exports: [production]
+    use #build
+      source: @"./build.uicl"
+    use #database
+      source: @"./database.uicl"
+    use #tests
+      source: @"./tests.uicl"
+    
+    parameter #host_ip
+      type: text
+    parameter #host_user
+      type: text
+    parameter #host_fingerprint
+      type: text
+    secret #login
+      source: runtime_prompt
+      scope: [ssh_adapter]
+    secret #database_url
+      source: credential_store
+      binding: "demo.database-url"
+      scope: [remote_service_environment]
+    
+    ops.ssh_host #host
+      address: $host_ip
+      user: $host_user
+      authentication:
+        method: password
+        credential: @login
+      host_key:
+        policy: pinned
+        fingerprint: $host_fingerprint
+      expected:
+        os: linux
+        architecture: x86_64
+        service_manager: systemd
+      privilege:
+        method: sudo
+        mode: noninteractive
+    
+    ops.service_release #release
+      depends_on: [@database::database]
+      host: @host
+      artifact: @build::release_build.output
+      service_name: "uicl-demo"
+      run_as: "uicl-demo"
+      directory: "/opt/uicl-demo"
+      executable: "bin/api"
+      environment:
+        DATABASE_URL: @database_url
+        HTTP_ADDR: "127.0.0.1:8080"
+      retain_releases: 3
+      health:
+        url: "http://127.0.0.1:8080/health"
+        expected_status: 200
+        timeout_ms: 30000
+      recovery:
+        on_unhealthy: previous_binary
+        on_disconnect: reconcile
+        database: no_automatic_rollback
+      approval: required
+    
+    deployment #production "演示服务器"
+      resources: [@database::database, @host, @release]
+      state:
+        binding: "deployment-state:uicl-demo"
+        locking: required
+        encryption: required
+      existing_resources: require_import
+      approval: required
+      gates: [@tests::create_visible, @tests::no_cross_user_update]
+    
+    observe #telemetry
+      target: @release
+      signals: [logs, metrics, traces]
+      payloads: deny
+      retention_days: 14
+      binding: "approved_observability_sink"
+  ```
+
+example #example_33 "design"
+  path: "examples/fullstack/design.uicl"
+  profiles: ["uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #design_module
+      exports: [brand]
+    
+    design #brand "待办设计系统"
+      mode: system
+      tokens:
+        color:
+          brand: "#315BEA"
+          text: "#172033"
+          surface: "#FFFFFF"
+        spacing:
+          base: 16
+      locales: ["zh-CN", en]
+      a11y
+        target: "wcag-2.2-aa"
+        reduce_motion: respect_system
+        keyboard: true
+  ```
+
+example #example_34 "project"
+  path: "examples/fullstack/project.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.host@1.0.0", "uicl.lifecycle@1.0.0", "uicl.meta@1.0.0", "uicl.postgresql@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #root
+      exports: [demo]
+    use #req
+      source: @"./requirements.uicl"
+    use #design
+      source: @"./design.uicl"
+    use #backend
+      source: @"./backend.uicl"
+    use #database
+      source: @"./database.uicl"
+    use #ui
+      source: @"./ui.uicl"
+    use #tests
+      source: @"./tests.uicl"
+    use #build
+      source: @"./build.uicl"
+    use #deploy
+      source: @"./deploy.uicl"
+    
+    project #demo "全流程个人待办"
+      requirements: [@req::create_note, @req::private_notes]
+      design: @design::brand
+      app: @ui::app
+      service: @backend::service
+      database: @database::database
+      tests: [@tests::create_visible, @tests::no_cross_user_update]
+      builds: [@build::web_build, @build::release_build]
+      deployment: @deploy::production
+  ```
+
+example #example_35 "requirements"
+  path: "examples/fullstack/requirements.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.lifecycle@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #requirements
+      exports: [create_note, private_notes]
+    
+    requirement #create_note "创建待办"
+      statement: "已登录用户可以创建长度为 1 到 120 个 Unicode 标量的待办标题。"
+      acceptance:
+        - "输入先 trim，再校验长度。"
+        - "保存成功后列表显示新待办。"
+        - "失败不清除输入。"
+    
+    requirement #private_notes "数据隔离"
+      statement: "每个用户只能读取和完成自己的待办；不可由请求体指定所有者。"
+      acceptance:
+        - "未经认证的创建失败。"
+        - "另一用户无法读取或修改已有记录。"
+        - "过期版本更新返回冲突。"
+  ```
+
+example #example_36 "tests"
+  path: "examples/fullstack/tests.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.deployment@1.0.0", "uicl.design@1.0.0", "uicl.lifecycle@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #tests_module
+      exports: [create_visible, no_cross_user_update]
+    use #req
+      source: @"./requirements.uicl"
+    use #ui
+      source: @"./ui.uicl"
+    use #backend
+      source: @"./backend.uicl"
+    
+    test #create_visible "创建后看到新待办"
+      kind: e2e
+      verifies: [@req::create_note]
+      isolation: ephemeral
+      given
+        test.reset
+          resource: @backend::Task
+        test.actor
+          id: "user-a"
+          roles: []
+        test.open
+          page: @ui::home
+      when
+        test.fill
+          target: @ui::editor
+          field: title
+          value: "买咖啡"
+        test.submit
+          target: @ui::editor
+      then
+        expect
+          target: @ui::entries
+          contains: "买咖啡"
+          count: 1
+    
+    test #no_cross_user_update "用户 B 不能修改用户 A 的待办"
+      kind: security
+      verifies: [@req::private_notes]
+      isolation: ephemeral
+      given
+        test.reset
+          resource: @backend::Task
+        test.fixture
+          model: @backend::Task
+          rows:
+            - id: "00000000-0000-4000-8000-000000000001"
+              title: "属于 A"
+              done: false
+              owner: "user-a"
+              version: 1
+              created_at: "2026-09-20T00:00:00Z"
+              updated_at: "2026-09-20T00:00:00Z"
+        test.actor
+          id: "user-b"
+          roles: []
+      when
+        test.execute #attempt
+          action: @backend::complete_task
+          args:
+            id: "00000000-0000-4000-8000-000000000001"
+            version: 1
+      then
+        expect
+          target: @attempt.result
+          error: "NOT_FOUND_OR_FORBIDDEN"
+  ```
+
+example #example_37 "ui"
+  path: "examples/fullstack/ui.uicl"
+  profiles: ["uicl.application@1.0.0", "uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    module #ui_module
+      exports: [app, home, editor, entries, tasks, web_target]
+    
+    use #backend
+      source: @"./backend.uicl"
+    use #design
+      source: @"./design.uicl"
+    
+    target #web_target
+      adapter: "web.react"
+      platform: web
+      framework: react
+      language: typescript
+      toolchain: locked
+    
+    app #app "个人待办"
+      target: @web_target
+      design: @design::brand
+      identity: host
+      page #home "待办清单"
+        route: "/"
+        access: authenticated
+        resource #tasks
+          query: @backend::my_tasks
+          args: {}
+        ui.heading "我的待办"
+        form #editor "新增待办"
+          create: @backend::add_task
+          fields: [title]
+          on_success_refresh: [@tasks]
+        list #entries
+          source: @tasks
+          empty_text: "还没有待办。"
+          ui.row
+            ui.text
+              value: $item.title
+            ui.button #complete "完成"
+              on click
+                call #completed
+                  action: @backend::complete_task
+                  args:
+                    id: $item.id
+                    version: $item.version
+                refresh
+                  target: @tasks
+  ```
+
+example #example_38 "article"
+  path: "examples/hosted/article.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.document@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ````uicl
+    <!-- uicl:markdown 1.0 -->
+    
+    # 产品说明
+    
+    这是一份 **原生 Markdown** 文档。
+    
+    <!-- uicl
+    doc.block #summary
+      target: next
+      intent: "保留正文，按需检查与编辑。"
+    -->
+    
+    产品支持整理资料，不会在打开文件时自动部署服务。
+    
+    ## 使用步骤
+    
+    - 创建文档。
+    - 审阅计划。
+    
+    下面的代码围栏只是示例，不激活其中的注解。
+    
+    ```html
+    <!-- uicl
+    doc.block #inactive
+      target: next
+    -->
+    ```
+  ````
+
+example #example_39 "data-block"
+  path: "examples/hosted/data-block.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.document@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    <!doctype html>
+    <html lang="zh-CN"><head><meta charset="utf-8"><!-- uicl:html 1.0 --><title>Data block</title></head>
+    <body><p id="summary">一份可正常阅读的 HTML 文件。</p>
+    <script type="text/plain" data-uicl>
+    uicl "1.0"
+    doc.block #contract
+      target: {html_id: "summary"}
+      intent: "这是声明，不是 JavaScript。"
+    </script></body></html>
+  ```
+
+example #example_40 "page"
+  path: "examples/hosted/page.uicl"
+  profiles: ["uicl.backend@1.0.0", "uicl.core@1.0.0", "uicl.design@1.0.0", "uicl.document@1.0.0", "uicl.meta@1.0.0", "uicl.resource@1.0.0", "uicl.testing@1.0.0", "uicl.ui@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    <!doctype html>
+    <html lang="zh-CN">
+    <head>
+      <meta charset="utf-8">
+      <!-- uicl:html 1.0 -->
+      <title>UICL 原生 HTML</title>
+    </head>
+    <body>
+      <h1>产品说明</h1>
+      <p id="summary">保留 <strong>HTML</strong> 格式。</p>
+      <!-- uicl
+    doc.block #summary_contract
+      target: {html_id: "summary"}
+      intent: "不自动改写正文。"
+      -->
+    </body>
+    </html>
+  ```
+
+example #example_41 "measurement-example"
+  path: "examples/profile-authoring/measurement-example.uicl"
+  profiles: ["example.measurement@1.0.0", "uicl.core@1.0.0", "uicl.meta@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    lab.sample #voltage "电压"
+      value: 12.6
+      unit: "V"
+  ```
+
+example #example_42 "measurement-profile"
+  path: "examples/profile-authoring/measurement-profile.uicl"
+  profiles: ["uicl.meta@1.0.0"]
+  readiness: "contract-example; tools-checked; real-runtime-not-executed"
+  body: ```uicl
+    uicl "1.0"
+    
+    profile #measurement_profile "测量数据领域"
+      id: "example.measurement"
+      version: "1.0.0"
+      core: "1.0"
+      status: "example-extension"
+      summary: |
+        演示第三方 Profile 的标准写法；只描述测量记录，不读取真实设备。
+      requires:
+        - "uicl.core@1.0.0"
+      origin: "1.0-profile-authoring-example"
+      implementation: "shape-only-example"
+      namespaces:
+        - "lab"
+      schema #sample_schema "lab.sample"
+        summary: "带单位的测量记录。"
+        primary: "label"
+        identity: "required"
+        children: []
+        unknown_properties: "reject"
+        effects: []
+        category: "data"
+        property "label"
+          type: "text"
+          description: "测量名称。"
+          required: true
+          expression: false
+        property "value"
+          type: "decimal"
+          description: "精确十进制测量值。"
+          required: true
+          expression: false
+        property "unit"
+          type: "text"
+          description: "单位。"
+          required: true
+          expression: false
+          enum:
+            - "V"
+            - "A"
+            - "W"
+        port "value"
+          type: "decimal"
+          phase: "compile"
+      rule #measurement_rule "MEASUREMENT_UNIT"
+        level: "MUST"
+        statement: |
+          单位是测量语义的一部分；读取此记录不读取设备。需要转换时必须使用明确且版本化的转换器。
+        verification: "domain"
+        origin: "1.0-profile-authoring-example"
+  ```

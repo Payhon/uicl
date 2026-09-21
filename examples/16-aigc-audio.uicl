@@ -1,0 +1,22 @@
+uicl "1.0"
+
+audio #voiceover "产品旁白"
+  text: "先描述目标，再检查约束，最后审阅产物。"
+  voice_binding: "licensed-voice:narrator"
+  sample_rate: 48000
+  channels: 1
+  require
+    check "audio.sample_rate"
+      equals: 48000
+  review
+    criterion "语句清楚，没有未经允许模仿具体个人的声音。"
+
+generate #audio_build
+  from: @voiceover
+  phase: build
+  output: "audio/wav"
+  binding: "audio_generation"
+  limits:
+    timeout_ms: 120000
+    attempts: 1
+  approval: required

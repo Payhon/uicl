@@ -1,0 +1,26 @@
+[
+  {
+    "path": "provenance/Semaquil-Design-Candidate.zh-CN.md",
+    "sha256": "beb216a2875c0a9c1204806acba64a04d2f151caeb97a984b40fc65b47d9d414",
+    "role": "historical-input-not-current-normative-source",
+    "licensing": "original-rights-preserved"
+  },
+  {
+    "path": "provenance/AML-Native-Documents-Proposal.aml",
+    "sha256": "29eb159a9b1c1c2d931d9772b7ea66e2c5d372dfd4aff8334e52b1dc0e8e4b35",
+    "role": "historical-input-not-current-normative-source",
+    "licensing": "original-rights-preserved"
+  },
+  {
+    "path": "provenance/AML-1.0-README.zh-CN.md",
+    "sha256": "d40fe4f342e56a2d1c8a818e8e6506ea2c33f2d13ecea57c06d7a97e2e437212",
+    "role": "historical-input-not-current-normative-source",
+    "licensing": "original-rights-preserved"
+  },
+  {
+    "path": "provenance/AppMark-Reference.md",
+    "sha256": "1a234096ea49aaad4f9a0fd3f2919d47fa9ec9d86a79aafeccd734aa9aed50e5",
+    "role": "historical-input-not-current-normative-source",
+    "licensing": "original-rights-preserved"
+  }
+]

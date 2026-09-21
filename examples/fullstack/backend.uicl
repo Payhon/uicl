@@ -1,0 +1,102 @@
+uicl "1.0"
+
+module #backend_module
+  exports: [Task, my_tasks, add_task, complete_task, create_api, list_api, complete_api, service, go_target]
+
+target #go_target
+  adapter: "backend.go"
+  language: go
+  platform: linux
+  architecture: x86_64
+  toolchain: locked
+
+model #Task "待办"
+  field "title"
+    type: text
+    min: 1
+    max: 120
+  field "done"
+    type: bool
+    default: false
+  field "owner"
+    type: id
+    immutable: true
+  policy
+    read: = $actor.authenticated and $row.owner == $actor.id
+    create: = $actor.authenticated and $new.owner == $actor.id
+    update: = $actor.authenticated and $old.owner == $actor.id and $new.owner == $old.owner
+    delete: false
+
+query #my_tasks
+  model: @Task
+  allow: = $actor.authenticated
+  where: = $row.done == false
+  select: [id, title, done, version, created_at]
+  order: ["created_at desc", "id desc"]
+  page_size: 50
+
+action #add_task "新增待办"
+  input "title"
+    type: text
+    normalize: trim
+    min: 1
+    max: 120
+  returns: @Task
+  allow: = $actor.authenticated
+  transaction: required
+  idempotency: required
+  run
+    create #created
+      model: @Task
+      values:
+        title: $input.title
+        owner: $actor.id
+    return
+      value: $created
+
+action #complete_task "完成待办"
+  input "id"
+    type: id
+  input "version"
+    type: int
+    min: 1
+  returns: @Task
+  allow: = $actor.authenticated
+  transaction: required
+  idempotency: required
+  run
+    update #updated
+      model: @Task
+      id: $input.id
+      expect_version: $input.version
+      values:
+        done: true
+    return
+      value: $updated
+
+endpoint #create_api
+  method: POST
+  path: "/api/tasks"
+  action: @add_task
+  auth: authenticated
+  body: json
+
+endpoint #list_api
+  method: GET
+  path: "/api/tasks"
+  query: @my_tasks
+  auth: authenticated
+
+endpoint #complete_api
+  method: POST
+  path: "/api/tasks/complete"
+  action: @complete_task
+  auth: authenticated
+  body: json
+
+service #service "待办服务"
+  target: @go_target
+  models: [@Task]
+  endpoints: [@create_api, @list_api, @complete_api]
+  identity_binding: "host.verified_identity"
+  health_path: "/health"

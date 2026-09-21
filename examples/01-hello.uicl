@@ -1,0 +1,4 @@
+uicl "1.0"
+
+app "你好"
+  ui.text "我的第一个 UICL 应用"

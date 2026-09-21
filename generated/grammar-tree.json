@@ -1,0 +1,1219 @@
+{
+  "start": "Document",
+  "rules": {
+    "Document": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Header"
+        },
+        {
+          "kind": "repeat",
+          "min": 1,
+          "max": null,
+          "item": {
+            "kind": "ref",
+            "name": "Node"
+          }
+        },
+        {
+          "kind": "token",
+          "name": "EOF"
+        }
+      ]
+    },
+    "Header": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "uicl"
+        },
+        {
+          "kind": "token",
+          "name": "STRING"
+        },
+        {
+          "kind": "token",
+          "name": "NL"
+        }
+      ]
+    },
+    "Node": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "QName"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "literal",
+                "text": "#"
+              },
+              {
+                "kind": "token",
+                "name": "IDENT"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "ref",
+            "name": "Primary"
+          }
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "ref",
+            "name": "InlineProps"
+          }
+        },
+        {
+          "kind": "token",
+          "name": "NL"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "token",
+                "name": "INDENT"
+              },
+              {
+                "kind": "repeat",
+                "min": 1,
+                "max": null,
+                "item": {
+                  "kind": "ref",
+                  "name": "NodeEntry"
+                }
+              },
+              {
+                "kind": "token",
+                "name": "DEDENT"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "NodeEntry": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Property"
+        },
+        {
+          "kind": "ref",
+          "name": "Node"
+        }
+      ]
+    },
+    "Primary": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "token",
+          "name": "STRING"
+        },
+        {
+          "kind": "ref",
+          "name": "QName"
+        }
+      ]
+    },
+    "Key": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "token",
+          "name": "STRING"
+        },
+        {
+          "kind": "ref",
+          "name": "QName"
+        }
+      ]
+    },
+    "QName": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "token",
+          "name": "IDENT"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "literal",
+                "text": "."
+              },
+              {
+                "kind": "token",
+                "name": "IDENT"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "InlineProps": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "("
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "Pair"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "Pair"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": ")"
+        }
+      ]
+    },
+    "Pair": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Key"
+        },
+        {
+          "kind": "literal",
+          "text": ":"
+        },
+        {
+          "kind": "ref",
+          "name": "InlineValue"
+        }
+      ]
+    },
+    "Property": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Key"
+        },
+        {
+          "kind": "literal",
+          "text": ":"
+        },
+        {
+          "kind": "choice",
+          "items": [
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "ref",
+                  "name": "InlineValue"
+                },
+                {
+                  "kind": "token",
+                  "name": "NL"
+                }
+              ]
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "token",
+                  "name": "RAW"
+                },
+                {
+                  "kind": "token",
+                  "name": "NL"
+                }
+              ]
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "token",
+                  "name": "NL"
+                },
+                {
+                  "kind": "token",
+                  "name": "INDENT"
+                },
+                {
+                  "kind": "ref",
+                  "name": "BlockValue"
+                },
+                {
+                  "kind": "token",
+                  "name": "DEDENT"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "InlineValue": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "="
+            },
+            {
+              "kind": "ref",
+              "name": "Expression"
+            }
+          ]
+        },
+        {
+          "kind": "ref",
+          "name": "Reference"
+        },
+        {
+          "kind": "ref",
+          "name": "Binding"
+        },
+        {
+          "kind": "ref",
+          "name": "Literal"
+        },
+        {
+          "kind": "ref",
+          "name": "InlineList"
+        },
+        {
+          "kind": "ref",
+          "name": "InlineRecord"
+        },
+        {
+          "kind": "ref",
+          "name": "QName"
+        }
+      ]
+    },
+    "Literal": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "token",
+          "name": "STRING"
+        },
+        {
+          "kind": "ref",
+          "name": "SignedNumber"
+        },
+        {
+          "kind": "literal",
+          "text": "true"
+        },
+        {
+          "kind": "literal",
+          "text": "false"
+        },
+        {
+          "kind": "literal",
+          "text": "null"
+        }
+      ]
+    },
+    "SignedNumber": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "literal",
+            "text": "-"
+          }
+        },
+        {
+          "kind": "token",
+          "name": "NUMBER"
+        }
+      ]
+    },
+    "InlineList": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "["
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "InlineValue"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "InlineValue"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": "]"
+        }
+      ]
+    },
+    "InlineRecord": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "{"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "Pair"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "Pair"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": "}"
+        }
+      ]
+    },
+    "BlockValue": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "BlockList"
+        },
+        {
+          "kind": "ref",
+          "name": "BlockRecord"
+        }
+      ]
+    },
+    "BlockRecord": {
+      "kind": "repeat",
+      "min": 1,
+      "max": null,
+      "item": {
+        "kind": "ref",
+        "name": "Property"
+      }
+    },
+    "BlockList": {
+      "kind": "repeat",
+      "min": 1,
+      "max": null,
+      "item": {
+        "kind": "ref",
+        "name": "ListItem"
+      }
+    },
+    "ListItem": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "token",
+          "name": "ITEM_BEGIN"
+        },
+        {
+          "kind": "choice",
+          "items": [
+            {
+              "kind": "ref",
+              "name": "BlockRecord"
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "ref",
+                  "name": "InlineValue"
+                },
+                {
+                  "kind": "token",
+                  "name": "NL"
+                }
+              ]
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "token",
+                  "name": "RAW"
+                },
+                {
+                  "kind": "token",
+                  "name": "NL"
+                }
+              ]
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "token",
+                  "name": "NL"
+                },
+                {
+                  "kind": "token",
+                  "name": "INDENT"
+                },
+                {
+                  "kind": "ref",
+                  "name": "BlockValue"
+                },
+                {
+                  "kind": "token",
+                  "name": "DEDENT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "token",
+          "name": "ITEM_END"
+        }
+      ]
+    },
+    "Reference": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "@"
+        },
+        {
+          "kind": "choice",
+          "items": [
+            {
+              "kind": "token",
+              "name": "STRING"
+            },
+            {
+              "kind": "seq",
+              "items": [
+                {
+                  "kind": "token",
+                  "name": "IDENT"
+                },
+                {
+                  "kind": "repeat",
+                  "min": 0,
+                  "max": 1,
+                  "item": {
+                    "kind": "seq",
+                    "items": [
+                      {
+                        "kind": "literal",
+                        "text": "::"
+                      },
+                      {
+                        "kind": "token",
+                        "name": "IDENT"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "repeat",
+                  "min": 0,
+                  "max": null,
+                  "item": {
+                    "kind": "seq",
+                    "items": [
+                      {
+                        "kind": "literal",
+                        "text": "."
+                      },
+                      {
+                        "kind": "token",
+                        "name": "IDENT"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Binding": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "$"
+        },
+        {
+          "kind": "token",
+          "name": "IDENT"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "ref",
+            "name": "Accessor"
+          }
+        }
+      ]
+    },
+    "Accessor": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "choice",
+              "items": [
+                {
+                  "kind": "literal",
+                  "text": "."
+                },
+                {
+                  "kind": "literal",
+                  "text": "?."
+                }
+              ]
+            },
+            {
+              "kind": "token",
+              "name": "IDENT"
+            }
+          ]
+        },
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "["
+            },
+            {
+              "kind": "ref",
+              "name": "Expression"
+            },
+            {
+              "kind": "literal",
+              "text": "]"
+            }
+          ]
+        }
+      ]
+    },
+    "Expression": {
+      "kind": "ref",
+      "name": "Coalesce"
+    },
+    "Coalesce": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Or"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "literal",
+                "text": "??"
+              },
+              {
+                "kind": "ref",
+                "name": "Coalesce"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Or": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "And"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "literal",
+                "text": "or"
+              },
+              {
+                "kind": "ref",
+                "name": "And"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "And": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Not"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "literal",
+                "text": "and"
+              },
+              {
+                "kind": "ref",
+                "name": "Not"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Not": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "not"
+            },
+            {
+              "kind": "ref",
+              "name": "Not"
+            }
+          ]
+        },
+        {
+          "kind": "ref",
+          "name": "Compare"
+        }
+      ]
+    },
+    "Compare": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Add"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "choice",
+                "items": [
+                  {
+                    "kind": "literal",
+                    "text": "=="
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "!="
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "<"
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "<="
+                  },
+                  {
+                    "kind": "literal",
+                    "text": ">"
+                  },
+                  {
+                    "kind": "literal",
+                    "text": ">="
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "in"
+                  }
+                ]
+              },
+              {
+                "kind": "ref",
+                "name": "Add"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Add": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Multiply"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "choice",
+                "items": [
+                  {
+                    "kind": "literal",
+                    "text": "+"
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "-"
+                  }
+                ]
+              },
+              {
+                "kind": "ref",
+                "name": "Multiply"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Multiply": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Unary"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "choice",
+                "items": [
+                  {
+                    "kind": "literal",
+                    "text": "*"
+                  },
+                  {
+                    "kind": "literal",
+                    "text": "%"
+                  }
+                ]
+              },
+              {
+                "kind": "ref",
+                "name": "Unary"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Unary": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "-"
+            },
+            {
+              "kind": "ref",
+              "name": "Unary"
+            }
+          ]
+        },
+        {
+          "kind": "ref",
+          "name": "Postfix"
+        }
+      ]
+    },
+    "Postfix": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Atom"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": null,
+          "item": {
+            "kind": "ref",
+            "name": "Accessor"
+          }
+        }
+      ]
+    },
+    "Atom": {
+      "kind": "choice",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Call"
+        },
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "$"
+            },
+            {
+              "kind": "token",
+              "name": "IDENT"
+            }
+          ]
+        },
+        {
+          "kind": "ref",
+          "name": "Reference"
+        },
+        {
+          "kind": "token",
+          "name": "STRING"
+        },
+        {
+          "kind": "token",
+          "name": "NUMBER"
+        },
+        {
+          "kind": "literal",
+          "text": "true"
+        },
+        {
+          "kind": "literal",
+          "text": "false"
+        },
+        {
+          "kind": "literal",
+          "text": "null"
+        },
+        {
+          "kind": "ref",
+          "name": "ExprList"
+        },
+        {
+          "kind": "ref",
+          "name": "ExprRecord"
+        },
+        {
+          "kind": "seq",
+          "items": [
+            {
+              "kind": "literal",
+              "text": "("
+            },
+            {
+              "kind": "ref",
+              "name": "Expression"
+            },
+            {
+              "kind": "literal",
+              "text": ")"
+            }
+          ]
+        }
+      ]
+    },
+    "Call": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "QName"
+        },
+        {
+          "kind": "literal",
+          "text": "("
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "Expression"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "Expression"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": ")"
+        }
+      ]
+    },
+    "ExprList": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "["
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "Expression"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "Expression"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": "]"
+        }
+      ]
+    },
+    "ExprRecord": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "literal",
+          "text": "{"
+        },
+        {
+          "kind": "repeat",
+          "min": 0,
+          "max": 1,
+          "item": {
+            "kind": "seq",
+            "items": [
+              {
+                "kind": "ref",
+                "name": "ExprPair"
+              },
+              {
+                "kind": "repeat",
+                "min": 0,
+                "max": null,
+                "item": {
+                  "kind": "seq",
+                  "items": [
+                    {
+                      "kind": "literal",
+                      "text": ","
+                    },
+                    {
+                      "kind": "ref",
+                      "name": "ExprPair"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "text": "}"
+        }
+      ]
+    },
+    "ExprPair": {
+      "kind": "seq",
+      "items": [
+        {
+          "kind": "ref",
+          "name": "Key"
+        },
+        {
+          "kind": "literal",
+          "text": ":"
+        },
+        {
+          "kind": "ref",
+          "name": "Expression"
+        }
+      ]
+    }
+  }
+}

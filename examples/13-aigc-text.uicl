@@ -1,0 +1,31 @@
+uicl "1.0"
+
+file #facts "产品事实"
+  source: @"../assets/product-facts.md"
+  media: "text/markdown"
+
+text #article "产品介绍文章"
+  prompt: "根据提供的资料写产品介绍，未提供的性能数据不要补写。"
+  language: "zh-CN"
+  sources: [@facts]
+  prefer:
+    tone: "平实"
+    sections:
+      - "适用场景"
+      - "使用过程"
+      - "已知限制"
+  require
+    check "text.max_unicode_scalars"
+      max: 2000
+  review
+    criterion "事实陈述能够追溯到输入资料。"
+
+generate #draft
+  from: @article
+  phase: build
+  output: "text/markdown"
+  binding: "text_generation"
+  limits:
+    timeout_ms: 60000
+    attempts: 1
+  approval: required

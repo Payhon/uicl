@@ -1,0 +1,21 @@
+uicl "1.0"
+
+component #metric "指标卡"
+  props:
+    title: text
+    value: int
+  events: {}
+  ui.card
+    ui.heading
+      value: $props.title
+    ui.text
+      value: $props.value
+
+app #dashboard "仪表板"
+  page #home "首页"
+    route: "/"
+    component.use
+      component: @metric
+      props:
+        title: "今日任务"
+        value: 8

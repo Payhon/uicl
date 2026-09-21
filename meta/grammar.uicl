@@ -1,0 +1,549 @@
+uicl "1.0"
+
+grammar #core_grammar "UICL Structural Grammar"
+  start: @g_Document
+  input: "LAYOUT-1 产生的 token 流；布局侧条件属于规范的一部分。"
+  status: consolidated_draft
+  g.rule #g_Document "Document"
+    g.seq
+      g.ref
+        target: @g_Header
+      g.repeat
+        min: 1
+        max: null
+        g.ref
+          target: @g_Node
+      g.token
+        name: "EOF"
+  g.rule #g_Header "Header"
+    g.seq
+      g.literal
+        text: "uicl"
+      g.token
+        name: "STRING"
+      g.token
+        name: "NL"
+  g.rule #g_Node "Node"
+    g.seq
+      g.ref
+        target: @g_QName
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.literal
+            text: "#"
+          g.token
+            name: "IDENT"
+      g.repeat
+        min: 0
+        max: 1
+        g.ref
+          target: @g_Primary
+      g.repeat
+        min: 0
+        max: 1
+        g.ref
+          target: @g_InlineProps
+      g.token
+        name: "NL"
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.token
+            name: "INDENT"
+          g.repeat
+            min: 1
+            max: null
+            g.ref
+              target: @g_NodeEntry
+          g.token
+            name: "DEDENT"
+  g.rule #g_NodeEntry "NodeEntry"
+    g.choice
+      g.ref
+        target: @g_Property
+      g.ref
+        target: @g_Node
+  g.rule #g_Primary "Primary"
+    g.choice
+      g.token
+        name: "STRING"
+      g.ref
+        target: @g_QName
+  g.rule #g_Key "Key"
+    g.choice
+      g.token
+        name: "STRING"
+      g.ref
+        target: @g_QName
+  g.rule #g_QName "QName"
+    g.seq
+      g.token
+        name: "IDENT"
+      g.repeat
+        min: 0
+        max: null
+        g.seq
+          g.literal
+            text: "."
+          g.token
+            name: "IDENT"
+  g.rule #g_InlineProps "InlineProps"
+    g.seq
+      g.literal
+        text: "("
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_Pair
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_Pair
+      g.literal
+        text: ")"
+  g.rule #g_Pair "Pair"
+    g.seq
+      g.ref
+        target: @g_Key
+      g.literal
+        text: ":"
+      g.ref
+        target: @g_InlineValue
+  g.rule #g_Property "Property"
+    g.seq
+      g.ref
+        target: @g_Key
+      g.literal
+        text: ":"
+      g.choice
+        g.seq
+          g.ref
+            target: @g_InlineValue
+          g.token
+            name: "NL"
+        g.seq
+          g.token
+            name: "RAW"
+          g.token
+            name: "NL"
+        g.seq
+          g.token
+            name: "NL"
+          g.token
+            name: "INDENT"
+          g.ref
+            target: @g_BlockValue
+          g.token
+            name: "DEDENT"
+  g.rule #g_InlineValue "InlineValue"
+    g.choice
+      g.seq
+        g.literal
+          text: "="
+        g.ref
+          target: @g_Expression
+      g.ref
+        target: @g_Reference
+      g.ref
+        target: @g_Binding
+      g.ref
+        target: @g_Literal
+      g.ref
+        target: @g_InlineList
+      g.ref
+        target: @g_InlineRecord
+      g.ref
+        target: @g_QName
+  g.rule #g_Literal "Literal"
+    g.choice
+      g.token
+        name: "STRING"
+      g.ref
+        target: @g_SignedNumber
+      g.literal
+        text: "true"
+      g.literal
+        text: "false"
+      g.literal
+        text: "null"
+  g.rule #g_SignedNumber "SignedNumber"
+    g.seq
+      g.repeat
+        min: 0
+        max: 1
+        g.literal
+          text: "-"
+      g.token
+        name: "NUMBER"
+  g.rule #g_InlineList "InlineList"
+    g.seq
+      g.literal
+        text: "["
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_InlineValue
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_InlineValue
+      g.literal
+        text: "]"
+  g.rule #g_InlineRecord "InlineRecord"
+    g.seq
+      g.literal
+        text: "{"
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_Pair
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_Pair
+      g.literal
+        text: "}"
+  g.rule #g_BlockValue "BlockValue"
+    g.choice
+      g.ref
+        target: @g_BlockList
+      g.ref
+        target: @g_BlockRecord
+  g.rule #g_BlockRecord "BlockRecord"
+    g.repeat
+      min: 1
+      max: null
+      g.ref
+        target: @g_Property
+  g.rule #g_BlockList "BlockList"
+    g.repeat
+      min: 1
+      max: null
+      g.ref
+        target: @g_ListItem
+  g.rule #g_ListItem "ListItem"
+    g.seq
+      g.token
+        name: "ITEM_BEGIN"
+      g.choice
+        g.ref
+          target: @g_BlockRecord
+        g.seq
+          g.ref
+            target: @g_InlineValue
+          g.token
+            name: "NL"
+        g.seq
+          g.token
+            name: "RAW"
+          g.token
+            name: "NL"
+        g.seq
+          g.token
+            name: "NL"
+          g.token
+            name: "INDENT"
+          g.ref
+            target: @g_BlockValue
+          g.token
+            name: "DEDENT"
+      g.token
+        name: "ITEM_END"
+  g.rule #g_Reference "Reference"
+    g.seq
+      g.literal
+        text: "@"
+      g.choice
+        g.token
+          name: "STRING"
+        g.seq
+          g.token
+            name: "IDENT"
+          g.repeat
+            min: 0
+            max: 1
+            g.seq
+              g.literal
+                text: "::"
+              g.token
+                name: "IDENT"
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: "."
+              g.token
+                name: "IDENT"
+  g.rule #g_Binding "Binding"
+    g.seq
+      g.literal
+        text: "$"
+      g.token
+        name: "IDENT"
+      g.repeat
+        min: 0
+        max: null
+        g.ref
+          target: @g_Accessor
+  g.rule #g_Accessor "Accessor"
+    g.choice
+      g.seq
+        g.choice
+          g.literal
+            text: "."
+          g.literal
+            text: "?."
+        g.token
+          name: "IDENT"
+      g.seq
+        g.literal
+          text: "["
+        g.ref
+          target: @g_Expression
+        g.literal
+          text: "]"
+  g.rule #g_Expression "Expression"
+    g.ref
+      target: @g_Coalesce
+  g.rule #g_Coalesce "Coalesce"
+    g.seq
+      g.ref
+        target: @g_Or
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.literal
+            text: "??"
+          g.ref
+            target: @g_Coalesce
+  g.rule #g_Or "Or"
+    g.seq
+      g.ref
+        target: @g_And
+      g.repeat
+        min: 0
+        max: null
+        g.seq
+          g.literal
+            text: "or"
+          g.ref
+            target: @g_And
+  g.rule #g_And "And"
+    g.seq
+      g.ref
+        target: @g_Not
+      g.repeat
+        min: 0
+        max: null
+        g.seq
+          g.literal
+            text: "and"
+          g.ref
+            target: @g_Not
+  g.rule #g_Not "Not"
+    g.choice
+      g.seq
+        g.literal
+          text: "not"
+        g.ref
+          target: @g_Not
+      g.ref
+        target: @g_Compare
+  g.rule #g_Compare "Compare"
+    g.seq
+      g.ref
+        target: @g_Add
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.choice
+            g.literal
+              text: "=="
+            g.literal
+              text: "!="
+            g.literal
+              text: "<"
+            g.literal
+              text: "<="
+            g.literal
+              text: ">"
+            g.literal
+              text: ">="
+            g.literal
+              text: "in"
+          g.ref
+            target: @g_Add
+  g.rule #g_Add "Add"
+    g.seq
+      g.ref
+        target: @g_Multiply
+      g.repeat
+        min: 0
+        max: null
+        g.seq
+          g.choice
+            g.literal
+              text: "+"
+            g.literal
+              text: "-"
+          g.ref
+            target: @g_Multiply
+  g.rule #g_Multiply "Multiply"
+    g.seq
+      g.ref
+        target: @g_Unary
+      g.repeat
+        min: 0
+        max: null
+        g.seq
+          g.choice
+            g.literal
+              text: "*"
+            g.literal
+              text: "%"
+          g.ref
+            target: @g_Unary
+  g.rule #g_Unary "Unary"
+    g.choice
+      g.seq
+        g.literal
+          text: "-"
+        g.ref
+          target: @g_Unary
+      g.ref
+        target: @g_Postfix
+  g.rule #g_Postfix "Postfix"
+    g.seq
+      g.ref
+        target: @g_Atom
+      g.repeat
+        min: 0
+        max: null
+        g.ref
+          target: @g_Accessor
+  g.rule #g_Atom "Atom"
+    g.choice
+      g.ref
+        target: @g_Call
+      g.seq
+        g.literal
+          text: "$"
+        g.token
+          name: "IDENT"
+      g.ref
+        target: @g_Reference
+      g.token
+        name: "STRING"
+      g.token
+        name: "NUMBER"
+      g.literal
+        text: "true"
+      g.literal
+        text: "false"
+      g.literal
+        text: "null"
+      g.ref
+        target: @g_ExprList
+      g.ref
+        target: @g_ExprRecord
+      g.seq
+        g.literal
+          text: "("
+        g.ref
+          target: @g_Expression
+        g.literal
+          text: ")"
+  g.rule #g_Call "Call"
+    g.seq
+      g.ref
+        target: @g_QName
+      g.literal
+        text: "("
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_Expression
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_Expression
+      g.literal
+        text: ")"
+  g.rule #g_ExprList "ExprList"
+    g.seq
+      g.literal
+        text: "["
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_Expression
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_Expression
+      g.literal
+        text: "]"
+  g.rule #g_ExprRecord "ExprRecord"
+    g.seq
+      g.literal
+        text: "{"
+      g.repeat
+        min: 0
+        max: 1
+        g.seq
+          g.ref
+            target: @g_ExprPair
+          g.repeat
+            min: 0
+            max: null
+            g.seq
+              g.literal
+                text: ","
+              g.ref
+                target: @g_ExprPair
+      g.literal
+        text: "}"
+  g.rule #g_ExprPair "ExprPair"
+    g.seq
+      g.ref
+        target: @g_Key
+      g.literal
+        text: ":"
+      g.ref
+        target: @g_Expression

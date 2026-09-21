@@ -1,0 +1,29 @@
+uicl "1.0"
+
+model #Request "审批申请"
+  field "requester"
+    type: id
+    immutable: true
+  field "status"
+    type: text
+    enum: [pending, approved, rejected]
+    default: pending
+  policy
+    read: = $actor.authenticated and $row.requester == $actor.id
+    create: = $actor.authenticated and $new.requester == $actor.id
+    update: = $actor.authenticated and "reviewer" in $actor.roles
+    delete: false
+
+workflow #approval
+  model: @Request
+  state_field: status
+  initial: pending
+  terminal: [approved, rejected]
+  transition #approve "approve"
+    from: pending
+    to: approved
+    allow: = $actor.authenticated and "reviewer" in $actor.roles and $old.requester != $actor.id
+  transition #reject "reject"
+    from: pending
+    to: rejected
+    allow: = $actor.authenticated and "reviewer" in $actor.roles and $old.requester != $actor.id

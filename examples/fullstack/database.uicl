@@ -1,0 +1,69 @@
+uicl "1.0"
+
+module #database_module
+  exports: [database, tasks_table, mapping]
+
+use #backend
+  source: @"./backend.uicl"
+
+secret #connection "数据库连接凭据"
+  source: credential_store
+  binding: "demo.database"
+  scope: [postgres_adapter]
+
+pg.database #database
+  name: "uicl_demo"
+  engine_major: 18
+  schema: public
+  connection: @connection
+
+  pg.table #tasks_table
+    name: "tasks"
+    columns:
+      - name: id
+        type: uuid
+        nullable: false
+      - name: title
+        type: text
+        nullable: false
+      - name: done
+        type: boolean
+        nullable: false
+        default: false
+      - name: owner
+        type: text
+        nullable: false
+      - name: version
+        type: bigint
+        nullable: false
+        default: 1
+      - name: created_at
+        type: timestamptz
+        nullable: false
+      - name: updated_at
+        type: timestamptz
+        nullable: false
+    primary_key: [id]
+    checks:
+      - name: title_length
+        sql: "char_length(title) BETWEEN 1 AND 120"
+      - name: positive_version
+        sql: "version >= 1"
+    indexes:
+      - name: tasks_owner_created
+        columns: [owner, created_at, id]
+        method: btree
+        build: normal
+
+  pg.mapping #mapping
+    model: @backend::Task
+    table: @tasks_table
+    id_conversion: uuid_string
+    fields:
+      id: id
+      title: title
+      done: done
+      owner: owner
+      version: version
+      created_at: created_at
+      updated_at: updated_at

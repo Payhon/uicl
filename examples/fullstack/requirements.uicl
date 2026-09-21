@@ -1,0 +1,18 @@
+uicl "1.0"
+
+module #requirements
+  exports: [create_note, private_notes]
+
+requirement #create_note "创建待办"
+  statement: "已登录用户可以创建长度为 1 到 120 个 Unicode 标量的待办标题。"
+  acceptance:
+    - "输入先 trim，再校验长度。"
+    - "保存成功后列表显示新待办。"
+    - "失败不清除输入。"
+
+requirement #private_notes "数据隔离"
+  statement: "每个用户只能读取和完成自己的待办；不可由请求体指定所有者。"
+  acceptance:
+    - "未经认证的创建失败。"
+    - "另一用户无法读取或修改已有记录。"
+    - "过期版本更新返回冲突。"

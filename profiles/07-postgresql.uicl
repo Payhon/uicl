@@ -1,0 +1,412 @@
+uicl "1.0"
+
+profile #profile_postgresql "PostgreSQL 关系结构与迁移"
+  id: "uicl.postgresql"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    物理关系模式独立于业务模型；不把 SQL 当 Core 表达式。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.backend@1.0.0"
+  origin: "scenario-review-and-1.0-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "pg"
+  record_schema #r_PgColumn "PgColumn"
+    summary: "物理字段。"
+    unknown_fields: "reject"
+    property "name"
+      type: "text"
+      description: "列名。"
+      required: true
+      expression: false
+    property "type"
+      type: "text"
+      description: "PostgreSQL 方言类型。"
+      required: true
+      expression: false
+    property "nullable"
+      type: "bool"
+      description: "可空。"
+      required: true
+      expression: false
+    property "default"
+      type: "value"
+      description: "SQL 字面默认值，不是 SQL 代码。"
+      required: false
+      expression: false
+    property "default_sql"
+      type: "text"
+      description: "显式 SQL 默认表达式，与 default 互斥。"
+      required: false
+      expression: false
+  record_schema #r_PgFK "PgFK"
+    summary: "外键。"
+    unknown_fields: "reject"
+    property "columns"
+      type: "list<text>"
+      description: "本表列。"
+      required: true
+      expression: false
+    property "target"
+      type: "ref"
+      description: "目标表。"
+      required: true
+      expression: false
+      targets:
+        - "pg.table"
+    property "target_columns"
+      type: "list<text>"
+      description: "目标列。"
+      required: true
+      expression: false
+    property "on_delete"
+      type: "text"
+      description: "删除策略。"
+      required: true
+      expression: false
+      enum:
+        - "restrict"
+        - "cascade"
+        - "set_null"
+        - "no_action"
+  record_schema #r_PgIndex "PgIndex"
+    summary: "索引。"
+    unknown_fields: "reject"
+    property "name"
+      type: "text"
+      description: "索引名。"
+      required: true
+      expression: false
+    property "columns"
+      type: "list<text>"
+      description: "列名。"
+      required: true
+      expression: false
+    property "method"
+      type: "text"
+      description: "访问方法。"
+      required: false
+      expression: false
+      default: "btree"
+    property "unique"
+      type: "bool"
+      description: "唯一索引。"
+      required: false
+      expression: false
+      default: false
+    property "where_sql"
+      type: "text"
+      description: "显式条件表达式。"
+      required: false
+      expression: false
+    property "build"
+      type: "text"
+      description: "构建方式。"
+      required: false
+      expression: false
+      default: "normal"
+      enum:
+        - "normal"
+        - "concurrently"
+  record_schema #r_PgCheck "PgCheck"
+    summary: "数据库约束。"
+    unknown_fields: "reject"
+    property "name"
+      type: "text"
+      description: "约束名。"
+      required: true
+      expression: false
+    property "sql"
+      type: "text"
+      description: "显式 SQL 表达式；由 PG 适配器解析。"
+      required: true
+      expression: false
+  record_schema #r_PgUnique "PgUnique"
+    summary: "唯一键。"
+    unknown_fields: "reject"
+    property "columns"
+      type: "list<text>"
+      description: "联合唯一列。"
+      required: true
+      expression: false
+  schema #s_pg_database "pg.database"
+    summary: "受管数据库定义；不包含连接密钥。"
+    primary: null
+    identity: "required"
+    children:
+      - "pg.table"
+      - "pg.role"
+      - "pg.policy"
+      - "pg.migration"
+      - "pg.mapping"
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "name"
+      type: "text"
+      description: "数据库名称。"
+      required: true
+      expression: false
+    property "engine_major"
+      type: "int"
+      description: "目标数据库主版本。"
+      required: true
+      expression: false
+    property "schema"
+      type: "text"
+      description: "默认 SQL schema。"
+      required: false
+      expression: false
+      default: "public"
+    property "connection"
+      type: "ref"
+      description: "宿主提供的凭据句柄。"
+      required: false
+      expression: false
+      targets:
+        - "secret"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  schema #s_pg_table "pg.table"
+    summary: "物理表，稳定身份与 SQL 名称分离。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "name"
+      type: "text"
+      description: "物理表名。"
+      required: true
+      expression: false
+    property "columns"
+      type: "list<record<PgColumn>>"
+      description: "列声明。"
+      required: true
+      expression: false
+    property "primary_key"
+      type: "list<text>"
+      description: "联合主键。"
+      required: true
+      expression: false
+    property "unique"
+      type: "list<record<PgUnique>>"
+      description: "唯一约束。"
+      required: false
+      expression: false
+    property "foreign_keys"
+      type: "list<record<PgFK>>"
+      description: "外键。"
+      required: false
+      expression: false
+    property "checks"
+      type: "list<record<PgCheck>>"
+      description: "检查约束。"
+      required: false
+      expression: false
+    property "indexes"
+      type: "list<record<PgIndex>>"
+      description: "索引。"
+      required: false
+      expression: false
+    property "rls"
+      type: "bool"
+      description: "启用行级安全。"
+      required: false
+      expression: false
+      default: false
+    property "force_rls"
+      type: "bool"
+      description: "要求表所有者也受相应策略约束。"
+      required: false
+      expression: false
+      default: false
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  schema #s_pg_role "pg.role"
+    summary: "数据库角色和执行权限边界。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "角色名。"
+      required: true
+      expression: false
+    property "login"
+      type: "bool"
+      description: "是否允许连接。"
+      required: true
+      expression: false
+    property "bypass_rls"
+      type: "bool"
+      description: "是否绕过 RLS，应用角色必须 false。"
+      required: true
+      expression: false
+    property "owner"
+      type: "bool"
+      description: "是否承担对象所有权。"
+      required: false
+      expression: false
+      default: false
+  schema #s_pg_policy "pg.policy"
+    summary: "物理行安全策略。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "table"
+      type: "ref"
+      description: "目标表。"
+      required: true
+      expression: false
+      targets:
+        - "pg.table"
+    property "role"
+      type: "ref"
+      description: "应用角色。"
+      required: true
+      expression: false
+      targets:
+        - "pg.role"
+    property "command"
+      type: "text"
+      description: "SQL 操作集合。"
+      required: true
+      expression: false
+    property "using_sql"
+      type: "text"
+      description: "可见旧行表达式。"
+      required: false
+      expression: false
+    property "check_sql"
+      type: "text"
+      description: "新行合法性表达式。"
+      required: false
+      expression: false
+  schema #s_pg_mapping "pg.mapping"
+    summary: "业务模型到物理表的显式映射。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "table"
+      type: "ref"
+      description: "物理表。"
+      required: true
+      expression: false
+      targets:
+        - "pg.table"
+    property "fields"
+      type: "record"
+      description: "逻辑字段到物理列的映射；包含系统字段。"
+      required: true
+      expression: false
+    property "id_conversion"
+      type: "text"
+      description: "不透明 id 与数据库具体身份类型的转换。"
+      required: true
+      expression: false
+  schema #s_pg_migration "pg.migration"
+    summary: "有前置版本和显式意图的迁移计划。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "database.ddl"
+    category: "declaration"
+    property "database"
+      type: "ref"
+      description: "数据库。"
+      required: true
+      expression: false
+      targets:
+        - "pg.database"
+    property "from_version"
+      type: "text"
+      description: "原版本。"
+      required: true
+      expression: false
+    property "to_version"
+      type: "text"
+      description: "目标版本。"
+      required: true
+      expression: false
+    property "atomic"
+      type: "text"
+      description: "事务策略。"
+      required: true
+      expression: false
+      enum:
+        - "required"
+        - "split_allowed"
+        - "none"
+    property "destructive"
+      type: "text"
+      description: "破坏性操作门禁。"
+      required: true
+      expression: false
+      enum:
+        - "deny"
+        - "approval_required"
+    property "steps"
+      type: "list<record>"
+      description: "按注册操作类型解析的迁移步骤；不能直接作为 shell。"
+      required: true
+      expression: false
+    property "lock_timeout_ms"
+      type: "int"
+      description: "锁等待上限。"
+      required: true
+      expression: false
+    property "statement_timeout_ms"
+      type: "int"
+      description: "语句超时。"
+      required: true
+      expression: false
+    port "plan"
+      type: "MigrationPlan"
+      phase: "execution"
+  rule #rule_PG_TYPED_SQL "PG_TYPED_SQL"
+    level: "MUST"
+    statement: |
+      pg.* 字段类型与 UICL 通用类型分离。sql/default_sql/where_sql 是受方言检查的 SQL，不是 Core = 表达式；SQL 标识符必须正确引用，不拼接不可信文字。
+    verification: "adapter"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_PG_TRANSACTION_CONFLICT "PG_TRANSACTION_CONFLICT"
+    level: "MUST"
+    statement: |
+      包含 concurrent 索引步骤的迁移与 atomic=required 冲突，必须拒绝或取得显式 split_allowed 修订；不能承诺事务外操作自动随事务回滚。
+    verification: "planner"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_PG_IDENTITY_AND_RLS "PG_IDENTITY_AND_RLS"
+    level: "MUST"
+    statement: |
+      model 策略不自动等同于 RLS。角色、表所有者、BYPASSRLS、会话租户上下文及连接复用必须明确。列改名必须显式步骤，不按相似名称猜测删除重建。
+    verification: "adapter-runtime"
+    origin: "scenario-review-and-1.0-completion"

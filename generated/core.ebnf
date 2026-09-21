@@ -1,0 +1,75 @@
+(* Generated from meta/grammar.uicl; layout and lexical side conditions also apply. *)
+
+Document = Header, ( Node ), { Node }, EOF ;
+
+Header = "uicl", STRING, NL ;
+
+Node = QName, [ "#", IDENT ], [ Primary ], [ InlineProps ], NL, [ INDENT, ( NodeEntry ), { NodeEntry }, DEDENT ] ;
+
+NodeEntry = (Property | Node) ;
+
+Primary = (STRING | QName) ;
+
+Key = (STRING | QName) ;
+
+QName = IDENT, { ".", IDENT } ;
+
+InlineProps = "(", [ Pair, { ",", Pair } ], ")" ;
+
+Pair = Key, ":", InlineValue ;
+
+Property = Key, ":", (InlineValue, NL | RAW, NL | NL, INDENT, BlockValue, DEDENT) ;
+
+InlineValue = ("=", Expression | Reference | Binding | Literal | InlineList | InlineRecord | QName) ;
+
+Literal = (STRING | SignedNumber | "true" | "false" | "null") ;
+
+SignedNumber = [ "-" ], NUMBER ;
+
+InlineList = "[", [ InlineValue, { ",", InlineValue } ], "]" ;
+
+InlineRecord = "{", [ Pair, { ",", Pair } ], "}" ;
+
+BlockValue = (BlockList | BlockRecord) ;
+
+BlockRecord = ( Property ), { Property } ;
+
+BlockList = ( ListItem ), { ListItem } ;
+
+ListItem = ITEM_BEGIN, (BlockRecord | InlineValue, NL | RAW, NL | NL, INDENT, BlockValue, DEDENT), ITEM_END ;
+
+Reference = "@", (STRING | IDENT, [ "::", IDENT ], { ".", IDENT }) ;
+
+Binding = "$", IDENT, { Accessor } ;
+
+Accessor = (("." | "?."), IDENT | "[", Expression, "]") ;
+
+Expression = Coalesce ;
+
+Coalesce = Or, [ "??", Coalesce ] ;
+
+Or = And, { "or", And } ;
+
+And = Not, { "and", Not } ;
+
+Not = ("not", Not | Compare) ;
+
+Compare = Add, [ ("==" | "!=" | "<" | "<=" | ">" | ">=" | "in"), Add ] ;
+
+Add = Multiply, { ("+" | "-"), Multiply } ;
+
+Multiply = Unary, { ("*" | "%"), Unary } ;
+
+Unary = ("-", Unary | Postfix) ;
+
+Postfix = Atom, { Accessor } ;
+
+Atom = (Call | "$", IDENT | Reference | STRING | NUMBER | "true" | "false" | "null" | ExprList | ExprRecord | "(", Expression, ")") ;
+
+Call = QName, "(", [ Expression, { ",", Expression } ], ")" ;
+
+ExprList = "[", [ Expression, { ",", Expression } ], "]" ;
+
+ExprRecord = "{", [ ExprPair, { ",", ExprPair } ], "}" ;
+
+ExprPair = Key, ":", Expression ;

@@ -1,0 +1,47 @@
+uicl "1.0"
+
+module #ui_module
+  exports: [app, home, editor, entries, tasks, web_target]
+
+use #backend
+  source: @"./backend.uicl"
+use #design
+  source: @"./design.uicl"
+
+target #web_target
+  adapter: "web.react"
+  platform: web
+  framework: react
+  language: typescript
+  toolchain: locked
+
+app #app "个人待办"
+  target: @web_target
+  design: @design::brand
+  identity: host
+  page #home "待办清单"
+    route: "/"
+    access: authenticated
+    resource #tasks
+      query: @backend::my_tasks
+      args: {}
+    ui.heading "我的待办"
+    form #editor "新增待办"
+      create: @backend::add_task
+      fields: [title]
+      on_success_refresh: [@tasks]
+    list #entries
+      source: @tasks
+      empty_text: "还没有待办。"
+      ui.row
+        ui.text
+          value: $item.title
+        ui.button #complete "完成"
+          on click
+            call #completed
+              action: @backend::complete_task
+              args:
+                id: $item.id
+                version: $item.version
+            refresh
+              target: @tasks

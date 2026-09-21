@@ -1,0 +1,121 @@
+uicl "1.0"
+
+profile #profile_document "原生文档与结构化文档规格"
+  id: "uicl.document"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    Markdown/HTML 正文是发布内容事实源，注解附加契约。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.resource@1.0.0"
+    - "uicl.testing@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "doc"
+    - "document"
+  schema #s_doc_block "doc.block"
+    summary: "绑定原生正文，不复制第二份正文。"
+    primary: null
+    identity: "required"
+    children:
+      - "require"
+      - "review"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "text|record"
+      description: "next 或 {html_id:...}，由宿主解析。"
+      required: true
+      expression: false
+    property "intent"
+      type: "text"
+      description: "编辑/内容意图，不当作硬规则。"
+      required: false
+      expression: false
+    property "spec"
+      type: "ref"
+      description: "可选关联的生成规格。"
+      required: false
+      expression: false
+    property "expected_digest"
+      type: "text"
+      description: "补丁前正文版本。"
+      required: false
+      expression: false
+  schema #s_document_spec "document.spec"
+    summary: "文档生成规格，可要求导出可编辑文档。"
+    primary: "label"
+    identity: "required"
+    children:
+      - "doc.section"
+      - "require"
+      - "review"
+    unknown_properties: "reject"
+    effects: []
+    category: "spec"
+    property "label"
+      type: "text"
+      description: "标题。"
+      required: false
+      expression: false
+    property "language"
+      type: "text"
+      description: "语言。"
+      required: true
+      expression: false
+    property "output"
+      type: "text"
+      description: "媒体类型。"
+      required: true
+      expression: false
+    property "editable"
+      type: "bool"
+      description: "保留语义结构的要求。"
+      required: true
+      expression: false
+  schema #s_doc_section "doc.section"
+    summary: "具有标题和原生正文的文档部分。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "章节名。"
+      required: true
+      expression: false
+    property "body"
+      type: "text"
+      description: "Markdown 或纯文正文。"
+      required: true
+      expression: false
+    property "format"
+      type: "text"
+      description: "正文方言。"
+      required: false
+      expression: false
+      default: "markdown"
+  rule #rule_HOST_PARSE_FIRST "HOST_PARSE_FIRST"
+    level: "MUST"
+    statement: |
+      先由宿主解析真实注释/数据块；代码围栏、script/style/textarea/template 或转义文本中的标记不激活。Markdown 注解仅文档级列零独立块。错误不能静默降级为 Markdown。
+    verification: "host-parser"
+    origin: "conversation-design"
+  rule #rule_HOST_PRESERVATION "HOST_PRESERVATION"
+    level: "MUST"
+    statement: |
+      无操作保存必须字节不变，补丁外字节保持。正文为唯一可编辑事实源；注解只存规格/检查/来源。改后缀承诺锁定宿主下静态可读，不承诺所有渲染器像素或任意脚本行为不变。
+    verification: "host-editor"
+    origin: "conversation-design"
+  rule #rule_HOST_BOUNDARY "HOST_BOUNDARY"
+    level: "MUST"
+    statement: |
+      注释/script 的终止边界不能靠 UICL 字符串引号保护；复杂载荷使用严格 Base64url 编码。编码不是加密。next 绑定不到对象时报错；机器编辑检查旧摘要。
+    verification: "host-parser"
+    origin: "conversation-design"

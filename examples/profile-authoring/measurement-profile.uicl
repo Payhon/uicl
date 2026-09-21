@@ -1,0 +1,51 @@
+uicl "1.0"
+
+profile #measurement_profile "测量数据领域"
+  id: "example.measurement"
+  version: "1.0.0"
+  core: "1.0"
+  status: "example-extension"
+  summary: |
+    演示第三方 Profile 的标准写法；只描述测量记录，不读取真实设备。
+  requires:
+    - "uicl.core@1.0.0"
+  origin: "1.0-profile-authoring-example"
+  implementation: "shape-only-example"
+  namespaces:
+    - "lab"
+  schema #sample_schema "lab.sample"
+    summary: "带单位的测量记录。"
+    primary: "label"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "data"
+    property "label"
+      type: "text"
+      description: "测量名称。"
+      required: true
+      expression: false
+    property "value"
+      type: "decimal"
+      description: "精确十进制测量值。"
+      required: true
+      expression: false
+    property "unit"
+      type: "text"
+      description: "单位。"
+      required: true
+      expression: false
+      enum:
+        - "V"
+        - "A"
+        - "W"
+    port "value"
+      type: "decimal"
+      phase: "compile"
+  rule #measurement_rule "MEASUREMENT_UNIT"
+    level: "MUST"
+    statement: |
+      单位是测量语义的一部分；读取此记录不读取设备。需要转换时必须使用明确且版本化的转换器。
+    verification: "domain"
+    origin: "1.0-profile-authoring-example"

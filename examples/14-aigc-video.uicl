@@ -1,0 +1,38 @@
+uicl "1.0"
+
+video #promo "八秒产品短片"
+  size: [1080, 1920]
+  fps: {num: 24, den: 1}
+  frames: 192
+  track #main
+    kind: video
+    overlap: forbid
+    shot #opening
+      start_frame: 0
+      frames: 72
+      prompt: "产品由暗到亮，缓慢推进。"
+    shot #detail
+      start_frame: 72
+      frames: 120
+      prompt: "展示细节，结尾停稳。"
+  track #captions
+    kind: subtitles
+    overlap: forbid
+    cue "看见每个细节"
+      start_frame: 72
+      frames: 96
+  require
+    check "video.frames"
+      equals: 192
+  review
+    criterion "两个镜头中的产品身份保持一致。"
+
+generate #video_build
+  from: @promo
+  phase: build
+  output: "video/mp4"
+  binding: "video_generation"
+  limits:
+    timeout_ms: 300000
+    attempts: 1
+  approval: required

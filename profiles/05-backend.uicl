@@ -1,0 +1,746 @@
+uicl "1.0"
+
+profile #profile_backend "后端业务与 API"
+  id: "uicl.backend"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    模型、访问策略、查询、动作、并发、幂等和工作流。
+  requires:
+    - "uicl.core@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "action"
+    - "assert"
+    - "call"
+    - "create"
+    - "delete"
+    - "each"
+    - "else"
+    - "emit"
+    - "endpoint"
+    - "for"
+    - "if"
+    - "input"
+    - "let"
+    - "model"
+    - "policy"
+    - "query"
+    - "return"
+    - "run"
+    - "service"
+    - "then"
+    - "throw"
+    - "transition"
+    - "update"
+    - "workflow"
+  schema #s_model "model"
+    summary: "服务端实体；保留 id/version/created_at/updated_at 系统字段。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "field"
+      - "policy"
+    unknown_properties: "reject"
+    effects: []
+    category: "model"
+    property "name"
+      type: "text"
+      description: "实体显示名。"
+      required: false
+      expression: false
+  schema #s_policy "policy"
+    summary: "服务端行级访问策略。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "read"
+      type: "bool"
+      description: "row 上的读取授权。"
+      required: false
+      expression: true
+      default: false
+    property "create"
+      type: "bool"
+      description: "new 上的创建授权。"
+      required: false
+      expression: true
+      default: false
+    property "update"
+      type: "bool"
+      description: "old/new 上的更新授权。"
+      required: false
+      expression: true
+      default: false
+    property "delete"
+      type: "bool"
+      description: "old 上的删除授权。"
+      required: false
+      expression: true
+      default: false
+  schema #s_query "query"
+    summary: "有界只读查询。"
+    primary: null
+    identity: "required"
+    children:
+      - "input"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "实体模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+        - "collection"
+    property "allow"
+      type: "bool"
+      description: "调用授权。"
+      required: true
+      expression: true
+    property "where"
+      type: "bool"
+      description: "额外行过滤。"
+      required: false
+      expression: true
+    property "select"
+      type: "list<text>"
+      description: "明确输出字段。"
+      required: true
+      expression: false
+    property "order"
+      type: "list<text>"
+      description: "稳定排序，分页必须包含唯一 tiebreaker。"
+      required: true
+      expression: false
+    property "page_size"
+      type: "int"
+      description: "单页大小上限。"
+      required: true
+      expression: false
+    port "result"
+      type: "QueryPage"
+      phase: "execution"
+  schema #s_input "input"
+    summary: "动作或查询的命名输入。"
+    primary: "name"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "输入名。"
+      required: true
+      expression: false
+    property "type"
+      type: "text|ref"
+      description: "业务类型。"
+      required: true
+      expression: false
+    property "normalize"
+      type: "text"
+      description: "trim 或 none。"
+      required: false
+      expression: false
+      enum:
+        - "trim"
+        - "none"
+    property "min"
+      type: "int"
+      description: "长度/数值下界。"
+      required: false
+      expression: false
+    property "max"
+      type: "int"
+      description: "上界。"
+      required: false
+      expression: false
+  schema #s_action "action"
+    summary: "确定性业务控制流；模型推断须显式节点。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "input"
+      - "run"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "动作说明。"
+      required: false
+      expression: false
+    property "returns"
+      type: "text|ref"
+      description: "输出业务类型。"
+      required: true
+      expression: false
+    property "allow"
+      type: "bool"
+      description: "服务端调用授权。"
+      required: true
+      expression: true
+    property "transaction"
+      type: "text"
+      description: "数据事务要求。"
+      required: true
+      expression: false
+      enum:
+        - "required"
+        - "none"
+    property "idempotency"
+      type: "text"
+      description: "服务端去重约定。"
+      required: true
+      expression: false
+      enum:
+        - "required"
+        - "none"
+    port "result"
+      type: "dynamic"
+      phase: "execution"
+  schema #s_run "run"
+    summary: "顺序执行块。"
+    primary: null
+    identity: "optional"
+    children:
+      - "let"
+      - "create"
+      - "update"
+      - "delete"
+      - "return"
+      - "throw"
+      - "assert"
+      - "if"
+      - "for"
+      - "call"
+      - "invoke"
+      - "emit"
+      - "infer"
+      - "dispatch"
+      - "transition.apply"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_let "let"
+    summary: "局部不可变绑定，只在当前 run/事件之后可见。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "value"
+      type: "value"
+      description: "表达式。"
+      required: true
+      expression: true
+  schema #s_create "create"
+    summary: "通过模型策略及约束的原子数据create"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "data.write"
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "values"
+      type: "record"
+      description: "写入字段，系统字段由宿主管理。"
+      required: true
+      expression: true
+    port "result"
+      type: "dynamic"
+      phase: "execution"
+  schema #s_update "update"
+    summary: "通过模型策略及约束的原子数据update"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "data.write"
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "values"
+      type: "record"
+      description: "写入字段，系统字段由宿主管理。"
+      required: false
+      expression: true
+    property "id"
+      type: "value"
+      description: "记录身份。"
+      required: true
+      expression: true
+    property "expect_version"
+      type: "int"
+      description: "乐观锁版本。"
+      required: true
+      expression: true
+    port "result"
+      type: "dynamic"
+      phase: "execution"
+  schema #s_delete "delete"
+    summary: "通过模型策略及约束的原子数据delete"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "data.write"
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "values"
+      type: "record"
+      description: "写入字段，系统字段由宿主管理。"
+      required: false
+      expression: true
+    property "id"
+      type: "value"
+      description: "记录身份。"
+      required: true
+      expression: true
+    property "expect_version"
+      type: "int"
+      description: "乐观锁版本。"
+      required: true
+      expression: true
+    port "result"
+      type: "dynamic"
+      phase: "execution"
+  schema #s_return "return"
+    summary: "从动作返回有类型结果。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "value"
+      type: "value"
+      description: "结果。"
+      required: true
+      expression: true
+  schema #s_throw "throw"
+    summary: "显式业务错误。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "code"
+      type: "text"
+      description: "稳定错误码。"
+      required: true
+      expression: false
+    property "message"
+      type: "text"
+      description: "脱敏错误说明。"
+      required: false
+      expression: false
+  schema #s_assert "assert"
+    summary: "违反前置条件时中止，不能替代身份授权。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "test"
+      type: "bool"
+      description: "布尔条件。"
+      required: true
+      expression: true
+    property "code"
+      type: "text"
+      description: "失败码。"
+      required: true
+      expression: false
+  schema #s_if "if"
+    summary: "二分条件，条件必须 bool。"
+    primary: null
+    identity: "optional"
+    children:
+      - "then"
+      - "else"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "test"
+      type: "bool"
+      description: "纯表达式。"
+      required: true
+      expression: true
+  schema #s_then "then"
+    summary: "条件分支。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "let"
+      - "set"
+      - "call"
+      - "invoke"
+      - "create"
+      - "update"
+      - "delete"
+      - "return"
+      - "throw"
+      - "assert"
+      - "if"
+      - "for"
+      - "refresh"
+      - "notify"
+      - "expect"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_else "else"
+    summary: "条件分支。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "let"
+      - "set"
+      - "call"
+      - "invoke"
+      - "create"
+      - "update"
+      - "delete"
+      - "return"
+      - "throw"
+      - "assert"
+      - "if"
+      - "for"
+      - "refresh"
+      - "notify"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_for "for"
+    summary: "有界服务端循环。"
+    primary: null
+    identity: "optional"
+    children:
+      - "run"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "items"
+      type: "list<value>"
+      description: "输入列表。"
+      required: true
+      expression: true
+    property "as"
+      type: "text"
+      description: "循环绑定名。"
+      required: true
+      expression: false
+    property "max_items"
+      type: "int"
+      description: "强制迭代上限。"
+      required: true
+      expression: false
+  schema #s_each "each"
+    summary: "有稳定 key 的 UI 列表循环。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "items"
+      type: "list<value>"
+      description: "输入集合。"
+      required: true
+      expression: true
+    property "as"
+      type: "text"
+      description: "行绑定名。"
+      required: true
+      expression: false
+    property "key"
+      type: "value"
+      description: "每项稳定唯一 key。"
+      required: true
+      expression: true
+  schema #s_call "call"
+    summary: "调用固定动作，不接受模型生成的函数名。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "action.call"
+    category: "declaration"
+    property "action"
+      type: "ref"
+      description: "动作声明。"
+      required: true
+      expression: false
+      targets:
+        - "action"
+    property "args"
+      type: "record"
+      description: "输入参数。"
+      required: true
+      expression: true
+    port "result"
+      type: "dynamic"
+      phase: "execution"
+  schema #s_emit "emit"
+    summary: "事务 outbox 事件；不在事务内直接调用网络。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "outbox.write"
+    category: "declaration"
+    property "event"
+      type: "text"
+      description: "版本化事件类型。"
+      required: true
+      expression: false
+    property "payload"
+      type: "record"
+      description: "无秘密的事件数据。"
+      required: true
+      expression: true
+  schema #s_endpoint "endpoint"
+    summary: "显式 HTTP 接口映射。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "method"
+      type: "text"
+      description: "HTTP 方法。"
+      required: true
+      expression: false
+    property "path"
+      type: "text"
+      description: "相对 API 路径。"
+      required: true
+      expression: false
+    property "action"
+      type: "ref"
+      description: "处理动作。"
+      required: false
+      expression: false
+      targets:
+        - "action"
+    property "query"
+      type: "ref"
+      description: "读取查询。"
+      required: false
+      expression: false
+      targets:
+        - "query"
+    property "auth"
+      type: "text"
+      description: "公共或身份验证。"
+      required: true
+      expression: false
+      enum:
+        - "public"
+        - "authenticated"
+    property "body"
+      type: "text"
+      description: "请求体编码。"
+      required: false
+      expression: false
+      default: "json"
+    property "rate_limit"
+      type: "record"
+      description: "由 HTTP 适配器验证的限流参数。"
+      required: false
+      expression: false
+  schema #s_service "service"
+    summary: "后端服务聚合入口。"
+    primary: "name"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "名称。"
+      required: false
+      expression: false
+    property "target"
+      type: "ref"
+      description: "编译目标。"
+      required: true
+      expression: false
+      targets:
+        - "target"
+    property "models"
+      type: "list<ref>"
+      description: "包含的模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "endpoints"
+      type: "list<ref>"
+      description: "显式暴露接口。"
+      required: true
+      expression: false
+      targets:
+        - "endpoint"
+    property "identity_binding"
+      type: "text"
+      description: "外部可信身份实现。"
+      required: true
+      expression: false
+    property "health_path"
+      type: "text"
+      description: "无敏感内容健康检查端点。"
+      required: false
+      expression: false
+      default: "/health"
+  schema #s_workflow "workflow"
+    summary: "持久有限状态机。"
+    primary: null
+    identity: "required"
+    children:
+      - "transition"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "关联模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+    property "state_field"
+      type: "text"
+      description: "被保护的状态字段。"
+      required: true
+      expression: false
+    property "initial"
+      type: "text"
+      description: "初始状态。"
+      required: true
+      expression: false
+    property "terminal"
+      type: "list<text>"
+      description: "终态。"
+      required: true
+      expression: false
+  schema #s_transition "transition"
+    summary: "只能在已授权且版本吻合时改变状态。"
+    primary: "name"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "迁移名。"
+      required: true
+      expression: false
+    property "from"
+      type: "text"
+      description: "源状态。"
+      required: true
+      expression: false
+    property "to"
+      type: "text"
+      description: "目标状态。"
+      required: true
+      expression: false
+    property "allow"
+      type: "bool"
+      description: "转换授权，与模型策略同时成立。"
+      required: true
+      expression: true
+  schema #s_transition_apply "transition.apply"
+    summary: "原子应用工作流转换。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "data.write"
+    category: "declaration"
+    property "transition"
+      type: "ref"
+      description: "已声明转换。"
+      required: true
+      expression: false
+      targets:
+        - "transition"
+    property "id"
+      type: "value"
+      description: "记录身份。"
+      required: true
+      expression: true
+    property "expect_version"
+      type: "int"
+      description: "期望版本。"
+      required: true
+      expression: true
+  rule #rule_BACKEND_AUTH "BACKEND_AUTH"
+    level: "MUST"
+    statement: |
+      服务端权限默认拒绝。模型策略在分页/计数/聚合前应用；API 或按钮存在不自动授予权限。actor 来自可信身份适配器，不能从请求体声明。
+    verification: "runtime"
+    origin: "conversation-design"
+  rule #rule_BACKEND_ATOMICITY "BACKEND_ATOMICITY"
+    level: "MUST"
+    statement: |
+      事务只涵盖受管理数据、并发约束与 outbox。事务内禁止直接网络副作用。system fields 由运行时生成，id 为不透明身份，version 初始 1 且每次成功更新递增。
+    verification: "runtime"
+    origin: "conversation-design"
+  rule #rule_BACKEND_IDEMPOTENCY "BACKEND_IDEMPOTENCY"
+    level: "MUST"
+    statement: |
+      去重键绑定主体、动作、有效期和输入摘要。相同键不同输入报错。外部调用结果不确定必须进入 INDETERMINATE，对账前不得重复执行。
+    verification: "runtime"
+    origin: "conversation-design"
+  rule #rule_BACKEND_FLOW "BACKEND_FLOW"
+    level: "MUST"
+    statement: |
+      动作非 unit 的每个正常路径必须返回匹配类型；调用图不得隐式无界递归。有界循环、if、return/throw 语义固定。普通 update 不能绕过 workflow 改变状态字段。
+    verification: "type-effect-runtime"
+    origin: "conversation-design"

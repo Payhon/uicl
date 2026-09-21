@@ -1,0 +1,490 @@
+uicl "1.0"
+
+profile #profile_meta "Profile 与语言自描述"
+  id: "uicl.meta"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    定义 Profile、节点形状、记录形状、规则、文法与示例。自描述不是无需受信引导器。
+  requires: []
+  origin: "1.0-editorial-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "document"
+    - "example"
+    - "g"
+    - "grammar"
+    - "port"
+    - "profile"
+    - "property"
+    - "record_schema"
+    - "rule"
+    - "schema"
+  schema #s_profile "profile"
+    summary: "领域注册单元；版本、依赖及节点语义必须显式。"
+    primary: "title"
+    identity: "required"
+    children:
+      - "schema"
+      - "record_schema"
+      - "rule"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "id"
+      type: "text"
+      description: "可解析的唯一 Profile 标识，不代表已经注册域名。"
+      required: true
+      expression: false
+    property "version"
+      type: "text"
+      description: "精确的领域版本。"
+      required: true
+      expression: false
+    property "core"
+      type: "text"
+      description: "所需 Core 版本。"
+      required: true
+      expression: false
+    property "status"
+      type: "text"
+      description: "规范编辑状态，不是运行时认证。"
+      required: true
+      expression: false
+    property "title"
+      type: "text"
+      description: "显示名称。"
+      required: true
+      expression: false
+    property "summary"
+      type: "text"
+      description: "领域的目标与排除范围。"
+      required: true
+      expression: false
+    property "requires"
+      type: "list<text>"
+      description: "依赖的 Profile 精确标识与版本。"
+      required: true
+      expression: false
+    property "origin"
+      type: "text"
+      description: "来源或本次细化标识。"
+      required: true
+      expression: false
+    property "implementation"
+      type: "text"
+      description: "本包仅结构检查，执行适配器的实现状态。"
+      required: true
+      expression: false
+    property "namespaces"
+      type: "list<text>"
+      description: "所占用的节点前缀；不能改变 Core。"
+      required: true
+      expression: false
+  schema #s_schema "schema"
+    summary: "一个节点的结构契约，未知属性默认拒绝。"
+    primary: "kind"
+    identity: "required"
+    children:
+      - "property"
+      - "port"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "kind"
+      type: "text"
+      description: "被定义的 QName。"
+      required: true
+      expression: false
+    property "summary"
+      type: "text"
+      description: "节点的含义。"
+      required: true
+      expression: false
+    property "primary"
+      type: "text|null"
+      description: "唯一主文本槽位；null 表示不接受。"
+      required: true
+      expression: false
+    property "identity"
+      type: "text"
+      description: "身份要求。"
+      required: true
+      expression: false
+      enum:
+        - "required"
+        - "optional"
+        - "forbidden"
+    property "children"
+      type: "list<text>"
+      description: "允许的子节点种类或已注册的命名空间模式。"
+      required: true
+      expression: false
+    property "unknown_properties"
+      type: "text"
+      description: "基线固定 reject。"
+      required: true
+      expression: false
+      enum:
+        - "reject"
+    property "effects"
+      type: "list<text>"
+      description: "可能出现的副作用分类，不等于授权。"
+      required: true
+      expression: false
+    property "category"
+      type: "text"
+      description: "领域对象类别。"
+      required: true
+      expression: false
+  schema #s_record_schema "record_schema"
+    summary: "具名记录值的结构约束，不创建节点或权限。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "property"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "记录类型名。"
+      required: true
+      expression: false
+    property "summary"
+      type: "text"
+      description: "字段集合语义。"
+      required: true
+      expression: false
+    property "unknown_fields"
+      type: "text"
+      description: "禁止未知字段。"
+      required: true
+      expression: false
+      enum:
+        - "reject"
+  schema #s_property "property"
+    summary: "一个属性的类型、必需性、默认值与表达式边界。"
+    primary: "name"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "属性键。"
+      required: true
+      expression: false
+    property "type"
+      type: "text"
+      description: "形状类型表达式。"
+      required: true
+      expression: false
+    property "description"
+      type: "text"
+      description: "字段语义与边界。"
+      required: true
+      expression: false
+    property "required"
+      type: "bool"
+      description: "是否必须出现。"
+      required: true
+      expression: false
+    property "expression"
+      type: "bool"
+      description: "允许延后到业务类型检查的纯表达式。"
+      required: true
+      expression: false
+    property "default"
+      type: "value"
+      description: "缺失时采用的确定性默认值；校验工具不自行注入。"
+      required: false
+      expression: false
+    property "enum"
+      type: "list<value>"
+      description: "可接受的字面量集合。"
+      required: false
+      expression: false
+    property "targets"
+      type: "list<text>"
+      description: "引用允许的节点种类；端口另按端口类型检查。"
+      required: false
+      expression: false
+  schema #s_port "port"
+    summary: "节点可引用的输出端口声明。"
+    primary: "name"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "端口名称。"
+      required: true
+      expression: false
+    property "type"
+      type: "text"
+      description: "业务输出类型。"
+      required: true
+      expression: false
+    property "phase"
+      type: "text"
+      description: "编译时或执行后可用。"
+      required: true
+      expression: false
+  schema #s_rule "rule"
+    summary: "规范性规则及验证类别；正文不会自动执行。"
+    primary: "code"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "code"
+      type: "text"
+      description: "跨版本稳定的规则标识。"
+      required: true
+      expression: false
+    property "level"
+      type: "text"
+      description: "规范强度。"
+      required: true
+      expression: false
+      enum:
+        - "MUST"
+        - "MUST_NOT"
+        - "SHOULD"
+        - "MAY"
+    property "statement"
+      type: "text"
+      description: "完整规范正文。"
+      required: true
+      expression: false
+    property "verification"
+      type: "text"
+      description: "所需验证种类。"
+      required: true
+      expression: false
+    property "origin"
+      type: "text"
+      description: "历史基线、场景讨论或本次编辑细化。"
+      required: true
+      expression: false
+  schema #s_grammar "grammar"
+    summary: "结构化文法入口。"
+    primary: "title"
+    identity: "required"
+    children:
+      - "g.rule"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "文法名称。"
+      required: true
+      expression: false
+    property "start"
+      type: "ref"
+      description: "起始产生式。"
+      required: true
+      expression: false
+      targets:
+        - "g.rule"
+    property "input"
+      type: "text"
+      description: "token/布局契约说明。"
+      required: true
+      expression: false
+    property "status"
+      type: "text"
+      description: "规范状态。"
+      required: true
+      expression: false
+  schema #s_g_rule "g.rule"
+    summary: "命名产生式。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "g.seq"
+      - "g.choice"
+      - "g.repeat"
+      - "g.ref"
+      - "g.token"
+      - "g.literal"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "规则名。"
+      required: true
+      expression: false
+  schema #s_g_seq "g.seq"
+    summary: "按顺序匹配全部子项。"
+    primary: null
+    identity: "optional"
+    children:
+      - "g.seq"
+      - "g.choice"
+      - "g.repeat"
+      - "g.ref"
+      - "g.token"
+      - "g.literal"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_g_choice "g.choice"
+    summary: "按声明顺序尝试；不能吞掉已确认的语义错误。"
+    primary: null
+    identity: "optional"
+    children:
+      - "g.seq"
+      - "g.choice"
+      - "g.repeat"
+      - "g.ref"
+      - "g.token"
+      - "g.literal"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_g_repeat "g.repeat"
+    summary: "在指定上下界重复一个子模式。"
+    primary: null
+    identity: "optional"
+    children:
+      - "g.seq"
+      - "g.choice"
+      - "g.ref"
+      - "g.token"
+      - "g.literal"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "min"
+      type: "int"
+      description: "最少次数。"
+      required: true
+      expression: false
+    property "max"
+      type: "int|null"
+      description: "最多次数，null 为未指定语法上界；仍受实现资源限制。"
+      required: true
+      expression: false
+  schema #s_g_ref "g.ref"
+    summary: "引用本模块的文法规则。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "目标产生式。"
+      required: true
+      expression: false
+      targets:
+        - "g.rule"
+  schema #s_g_token "g.token"
+    summary: "匹配词法器提供的 token。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "token 种类。"
+      required: true
+      expression: false
+  schema #s_g_literal "g.literal"
+    summary: "匹配固定文法文本。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "text"
+      type: "text"
+      description: "固定字面量。"
+      required: true
+      expression: false
+  schema #s_example "example"
+    summary: "显式记录可提取示例，不在读取阶段运行。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "用例说明。"
+      required: true
+      expression: false
+    property "path"
+      type: "text"
+      description: "包内相对源码位置。"
+      required: true
+      expression: false
+    property "profiles"
+      type: "list<text>"
+      description: "涉及领域。"
+      required: true
+      expression: false
+    property "readiness"
+      type: "text"
+      description: "执行准备状态。"
+      required: true
+      expression: false
+    property "body"
+      type: "text"
+      description: "可选内嵌原文，必须与独立文件一致。"
+      required: false
+      expression: false
+  schema #s_document "document"
+    summary: "阅读文档元数据，不创建运行应用。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "文档标题。"
+      required: true
+      expression: false
+    property "version"
+      type: "text"
+      description: "规范版本。"
+      required: true
+      expression: false
+    property "status"
+      type: "text"
+      description: "发布状态。"
+      required: true
+      expression: false
+    property "authority"
+      type: "text"
+      description: "权限或标准机构声明边界。"
+      required: true
+      expression: false
+  rule #rule_PROFILE_SELF_DESCRIPTION "PROFILE_SELF_DESCRIPTION"
+    level: "MUST"
+    statement: |
+      Profile 是惰性数据。schema 可以限定本 Profile 的词汇，不能覆盖宿主的授权、Core 运算符、密钥隔离或其他已锁定 Profile。同名 schema/记录/依赖版本冲突必须拒绝。
+    verification: "static"
+    origin: "1.0-editorial-completion"
+  rule #rule_PROFILE_BOOTSTRAP "PROFILE_BOOTSTRAP"
+    level: "MUST"
+    statement: |
+      元规范仍需受信的最小解析器；本包检查器读取 schema/property/record_schema，文法 g.* 是自描述与可派生数据，未作为完整解析器自动生成依据。
+    verification: "tooling"
+    origin: "1.0-editorial-completion"

@@ -1,0 +1,76 @@
+uicl "1.0"
+
+type #Category "工单分类"
+  enum: [refund, delivery, product, other]
+
+capability #classifier
+  interface: "ticket.classify@1"
+  binding: "classification_model"
+  input:
+    text: text
+  output: @Category
+  effects: [model.infer, network]
+  permissions: [model.invoke]
+  limits:
+    timeout_ms: 30000
+    attempts: 1
+  errors: [REFUSED, INVALID_OUTPUT, TIMEOUT]
+
+action #manual "人工审核"
+  returns: text
+  allow: = $actor.authenticated
+  transaction: none
+  idempotency: none
+  run
+    return
+      value: "manual_review"
+
+action #refund "退款审核入口"
+  returns: text
+  allow: = $actor.authenticated
+  transaction: none
+  idempotency: none
+  run
+    return
+      value: "refund_review"
+
+action #delivery "物流帮助"
+  returns: text
+  allow: = $actor.authenticated
+  transaction: none
+  idempotency: none
+  run
+    return
+      value: "delivery_help"
+
+action #product "产品帮助"
+  returns: text
+  allow: = $actor.authenticated
+  transaction: none
+  idempotency: none
+  run
+    return
+      value: "product_help"
+
+action #route_ticket "分类后进入固定路径"
+  input "text"
+    type: text
+    min: 1
+  returns: text
+  allow: = $actor.authenticated
+  transaction: none
+  idempotency: none
+  run
+    infer #classification
+      using: @classifier
+      args:
+        text: $input.text
+      on_error: @manual
+    dispatch
+      value: $classification
+      routes:
+        refund: @refund
+        delivery: @delivery
+        product: @product
+        other: @manual
+      on_unknown: @manual

@@ -1,0 +1,33 @@
+uicl "1.0"
+
+file #fallback
+  source: @"../assets/fallback.svg"
+  media: "image/svg+xml"
+
+generator #hero_generator
+  input:
+    topic: text
+  output: "Artifact<image>"
+  binding: "image_generation"
+  instructions: "根据输入主题生成横幅；不生成脚本或网络请求。"
+  limits:
+    timeout_ms: 90000
+    attempts: 1
+  constraints:
+    size: [1200, 630]
+    media: "image/png"
+
+app #reader "主题阅读"
+  state #topic
+    value: "咖啡与清晨"
+  ui.slot #hero
+    generator: @hero_generator
+    args:
+      topic: $topic
+    trigger: explicit
+    fallback: @fallback
+    response_policy: latest_wins
+  ui.button #regenerate "生成新封面"
+    on click
+      refresh
+        target: @hero

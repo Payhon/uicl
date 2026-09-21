@@ -1,0 +1,128 @@
+<!-- aml:markdown 1.0 -->
+
+# AML 原生文档承载方案
+
+状态：建议稿与有限兼容性实验。未修改上一轮 AML 1.0 规范包，也未实现完整 Host Documents 编译器。
+
+本文件的 `.aml` 副本与本 Markdown 文件字节相同。这里标记中的 `1.0` 表示所用 AML Core 版本；`aml:markdown`、`aml:html` 及 `doc.block` 是本次拟新增的 Host Documents Profile 约定，并不是现有 1.0 引导解析器已经支持的文档入口。
+
+## 1. 决策
+
+采用一个语义核心、三个源码入口：结构化 AML、Markdown 承载文档、HTML 承载文档。正文直接使用原语言；AML 通过明确、不可见的注解附加约束。结构化入口保留原有语法，不能把所有 Markdown 行都交给 AML 缩进词法器。
+
+兼容目标是：同一个源文件在不修改字节、只改变后缀或显式选择宿主解析器的情况下，保留宿主文档的静态可见内容。AML 专属的生成、检查和交互不要求普通阅读器实现。
+
+不承诺所有 Markdown 方言的显示完全一致，不承诺任意 HTML 脚本观察不到新增的注释或数据节点，不承诺任意在线编辑器保留注释。无操作保存必须保留源码字节，语义投影是派生结果。
+
+## 2. 最小 Markdown
+
+```markdown
+<!-- aml:markdown 1.0 -->
+
+# 产品说明
+
+正文保留 **Markdown** 写法。
+```
+
+上述文件同时是普通 Markdown 和拟议 Markdown-hosted AML。宿主基线建议锁定 CommonMark 0.31.2。表格、任务列表、数学公式等其他能力，必须明确对应扩展及版本。
+
+完全不添加标记的旧 Markdown 也可通过明确的 `host=markdown` 导入为无活动声明的 AML 文档。需要脱离上下文自识别的 `.aml` 建议带标记。任意文本都可能是 Markdown，不能依赖猜测来决定执行语义。
+
+## 3. 注解岛
+
+```markdown
+<!-- aml
+doc.block #summary
+  target: next
+  intent: "用简短的语言介绍产品用途。"
+-->
+
+这是一段正文。
+```
+
+可直接阅读的完整例子见 `examples/annotated.md`。注解岛的载荷按 AML 节点片段解析；版本由文档头继承。实现可以构造虚拟版本头交给 Core 解析器，但必须保留源位置映射。每个注解岛只表示声明，不触发执行。
+
+`doc.block` 是拟新增节点：有必需且唯一的稳定 `#id`；`target` 是 `next` 或 `{html_id: "..."}`；可有 `intent` 字符串。`intent` 是说明，不能冒充机器已经验证的硬约束。未来可以通过明确的 doc.* 检查节点关联字数、事实来源或内容规格。
+
+Markdown 第一阶段只支持文档级、列 0、前后位于独立块边界的注解，避免改变列表松紧、表格、代码缩进或段落换行。`next` 绑定注解之后的第一个同级宿主块，忽略空白及其他已识别 AML 注解；没有目标或要求的块类型不符时必须报错，不能全局搜索相似句子。插入或移动正文可能改变邻接绑定，编辑器应显示影响；机器补丁必须绑定预期源码摘要和目标版本。
+
+不要在注解内包裹需要显示的正文。正文中的 `#`、`@`、`$` 和反引号保留宿主含义。普通代码围栏即使标记为 aml，也只是文档示例；需要测试的示例必须另行显式引用，测试授权仍独立。
+
+## 4. HTML 承载
+
+完整样例见 `examples/page.html` 与 `examples/page.aml`。在现有 HTML 的 head 中、靠前的 charset 声明之后添加：
+
+```html
+<!-- aml:html 1.0 -->
+```
+
+保留原 doctype、HTML、CSS 和现有内容。可以使用同样的 AML 注释；通过 `target: {html_id: "summary"}` 绑定已有元素 ID。不匹配、重复 ID 或多个冲突绑定均应报错。HTML ID 在此按原始字符串精确匹配，不强制符合 AML 标识符规则。
+
+较长的 HTML 内嵌契约可使用下列可选数据块：
+
+```html
+<script type="text/plain" data-aml>
+aml "1.0"
+doc.block #summary_contract
+  target: {html_id: "summary"}
+  intent: "说明产品的主要用途，不自动改写原文。"
+</script>
+```
+
+这里使用既有 `text/plain` 类型和 `data-aml` 标记，没有宣称注册了新的 MIME 类型。该数据块载荷是完整 AML Core 文档；其他普通 script 不是 AML 契约。必须校验文档头与数据块版本一致，并检查全局 ID 冲突。
+
+这个数据块形式不用于通用 Markdown：GFM 对 script 等标签有 tagfilter 扩展，无法据此保证不可见兼容。
+
+## 5. 格式识别
+
+先读取可信的外部 host 参数或专用文档标记，再选择解析器。Markdown 标记放在文件最前的独立注释，允许 UTF-8 BOM；HTML 标记必须是 head 内的真实注释节点。代码、字符串、pre/code、textarea、script/style 或 template 中的示例不改变文档模式。
+
+没有自识别标记时，旧文档可通过明确宿主参数被动导入。对不明确的 `.aml`，严格模式报缺失模式或要求上层显式选择；编辑器可提供非执行预览。不能在 Core 语法错误后静默降级为 Markdown，借此掩盖错误或绕过权限检查。重复标记、冲突宿主及不支持版本应报错。
+
+宿主与 Core 版本分别进入锁文件；无显式方言时使用本承载规范锁定的基线。扩展名只能提供交互提示，不能授权执行。
+
+## 6. 转义边界
+
+HTML 注释不能任意嵌套。载荷中的 HTML 注释分隔符、异常终止串必须校验。AML 字符串中的关闭符可以写成 `"关闭符 --\u003e"`，由 AML 字符串解码恢复。注释中不要进行通用 HTML 实体解码；`&amp;` 默认保持其字面字节。
+
+`script` 数据块同样受 HTML 词法规则约束，AML 字符串引号不能阻止 HTML 识别结束标签。必须处理大小写不敏感的 script 分隔序列和相关历史解析状态。字符串内可使用 AML 支持的 Unicode 转义；不能安全转义的原文块需要编码载体或独立资源表示，不能粗暴全局替换源码。完整编码载体格式尚未在本实验中实现。
+
+## 7. 单一事实源与编辑
+
+宿主正文是已发布内容的事实来源，不在隐含 AML 节点内保存另一份可编辑正文。契约保存生成规格、验证要求、依赖、版本及编辑许可。
+
+生成流程应是：读取规格与当前正文，获得外部授权，生成候选，校验，预览差异，在版本检查通过后修改正文。旧阅读器显示当前正文；拥有 AML 能力的工具也先显示当前正文，不应在打开文档时自动生成替换。
+
+无操作保存必须字节一致；补丁之外的区域保持原样。编辑器需同时保存原始字节、宿主 CST/AST、AML AST、源映射和约束图，不能仅从 AST 重建整个文档。特别要保留 Markdown 行尾空格、代码缩进、换行、HTML 属性与实体写法。格式化必须显式选择范围。
+
+## 8. 执行与安全
+
+解析、预览、检查、生成、执行是不同操作。注释和 data-aml 不是授权凭证，不能存储秘密。第三方文档中的声明仍然是不可信输入。默认禁止模型调用、文件写入、网络请求和动态代码执行，直到外部宿主明确授权。
+
+AML 安全预览可以禁用 HTML 脚本并隔离资源读取；普通浏览器直接打开 HTML 时，原有 JavaScript 仍遵循浏览器行为，不能声称 AML 标记把任意 HTML 变得安全。安全预览与原生行为预览需要明确区分。
+
+上传、富文本编辑、HTML 压缩和静态发布可能删除注释或数据节点。发布链路必须验证契约是否保留；纯阅读导出可以移除，但应明确标记为没有完整 AML 契约的派生快照。
+
+一份文档文件不等于资源完全离线。只修改扩展名、不移动文件时，普通相对引用通常仍以所在目录解析；依赖文件名、自身 URL、服务端路由、MIME 或脚本 location 的内容需要单独验证。
+
+## 9. 已执行的实验
+
+执行 `python reference/verify.py`。
+
+使用当前环境的 markdown-it-py CommonMark 配置、Mistune 默认 HTML-enabled 配置和 Chromium。共 16 项检查通过：四对扩展名副本的字节一致性、两种 Markdown 引擎中的原生结构与控制文档对比、代码围栏不作为声明提取、截断载体拒绝、AML 字符串转义、两种 HTML 载体的可见文本和元素几何对比、提取片段的 Core 语法，以及样例没有页面错误或网络请求。
+
+结果见 `reports/verification.json`。这不是完整 CommonMark/GFM/WHATWG 一致性测试，不是所有阅读器、浏览器或文档的兼容承诺，也不是字节无损编辑器或执行安全的完整证明。
+
+`reference/aml_seed_1_0.py` 原样取自此前生成的 AML 1.0 包；这里仅检查提取出的 Core 语法，旧解析器本身不识别整个宿主文件，也不验证新增 doc.block 的业务语义。`reference/verify.py` 是实验脚本，不是生产提取器。
+
+## 10. 外部规范依据
+
+以下为外部规则依据，与本提案的新语法明确区分：
+
+- CommonMark 0.31.2 的 HTML blocks、代码围栏、块边界及方言兼容说明：`https://spec.commonmark.org/0.31.2/`
+- GitHub Flavored Markdown 的扩展、过滤和清理说明：`https://github.github.com/gfm/`
+- WHATWG HTML 注释语法：`https://html.spec.whatwg.org/multipage/syntax.html#comments`
+- WHATWG script 数据块及内容限制：`https://html.spec.whatwg.org/multipage/scripting.html`
+- WHATWG 自定义 data-* 属性：`https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes`
+
+本建议的核心是：原生正文可以独立阅读，AML 约束可以独立检查；两个视图共享同一份已发布内容。

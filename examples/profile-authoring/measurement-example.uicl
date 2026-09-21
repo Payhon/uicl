@@ -1,0 +1,5 @@
+uicl "1.0"
+
+lab.sample #voltage "电压"
+  value: 12.6
+  unit: "V"

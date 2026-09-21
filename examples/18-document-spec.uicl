@@ -1,0 +1,19 @@
+uicl "1.0"
+
+document.spec #guide "使用指南"
+  language: "zh-CN"
+  output: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  editable: true
+  doc.section #purpose "用途"
+    format: markdown
+    body: |
+      本工具用于**整理资料**与检查约束。
+      不会在打开文档时自动调用付费服务。
+  doc.section #steps "使用步骤"
+    body: |
+      1. 准备输入。
+      2. 审阅计划。
+      3. 授权执行。
+  require
+    check "document.text_editable"
+      equals: true

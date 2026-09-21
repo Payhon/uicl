@@ -1,0 +1,111 @@
+uicl "1.0"
+
+profile #profile_dataset "训练样本与来源血缘"
+  id: "uicl.dataset"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    记录规格、产物、来源、许可、评估及拆分分组。
+  requires:
+    - "uicl.resource@1.0.0"
+    - "uicl.testing@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "dataset"
+    - "sample"
+  schema #s_dataset "dataset"
+    summary: "样本集合与拆分原则。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "sample"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "数据集名。"
+      required: false
+      expression: false
+    property "purpose"
+      type: "text"
+      description: "明确用途。"
+      required: true
+      expression: false
+    property "split_policy"
+      type: "text"
+      description: "以共同来源分组防泄漏。"
+      required: true
+      expression: false
+      enum:
+        - "source_group"
+    property "permission"
+      type: "text"
+      description: "许可核验状态。"
+      required: true
+      expression: false
+      enum:
+        - "verified"
+        - "unverified"
+    property "loader"
+      type: "text"
+      description: "还原原生模态的加载方式。"
+      required: true
+      expression: false
+  schema #s_sample "sample"
+    summary: "有可追踪输入输出的一条样本。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "source_group"
+      type: "text"
+      description: "同源文档/图像/投影共享的分组。"
+      required: true
+      expression: false
+    property "input"
+      type: "ref"
+      description: "任务规格或原文资源。"
+      required: true
+      expression: false
+    property "output"
+      type: "ref"
+      description: "实际产物，不能引用未执行生成任务假装存在。"
+      required: true
+      expression: false
+    property "license"
+      type: "text"
+      description: "内容权利/许可，unknown 不允许训练。"
+      required: true
+      expression: false
+    property "consent"
+      type: "text"
+      description: "必要同意证据或核验状态。"
+      required: true
+      expression: false
+    property "sensitivity"
+      type: "text"
+      description: "敏感性。"
+      required: true
+      expression: false
+    property "evidence"
+      type: "list<ref>"
+      description: "验证记录。"
+      required: false
+      expression: false
+  rule #rule_DATASET_RIGHTS "DATASET_RIGHTS"
+    level: "MUST"
+    statement: |
+      采用 .uicl 或 HEXL 不改变用户内容权利，不表示允许训练、公开或转让。许可、同意未知时必须阻断数据发布/训练。原始来源同组拆分。
+    verification: "governance-runtime"
+    origin: "conversation-design"
+  rule #rule_DATASET_MODALITY "DATASET_MODALITY"
+    level: "MUST"
+    statement: |
+      交换层可以文本封装；训练层根据模态解码，不将 Base64 当作视觉语义。统一格式提升模型能力属于待实验假设。
+    verification: "loader-evaluation"
+    origin: "conversation-design"

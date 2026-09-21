@@ -1,0 +1,188 @@
+uicl "1.0"
+
+profile #profile_lifecycle "需求、项目与观测"
+  id: "uicl.lifecycle"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    把完整开发交付过程关联起来，不把计划当执行事实。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.application@1.0.0"
+    - "uicl.testing@1.0.0"
+    - "uicl.deployment@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "decision"
+    - "observe"
+    - "project"
+    - "requirement"
+  schema #s_requirement "requirement"
+    summary: "可引用的业务需求。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "需求摘要。"
+      required: true
+      expression: false
+    property "statement"
+      type: "text"
+      description: "完整要求。"
+      required: true
+      expression: false
+    property "acceptance"
+      type: "list<text>"
+      description: "验收标准，不等于已通过。"
+      required: true
+      expression: false
+  schema #s_decision "decision"
+    summary: "未决需求阻断发布。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "question"
+      type: "text"
+      description: "需要决定的问题。"
+      required: true
+      expression: false
+    property "options"
+      type: "list<text>"
+      description: "候选。"
+      required: true
+      expression: false
+    property "resolved"
+      type: "bool"
+      description: "是否已明确解决。"
+      required: true
+      expression: false
+    property "answer"
+      type: "text"
+      description: "已确认答案。"
+      required: false
+      expression: false
+  schema #s_project "project"
+    summary: "跨模块项目入口。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "项目名。"
+      required: true
+      expression: false
+    property "requirements"
+      type: "list<ref>"
+      description: "需求列表。"
+      required: true
+      expression: false
+      targets:
+        - "requirement"
+    property "design"
+      type: "ref"
+      description: "设计系统。"
+      required: true
+      expression: false
+      targets:
+        - "design"
+    property "app"
+      type: "ref"
+      description: "UI 应用。"
+      required: true
+      expression: false
+      targets:
+        - "app"
+    property "service"
+      type: "ref"
+      description: "后端服务。"
+      required: true
+      expression: false
+      targets:
+        - "service"
+    property "database"
+      type: "ref"
+      description: "数据库。"
+      required: true
+      expression: false
+      targets:
+        - "pg.database"
+    property "tests"
+      type: "list<ref>"
+      description: "验收。"
+      required: true
+      expression: false
+      targets:
+        - "test"
+    property "builds"
+      type: "list<ref>"
+      description: "构建声明。"
+      required: true
+      expression: false
+      targets:
+        - "build"
+    property "deployment"
+      type: "ref"
+      description: "部署环境。"
+      required: true
+      expression: false
+      targets:
+        - "deployment"
+  schema #s_observe "observe"
+    summary: "运行观测契约，不默认收集正文。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "被观测对象。"
+      required: true
+      expression: false
+    property "signals"
+      type: "list<text>"
+      description: "日志/指标/追踪。"
+      required: true
+      expression: false
+    property "payloads"
+      type: "text"
+      description: "禁止敏感正文。"
+      required: true
+      expression: false
+      enum:
+        - "deny"
+    property "retention_days"
+      type: "int"
+      description: "保留期限。"
+      required: true
+      expression: false
+    property "binding"
+      type: "text"
+      description: "授权接收端。"
+      required: true
+      expression: false
+  rule #rule_LIFECYCLE_GATES "LIFECYCLE_GATES"
+    level: "MUST"
+    statement: |
+      未解决 decision、未知检查、缺失工具/模型/身份绑定或未授权的数据出站均阻断发布。不因语法可解析就声称应用可运行。
+    verification: "planner-runtime"
+    origin: "conversation-design"
+  rule #rule_LIFECYCLE_OBSERVE "LIFECYCLE_OBSERVE"
+    level: "MUST"
+    statement: |
+      日志/追踪默认不记录请求正文、凭据、模型完整上下文；没有授权接收端不上传。验证/执行状态必须诚实区分声明、计划、实际回执。
+    verification: "runtime"
+    origin: "conversation-design"

@@ -1,0 +1,61 @@
+uicl "1.0"
+
+parameter #server_ip "ECS IP"
+  type: text
+parameter #ssh_user "SSH 用户"
+  type: text
+parameter #host_fingerprint "可信主机指纹"
+  type: text
+
+secret #ssh_password "SSH 密码"
+  source: runtime_prompt
+  scope: [ssh_adapter]
+
+ops.ssh_host #ecs
+  address: $server_ip
+  user: $ssh_user
+  port: 22
+  authentication:
+    method: password
+    credential: @ssh_password
+  host_key:
+    policy: pinned
+    fingerprint: $host_fingerprint
+  expected:
+    os: linux
+    architecture: x86_64
+    service_manager: systemd
+  privilege:
+    method: sudo
+    mode: noninteractive
+
+// 此处是外部产物定位声明，不随包提供可执行文件。
+artifact #release
+  media: "application/gzip"
+  source: @"artifact://host-supplied/example-api"
+
+ops.service_release #api
+  host: @ecs
+  artifact: @release
+  service_name: "example-api"
+  run_as: "example-api"
+  directory: "/opt/example-api"
+  executable: "bin/api"
+  retain_releases: 3
+  health:
+    url: "http://127.0.0.1:8080/health"
+    expected_status: 200
+    timeout_ms: 30000
+  recovery:
+    on_unhealthy: previous_binary
+    on_disconnect: reconcile
+    database: no_automatic_rollback
+  approval: required
+
+deployment #production "已有 Linux ECS"
+  resources: [@ecs, @api]
+  state:
+    binding: "ops-state:ecs-example"
+    locking: required
+  existing_resources: require_import
+  approval: required

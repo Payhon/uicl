@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><!-- uicl:html 1.0 --><title>Data block</title></head>
+<body><p id="summary">一份可正常阅读的 HTML 文件。</p>
+<script type="text/plain" data-uicl>
+uicl "1.0"
+doc.block #contract
+  target: {html_id: "summary"}
+  intent: "这是声明，不是 JavaScript。"
+</script></body></html>

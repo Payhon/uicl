@@ -1,0 +1,284 @@
+{
+  "status": "PASS",
+  "documents": 34,
+  "results": [
+    {
+      "file": "spec/Compiler-Conformance.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Domain-Semantics.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Fullstack-Walkthrough.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/HEXL-1.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Layout-1.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Migration-Provenance.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Profile-Authoring.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Profile-Index.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/Quickstart.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "spec/UICL-1.0.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/00-meta.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/01-core.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/02-resource.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/03-design.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/04-ui.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/05-backend.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/06-application.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/07-postgresql.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/08-testing.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/09-deployment.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/10-aigc.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/11-agent.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/12-hybrid.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/13-document.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/14-dataset.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/15-native.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/16-mobile.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/17-cloudflare.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/18-host.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "guides/19-lifecycle.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "examples/hosted/article.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "examples/hosted/data-block.uicl",
+      "mode": "html",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "examples/hosted/page.uicl",
+      "mode": "html",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    },
+    {
+      "file": "README.uicl",
+      "mode": "markdown",
+      "islands": 1,
+      "nodes": 1,
+      "status": "PASS",
+      "scope": "sample host extraction + shape, not full host conformance or runtime"
+    }
+  ],
+  "not_evaluated": [
+    "all CommonMark/GFM/WHATWG cases",
+    "browser rendering and script behavior",
+    "lossless edits",
+    "annotation execution authorization"
+  ]
+}

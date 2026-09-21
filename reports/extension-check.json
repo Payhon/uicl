@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "scope": "syntax, registered shapes, primary slots, module exports, reference identity/port existence, selected static rules",
+  "documents": 2,
+  "node_schemas": 163,
+  "record_schemas": 20,
+  "profiles": 21,
+  "references_checked": 0,
+  "external_resources": [],
+  "not_evaluated": [
+    "runtime binding type system",
+    "generic port type compatibility",
+    "permission/effect soundness",
+    "domain runtimes",
+    "real build/deployment",
+    "full host-document conformance",
+    "complete grammar-driven independent parser"
+  ]
+}

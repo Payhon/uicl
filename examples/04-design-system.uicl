@@ -1,0 +1,40 @@
+uicl "1.0"
+
+design #brand "通用阅读设计系统"
+  mode: system
+  tokens:
+    color:
+      brand: "#315BEA"
+      surface: "#FFFFFF"
+      text: "#172033"
+    spacing:
+      normal: 16
+    radius:
+      card: 12
+  locales:
+    - "zh-CN"
+    - en
+  breakpoints:
+    - name: wide
+      min_width: 840
+      columns: 2
+  theme "dark"
+    tokens:
+      color:
+        surface: "#111827"
+        text: "#F9FAFB"
+  style #panel "panel"
+    values:
+      padding: 16
+      radius: 12
+  a11y
+    target: "wcag-2.2-aa"
+    reduce_motion: respect_system
+    keyboard: true
+
+app #design_demo "设计预览"
+  design: @brand
+  ui.card
+    style: @panel
+    ui.heading "产品概览"
+    ui.text "目标声明需要通过实际检查才能成为达标证据。"

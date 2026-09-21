@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "edition": "UICL 1.0 consolidated specification",
+  "evaluated": {
+    "standard_profiles": 20,
+    "node_schemas": 162,
+    "closed_record_schemas": 20,
+    "grammar_productions": 37,
+    "core_sections": 45,
+    "core_and_domain_rules": 96,
+    "structured_source_documents": 60,
+    "references_checked": 227,
+    "single_file_edition": 1,
+    "extra_profile_documents": 2,
+    "hosted_documents": 34,
+    "byte_identical_host_pairs": 34,
+    "independent_uicl_examples": 42,
+    "embedded_example_source_matches": 42,
+    "unittest_methods": 106,
+    "hexl_matrix_subtests": 360,
+    "historical_source_hashes": 4
+  },
+  "reports": {
+    "structure": "structural-check.json",
+    "single_file": "structured-edition-check.json",
+    "extension": "extension-check.json",
+    "hosts": "host-check.json",
+    "unit_tests": "unittest.txt",
+    "rules": "rule-coverage.json"
+  },
+  "host_pairs": [
+    [
+      "spec/Compiler-Conformance.uicl",
+      "spec/Compiler-Conformance.md"
+    ],
+    [
+      "spec/Domain-Semantics.uicl",
+      "spec/Domain-Semantics.md"
+    ],
+    [
+      "spec/Fullstack-Walkthrough.uicl",
+      "spec/Fullstack-Walkthrough.md"
+    ],
+    [
+      "spec/HEXL-1.uicl",
+      "spec/HEXL-1.md"
+    ],
+    [
+      "spec/Layout-1.uicl",
+      "spec/Layout-1.md"
+    ],
+    [
+      "spec/Migration-Provenance.uicl",
+      "spec/Migration-Provenance.md"
+    ],
+    [
+      "spec/Profile-Authoring.uicl",
+      "spec/Profile-Authoring.md"
+    ],
+    [
+      "spec/Profile-Index.uicl",
+      "spec/Profile-Index.md"
+    ],
+    [
+      "spec/Quickstart.uicl",
+      "spec/Quickstart.md"
+    ],
+    [
+      "spec/UICL-1.0.uicl",
+      "spec/UICL-1.0.md"
+    ],
+    [
+      "guides/00-meta.uicl",
+      "guides/00-meta.md"
+    ],
+    [
+      "guides/01-core.uicl",
+      "guides/01-core.md"
+    ],
+    [
+      "guides/02-resource.uicl",
+      "guides/02-resource.md"
+    ],
+    [
+      "guides/03-design.uicl",
+      "guides/03-design.md"
+    ],
+    [
+      "guides/04-ui.uicl",
+      "guides/04-ui.md"
+    ],
+    [
+      "guides/05-backend.uicl",
+      "guides/05-backend.md"
+    ],
+    [
+      "guides/06-application.uicl",
+      "guides/06-application.md"
+    ],
+    [
+      "guides/07-postgresql.uicl",
+      "guides/07-postgresql.md"
+    ],
+    [
+      "guides/08-testing.uicl",
+      "guides/08-testing.md"
+    ],
+    [
+      "guides/09-deployment.uicl",
+      "guides/09-deployment.md"
+    ],
+    [
+      "guides/10-aigc.uicl",
+      "guides/10-aigc.md"
+    ],
+    [
+      "guides/11-agent.uicl",
+      "guides/11-agent.md"
+    ],
+    [
+      "guides/12-hybrid.uicl",
+      "guides/12-hybrid.md"
+    ],
+    [
+      "guides/13-document.uicl",
+      "guides/13-document.md"
+    ],
+    [
+      "guides/14-dataset.uicl",
+      "guides/14-dataset.md"
+    ],
+    [
+      "guides/15-native.uicl",
+      "guides/15-native.md"
+    ],
+    [
+      "guides/16-mobile.uicl",
+      "guides/16-mobile.md"
+    ],
+    [
+      "guides/17-cloudflare.uicl",
+      "guides/17-cloudflare.md"
+    ],
+    [
+      "guides/18-host.uicl",
+      "guides/18-host.md"
+    ],
+    [
+      "guides/19-lifecycle.uicl",
+      "guides/19-lifecycle.md"
+    ],
+    [
+      "examples/hosted/article.uicl",
+      "examples/hosted/article.md"
+    ],
+    [
+      "examples/hosted/data-block.uicl",
+      "examples/hosted/data-block.html"
+    ],
+    [
+      "examples/hosted/page.uicl",
+      "examples/hosted/page.html"
+    ],
+    [
+      "README.uicl",
+      "README.zh-CN.md"
+    ]
+  ],
+  "scope_limits": [
+    "Syntactic/shape/link and selected static checks only; expression result types are not inferred.",
+    "Native HTML uses a restricted example parser, not complete WHATWG conformance.",
+    "No browser screenshot comparison or no-op source editor implementation tested.",
+    "No Windows/mobile build, PostgreSQL execution, Cloudflare or ECS changes performed.",
+    "No model calls, secret resolution, native code execution, real Agent or WebAssembly runtime executed.",
+    "Grammar views are derived from UICL, but the syntax prototype is hand-written.",
+    "All full normative semantic rule results remain NOT_EVALUATED.",
+    "HEXL tests were rerun in this package; old AML/Semaquil reports were not counted."
+  ]
+}

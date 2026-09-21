@@ -1,0 +1,80 @@
+uicl "1.0"
+
+module #deploy_module
+  exports: [production]
+use #build
+  source: @"./build.uicl"
+use #database
+  source: @"./database.uicl"
+use #tests
+  source: @"./tests.uicl"
+
+parameter #host_ip
+  type: text
+parameter #host_user
+  type: text
+parameter #host_fingerprint
+  type: text
+secret #login
+  source: runtime_prompt
+  scope: [ssh_adapter]
+secret #database_url
+  source: credential_store
+  binding: "demo.database-url"
+  scope: [remote_service_environment]
+
+ops.ssh_host #host
+  address: $host_ip
+  user: $host_user
+  authentication:
+    method: password
+    credential: @login
+  host_key:
+    policy: pinned
+    fingerprint: $host_fingerprint
+  expected:
+    os: linux
+    architecture: x86_64
+    service_manager: systemd
+  privilege:
+    method: sudo
+    mode: noninteractive
+
+ops.service_release #release
+  depends_on: [@database::database]
+  host: @host
+  artifact: @build::release_build.output
+  service_name: "uicl-demo"
+  run_as: "uicl-demo"
+  directory: "/opt/uicl-demo"
+  executable: "bin/api"
+  environment:
+    DATABASE_URL: @database_url
+    HTTP_ADDR: "127.0.0.1:8080"
+  retain_releases: 3
+  health:
+    url: "http://127.0.0.1:8080/health"
+    expected_status: 200
+    timeout_ms: 30000
+  recovery:
+    on_unhealthy: previous_binary
+    on_disconnect: reconcile
+    database: no_automatic_rollback
+  approval: required
+
+deployment #production "演示服务器"
+  resources: [@database::database, @host, @release]
+  state:
+    binding: "deployment-state:uicl-demo"
+    locking: required
+    encryption: required
+  existing_resources: require_import
+  approval: required
+  gates: [@tests::create_visible, @tests::no_cross_user_update]
+
+observe #telemetry
+  target: @release
+  signals: [logs, metrics, traces]
+  payloads: deny
+  retention_days: 14
+  binding: "approved_observability_sink"

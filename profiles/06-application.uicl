@@ -1,0 +1,155 @@
+uicl "1.0"
+
+profile #profile_application "应用组合与渐进默认"
+  id: "uicl.application"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    连接设计、界面、数据和目标平台，简写不隐藏业务决定。
+  requires:
+    - "uicl.ui@1.0.0"
+    - "uicl.backend@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "app"
+    - "collection"
+    - "page"
+  schema #s_app "app"
+    summary: "应用根；直接 UI 子项可展开为默认 home 页面。"
+    primary: "title"
+    identity: "optional"
+    children:
+      - "page"
+      - "state"
+      - "computed"
+      - "collection"
+      - "ui.*"
+      - "form"
+      - "list"
+      - "resource"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "应用名称。"
+      required: true
+      expression: false
+    property "target"
+      type: "ref"
+      description: "单一目标。"
+      required: false
+      expression: false
+      targets:
+        - "target"
+    property "targets"
+      type: "list<ref>"
+      description: "多个独立构建目标，与 target 互斥。"
+      required: false
+      expression: false
+      targets:
+        - "target"
+    property "design"
+      type: "ref"
+      description: "设计系统。"
+      required: false
+      expression: false
+      targets:
+        - "design"
+    property "identity"
+      type: "text"
+      description: "身份由宿主绑定。"
+      required: false
+      expression: false
+      enum:
+        - "host"
+    property "locale"
+      type: "text"
+      description: "默认语言。"
+      required: false
+      expression: false
+      default: "zh-CN"
+  schema #s_page "page"
+    summary: "页面与路由。"
+    primary: "title"
+    identity: "required"
+    children:
+      - "state"
+      - "computed"
+      - "resource"
+      - "ui.*"
+      - "form"
+      - "list"
+      - "if"
+      - "each"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "页面标题。"
+      required: true
+      expression: false
+    property "route"
+      type: "text"
+      description: "路由。"
+      required: true
+      expression: false
+    property "access"
+      type: "text"
+      description: "客户端进入要求，不替代后端授权。"
+      required: false
+      expression: false
+      default: "public"
+      enum:
+        - "public"
+        - "authenticated"
+  schema #s_collection "collection"
+    summary: "渐进数据组合；只默认 read/create。"
+    primary: null
+    identity: "required"
+    children:
+      - "field"
+      - "policy"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "storage"
+      type: "text"
+      description: "必须显式选择数据位置。"
+      required: true
+      expression: false
+      enum:
+        - "device"
+        - "server"
+    property "access"
+      type: "text"
+      description: "server 必需的固定授权 recipe。"
+      required: false
+      expression: false
+      enum:
+        - "owner"
+    property "operations"
+      type: "list<text>"
+      description: "显式操作集。"
+      required: false
+      expression: false
+      default:
+        - "read"
+        - "create"
+  rule #rule_APP_PROGRESSIVE "APP_PROGRESSIVE"
+    level: "MUST"
+    statement: |
+      无 page 的 app 中 UI 子项按基础 recipe 生成 home /，不生成服务器或账号。出现显式 page 时不得再隐式混入另一首页。collection 缺失 storage 不能猜测。
+    verification: "recipe"
+    origin: "conversation-design"
+  rule #rule_APP_STORAGE "APP_STORAGE"
+    level: "MUST"
+    statement: |
+      server collection 需要可信 identity 和 owner/显式 policy。device 改 server 必须独立取得数据迁移和上传许可。update/delete 绝不因控件出现而自动开放。
+    verification: "recipe-runtime"
+    origin: "conversation-design"

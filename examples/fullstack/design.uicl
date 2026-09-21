@@ -1,0 +1,19 @@
+uicl "1.0"
+
+module #design_module
+  exports: [brand]
+
+design #brand "待办设计系统"
+  mode: system
+  tokens:
+    color:
+      brand: "#315BEA"
+      text: "#172033"
+      surface: "#FFFFFF"
+    spacing:
+      base: 16
+  locales: ["zh-CN", en]
+  a11y
+    target: "wcag-2.2-aa"
+    reduce_motion: respect_system
+    keyboard: true

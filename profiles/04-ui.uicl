@@ -1,0 +1,766 @@
+uicl "1.0"
+
+profile #profile_ui "界面与交互"
+  id: "uicl.ui"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    有序界面树、状态绑定、事件、查询资源、表单列表与组件。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.design@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "component"
+    - "fill_slot"
+    - "form"
+    - "list"
+    - "navigate"
+    - "notify"
+    - "on"
+    - "refresh"
+    - "resource"
+    - "set"
+    - "slot"
+    - "ui"
+  schema #s_ui_column "ui.column"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_row "ui.row"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_stack "ui.stack"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_scroll "ui.scroll"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_card "ui.card"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_grid "ui.grid"
+    summary: "有序布局容器，顺序保留。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "if"
+      - "each"
+      - "form"
+      - "list"
+      - "component.use"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "gap"
+      type: "number"
+      description: "逻辑间距。"
+      required: false
+      expression: false
+    property "columns"
+      type: "int"
+      description: "grid 的列数。"
+      required: false
+      expression: false
+    property "padding"
+      type: "number"
+      description: "内边距。"
+      required: false
+      expression: false
+  schema #s_ui_text "ui.text"
+    summary: "显示文字或显式可格式化标量。"
+    primary: "value"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "value"
+      type: "value"
+      description: "显示值，不是执行代码。"
+      required: true
+      expression: true
+    property "size"
+      type: "number"
+      description: "字号。"
+      required: false
+      expression: false
+  schema #s_ui_heading "ui.heading"
+    summary: "具有标题语义的文字。"
+    primary: "value"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "value"
+      type: "text"
+      description: "标题文字。"
+      required: true
+      expression: true
+    property "level"
+      type: "int"
+      description: "标题层级。"
+      required: false
+      expression: false
+      default: 1
+  schema #s_ui_button "ui.button"
+    summary: "用户手势触发的按钮。"
+    primary: "label"
+    identity: "optional"
+    children:
+      - "on"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "label"
+      type: "text"
+      description: "按钮文案。"
+      required: true
+      expression: false
+    property "disabled"
+      type: "bool"
+      description: "是否可操作。"
+      required: false
+      expression: true
+      default: false
+  schema #s_ui_input "ui.input"
+    summary: "绑定可写 state 的输入框。"
+    primary: "label"
+    identity: "optional"
+    children:
+      - "on"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "label"
+      type: "text"
+      description: "无障碍标签。"
+      required: true
+      expression: false
+    property "bind"
+      type: "ref"
+      description: "可写状态句柄。"
+      required: true
+      expression: false
+      targets:
+        - "state"
+    property "max_length"
+      type: "int"
+      description: "客户端字符数限制，不替代服务端校验。"
+      required: false
+      expression: false
+    property "input_type"
+      type: "text"
+      description: "text/password/email 等输入提示。"
+      required: false
+      expression: false
+  schema #s_ui_image "ui.image"
+    summary: "显示已有图片产物，不接受图片 Spec 本身。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "ui"
+    property "visible"
+      type: "bool"
+      description: "是否显示，不代表权限。"
+      required: false
+      expression: true
+    property "style"
+      type: "ref"
+      description: "视觉样式引用。"
+      required: false
+      expression: false
+      targets:
+        - "style"
+    property "test_id"
+      type: "text"
+      description: "可选稳定测试辅助标识。"
+      required: false
+      expression: false
+    property "src"
+      type: "ref"
+      description: "图片资源或已验证图片产物端口。"
+      required: true
+      expression: false
+    property "alt"
+      type: "text"
+      description: "替代文字。"
+      required: true
+      expression: false
+  schema #s_on "on"
+    summary: "事件顺序处理器，默认等待每一步。"
+    primary: "event"
+    identity: "optional"
+    children:
+      - "set"
+      - "call"
+      - "invoke"
+      - "refresh"
+      - "navigate"
+      - "notify"
+      - "let"
+      - "if"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "event"
+      type: "text"
+      description: "按组件注册表定义的事件。"
+      required: true
+      expression: false
+  schema #s_set "set"
+    summary: "更新可写客户端状态。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "state.write"
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "state 句柄。"
+      required: true
+      expression: false
+      targets:
+        - "state"
+    property "value"
+      type: "value"
+      description: "赋值表达式或字面值。"
+      required: true
+      expression: true
+  schema #s_navigate "navigate"
+    summary: "按已声明页面跳转。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "page"
+      type: "ref"
+      description: "目标页面。"
+      required: true
+      expression: false
+      targets:
+        - "page"
+    property "args"
+      type: "record"
+      description: "路由参数。"
+      required: false
+      expression: true
+  schema #s_notify "notify"
+    summary: "用户可见反馈。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "message"
+      type: "text"
+      description: "提示内容，不得含秘密。"
+      required: true
+      expression: true
+  schema #s_refresh "refresh"
+    summary: "显式刷新查询或动态槽位。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "resource.refresh"
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "已声明的 resource 或 ui.slot。"
+      required: true
+      expression: false
+      targets:
+        - "resource"
+        - "ui.slot"
+  schema #s_resource "resource"
+    summary: "客户端查询资源及 loading/error/items/cursor 状态。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "query"
+      type: "ref"
+      description: "只读后端 query。"
+      required: true
+      expression: false
+      targets:
+        - "query"
+    property "args"
+      type: "record"
+      description: "查询输入。"
+      required: false
+      expression: true
+      default: {}
+    port "snapshot"
+      type: "QuerySnapshot"
+      phase: "execution"
+  schema #s_form "form"
+    summary: "标准组合表单。"
+    primary: "title"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "表单标题。"
+      required: false
+      expression: false
+    property "create"
+      type: "ref"
+      description: "collection 或 create action。"
+      required: true
+      expression: false
+      targets:
+        - "collection"
+        - "action"
+    property "on_success_refresh"
+      type: "list<ref>"
+      description: "仅写成功后显式刷新；刷新失败不撤销写成功。"
+      required: false
+      expression: false
+      targets:
+        - "resource"
+    property "fields"
+      type: "list<text>"
+      description: "白名单表单字段，禁止 owner/version 等服务端字段。"
+      required: false
+      expression: false
+  schema #s_list "list"
+    summary: "具有加载、空态、错误和有界分页的组合列表。"
+    primary: null
+    identity: "required"
+    children:
+      - "ui.*"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "source"
+      type: "ref"
+      description: "collection 或客户端 resource。"
+      required: true
+      expression: false
+      targets:
+        - "collection"
+        - "resource"
+    property "empty_text"
+      type: "text"
+      description: "空态文案。"
+      required: false
+      expression: false
+    property "key"
+      type: "text"
+      description: "稳定行身份字段。"
+      required: false
+      expression: false
+      default: "id"
+  schema #s_component "component"
+    summary: "类型化复用界面组件。"
+    primary: "name"
+    identity: "required"
+    children:
+      - "ui.*"
+      - "slot"
+      - "state"
+      - "computed"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "组件说明。"
+      required: false
+      expression: false
+    property "props"
+      type: "record"
+      description: "属性名到业务类型。"
+      required: true
+      expression: false
+    property "events"
+      type: "record"
+      description: "事件名到事件载荷类型。"
+      required: false
+      expression: false
+      default: {}
+  schema #s_slot "slot"
+    summary: "组件内容插槽，不是动态生成槽位。"
+    primary: "name"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "插槽名。"
+      required: true
+      expression: false
+  schema #s_component_use "component.use"
+    summary: "组件实例，属性按组件契约检查。"
+    primary: null
+    identity: "optional"
+    children:
+      - "ui.*"
+      - "fill_slot"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "component"
+      type: "ref"
+      description: "组件声明。"
+      required: true
+      expression: false
+      targets:
+        - "component"
+    property "props"
+      type: "record"
+      description: "输入参数。"
+      required: true
+      expression: true
+  schema #s_fill_slot "fill_slot"
+    summary: "填充已声明插槽。"
+    primary: "name"
+    identity: "optional"
+    children:
+      - "ui.*"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "插槽名。"
+      required: true
+      expression: false
+  rule #rule_UI_LIFECYCLE "UI_LIFECYCLE"
+    level: "MUST"
+    statement: |
+      页面卸载后不得回写已销毁状态。资源刷新与生成采用请求版本/latest-wins，取消不等于回滚已提交服务端效果。表单提交保存输入快照，成功后只清空仍等于快照的输入。
+    verification: "runtime"
+    origin: "conversation-design"
+  rule #rule_UI_BINDINGS "UI_BINDINGS"
+    level: "MUST"
+    statement: |
+      ui.input.bind/set.target 只能引用可写 state；props、actor、query 行和产物不可写。@ 与 $ 的区别不可通过框架映射抹去。
+    verification: "type-effect"
+    origin: "conversation-design"
+  rule #rule_UI_LIST_FORMS "UI_LIST_FORMS"
+    level: "MUST"
+    statement: |
+      form/list 按锁定 recipe 展开，提供校验、加载、错误、分页和请求去重。控件出现或隐藏不得隐式开放或撤销后端权限。
+    verification: "recipe-runtime"
+    origin: "conversation-design"

@@ -1,0 +1,45 @@
+uicl "1.0"
+
+target #windows
+  adapter: "desktop.wpf"
+  platform: windows
+  framework: wpf
+  language: csharp
+  architectures: [x64, arm64]
+  toolchain: locked
+  build_host: windows
+  ui_privilege: as_invoker
+
+file #native_source "原生接口待实现边界"
+  media: "text/x-csharp"
+  source: @"../assets/ServiceActions.cs"
+
+native.operation #set_start_mode
+  interface: "windows.service.set_start_mode@1"
+  implementation: @native_source
+  entry: "ServiceActions.SetStartMode"
+  input:
+    service: text
+    mode: text
+  output: unit
+  effects: [os.service.configure]
+  policy:
+    allowed_objects: [DemoMaintenanceService]
+    execution: elevated_broker
+    approval: each_invocation
+  recovery:
+    capture_before: true
+    restore: compare_and_set
+  threading: worker
+  errors: [DENIED, NOT_FOUND, CONFLICT, INDETERMINATE]
+
+app #maintenance "桌面维护工具"
+  target: @windows
+  ui.text "只允许修改由本示例管理的演示服务。"
+  ui.button #manual "设为手动启动"
+    on click
+      invoke
+        capability: @set_start_mode
+        args:
+          service: "DemoMaintenanceService"
+          mode: manual

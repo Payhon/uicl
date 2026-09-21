@@ -1,0 +1,48 @@
+uicl "1.0"
+
+type #Answer "检索回答"
+  field "text"
+    type: text
+    min: 1
+  field "needs_review"
+    type: bool
+
+tool #search "知识库检索"
+  adapter: mcp
+  binding: "knowledge.search"
+  input:
+    query: text
+  output: "list<text>"
+  effects: [data.read]
+  permissions: [knowledge.read]
+
+agent #researcher "资料助理"
+  input:
+    question: text
+  output: @Answer
+  model_binding: "assistant_model"
+  tools: [@search]
+  instructions: |
+    先检索资料，再根据资料回答。
+    无法证实时明确说明，并设置 needs_review。
+  memory:
+    scope: session
+    retention_days: 1
+    secrets: deny
+  limits:
+    timeout_ms: 60000
+    attempts: 1
+    max_steps: 8
+    max_tool_calls: 4
+  policy:
+    tool_scope: declared_only
+    external_writes: deny
+    delegation_depth: 0
+    data_egress: approved_only
+  on_exhausted: human_review
+
+agent.run #answer
+  agent: @researcher
+  args:
+    question: "资料中描述了哪些明确限制？"
+  approval: required

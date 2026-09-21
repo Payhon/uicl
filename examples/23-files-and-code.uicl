@@ -1,0 +1,46 @@
+uicl "1.0"
+
+file #json_config "JSON 原文"
+  media: "application/json"
+  body: ```json
+    {"enabled": true, "literal": "$not_a_binding"}
+  ```
+
+file #python_code "Python 原文"
+  media: "text/x-python"
+  body: ```python
+    def add(a: int, b: int) -> int:
+        return a + b
+  ```
+
+file #go_code "Go 原文"
+  media: "text/x-go"
+  body: ```go
+    package main
+    func Add(a, b int) int { return a + b }
+  ```
+
+file #typescript_code "TypeScript 原文"
+  media: "text/typescript"
+  body: ```typescript
+    export const add = (a: number, b: number): number => a + b;
+  ```
+
+file #php_code "PHP 原文"
+  media: "text/x-php"
+  body: ```php
+    <?php
+    function add(int $a, int $b): int { return $a + $b; }
+  ```
+
+file #existing_binary "任意二进制引用"
+  source: @"file:///C:/Example/native.dll"
+  media: "application/octet-stream"
+
+projection #binary_view
+  source: @existing_binary
+  adapter: "host.binary-inspector"
+  fidelity: semantic
+  editable: false
+  known_loss:
+    - "仅展示适配器能够验证的节区与依赖，不恢复原始源码。"

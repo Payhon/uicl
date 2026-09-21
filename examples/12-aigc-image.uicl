@@ -1,0 +1,40 @@
+uicl "1.0"
+
+image #cover "咖啡海报"
+  prompt: "一杯冰咖啡，干净背景，顶部为精确标题留白。"
+  size: [1200, 1600]
+  prefer:
+    lighting: "柔和侧光"
+    palette:
+      - "奶油白"
+      - "咖啡棕"
+  scene
+    background: "浅色无纹理背景"
+    subject "冰咖啡"
+      count: 1
+      region: [0.25, 0.25, 0.5, 0.6]
+  overlay
+    overlay.text "夏日限定"
+      region: [0.1, 0.05, 0.8, 0.12]
+      font: "licensed-font:headline"
+      font_px: 72
+      align: center
+  require
+    check "media.dimensions"
+      equals: [1200, 1600]
+    check "media.mime"
+      equals: "image/png"
+  review
+    criterion "主要杯子只有一个，标题不遮挡主体。"
+
+generate #render
+  from: @cover
+  phase: build
+  output: "image/png"
+  binding: "image_generation"
+  limits:
+    timeout_ms: 90000
+    attempts: 1
+    max_cost_minor: 100
+    currency: USD
+  approval: required

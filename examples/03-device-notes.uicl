@@ -1,0 +1,16 @@
+uicl "1.0"
+
+app #notes_app "随手记"
+  collection #notes
+    storage: device
+    operations:
+      - read
+      - create
+    field "content"
+      type: text
+      min: 1
+  form #editor "新增便签"
+    create: @notes
+  list #entries
+    source: @notes
+    empty_text: "尚无便签。"

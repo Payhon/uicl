@@ -1,0 +1,277 @@
+uicl "1.0"
+
+profile #profile_host "SSH 主机操作与 ECS 发布"
+  id: "uicl.host"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    通用已有 Linux 主机部署。SSH 不授予云控制面权限。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.deployment@1.0.0"
+  origin: "scenario-review-and-1.0-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "ops"
+  record_schema #r_SshAuthentication "SshAuthentication"
+    summary: "SSH 认证。"
+    unknown_fields: "reject"
+    property "method"
+      type: "text"
+      description: "认证方式。"
+      required: true
+      expression: false
+      enum:
+        - "password"
+        - "private_key"
+    property "credential"
+      type: "ref"
+      description: "秘密句柄。"
+      required: true
+      expression: false
+      targets:
+        - "secret"
+  record_schema #r_HostKey "HostKey"
+    summary: "可信服务器身份。"
+    unknown_fields: "reject"
+    property "policy"
+      type: "text"
+      description: "固定指纹。"
+      required: true
+      expression: false
+      enum:
+        - "pinned"
+    property "fingerprint"
+      type: "text"
+      description: "可信渠道取得的主机指纹。"
+      required: true
+      expression: true
+  record_schema #r_HostExpected "HostExpected"
+    summary: "主机前置检查。"
+    unknown_fields: "reject"
+    property "os"
+      type: "text"
+      description: "操作系统。"
+      required: true
+      expression: false
+    property "architecture"
+      type: "text"
+      description: "CPU 架构。"
+      required: true
+      expression: false
+    property "service_manager"
+      type: "text"
+      description: "服务管理器。"
+      required: true
+      expression: false
+  record_schema #r_Privilege "Privilege"
+    summary: "远程操作提权要求。"
+    unknown_fields: "reject"
+    property "method"
+      type: "text"
+      description: "sudo 或 none。"
+      required: true
+      expression: false
+      enum:
+        - "sudo"
+        - "none"
+    property "mode"
+      type: "text"
+      description: "提权方式。"
+      required: true
+      expression: false
+      enum:
+        - "noninteractive"
+        - "credential"
+    property "credential"
+      type: "ref"
+      description: "单独 sudo 凭据，不默认等于 SSH 密码。"
+      required: false
+      expression: false
+      targets:
+        - "secret"
+  record_schema #r_Health "Health"
+    summary: "健康检查。"
+    unknown_fields: "reject"
+    property "url"
+      type: "text"
+      description: "目标 URL；受执行位置和网络策略限制。"
+      required: true
+      expression: false
+    property "expected_status"
+      type: "int"
+      description: "期望 HTTP 状态。"
+      required: true
+      expression: false
+    property "timeout_ms"
+      type: "int"
+      description: "超时。"
+      required: true
+      expression: false
+  record_schema #r_ReleaseRecovery "ReleaseRecovery"
+    summary: "发布恢复。"
+    unknown_fields: "reject"
+    property "on_unhealthy"
+      type: "text"
+      description: "程序版本恢复范围。"
+      required: true
+      expression: false
+      enum:
+        - "previous_binary"
+        - "stop"
+    property "on_disconnect"
+      type: "text"
+      description: "断线先对账。"
+      required: true
+      expression: false
+      enum:
+        - "reconcile"
+    property "database"
+      type: "text"
+      description: "不自动逆转数据库。"
+      required: true
+      expression: false
+      enum:
+        - "no_automatic_rollback"
+  schema #s_ops_ssh_host "ops.ssh_host"
+    summary: "已有主机的可信连接配置。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "address"
+      type: "text"
+      description: "IP 或主机名。"
+      required: true
+      expression: true
+    property "port"
+      type: "int"
+      description: "SSH 端口。"
+      required: false
+      expression: false
+      default: 22
+    property "user"
+      type: "text"
+      description: "SSH 用户。"
+      required: true
+      expression: true
+    property "authentication"
+      type: "record<SshAuthentication>"
+      description: "认证。"
+      required: true
+      expression: false
+    property "host_key"
+      type: "record<HostKey>"
+      description: "服务端身份。"
+      required: true
+      expression: false
+    property "expected"
+      type: "record<HostExpected>"
+      description: "前置环境。"
+      required: true
+      expression: false
+    property "privilege"
+      type: "record<Privilege>"
+      description: "提权。"
+      required: true
+      expression: false
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  schema #s_ops_service_release "ops.service_release"
+    summary: "上传校验、版本目录、进程管理及健康检查。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "host.deploy"
+    category: "managed-resource"
+    property "host"
+      type: "ref"
+      description: "SSH 主机。"
+      required: true
+      expression: false
+      targets:
+        - "ops.ssh_host"
+    property "artifact"
+      type: "ref"
+      description: "真实构建产物。"
+      required: true
+      expression: false
+    property "service_name"
+      type: "text"
+      description: "服务名。"
+      required: true
+      expression: false
+    property "run_as"
+      type: "text"
+      description: "独立服务账户，须预先存在或经引导创建。"
+      required: true
+      expression: false
+    property "directory"
+      type: "text"
+      description: "受管发布目录。"
+      required: true
+      expression: false
+    property "executable"
+      type: "text"
+      description: "包内可执行入口。"
+      required: true
+      expression: false
+    property "environment"
+      type: "record"
+      description: "环境变量；秘密只在运行端定向注入。"
+      required: false
+      expression: false
+      default: {}
+    property "retain_releases"
+      type: "int"
+      description: "保留程序版本数量。"
+      required: true
+      expression: false
+    property "health"
+      type: "record<Health>"
+      description: "健康检查。"
+      required: true
+      expression: false
+    property "recovery"
+      type: "record<ReleaseRecovery>"
+      description: "失败/断线恢复。"
+      required: true
+      expression: false
+    property "approval"
+      type: "text"
+      description: "发布需要外部授权。"
+      required: true
+      expression: false
+      enum:
+        - "required"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  rule #rule_HOST_AUTH "HOST_AUTH"
+    level: "MUST"
+    statement: |
+      SSH 密码/密钥仅由凭据代理交给认证入口。严格主机指纹校验，变化时报错；不能为方便而自动关闭验证。sudo 权限必须独立检查。
+    verification: "ssh-adapter"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_HOST_RECONCILE "HOST_RECONCILE"
+    level: "MUST"
+    statement: |
+      断线不能直接解释为失败。执行日志/标识与目标状态决定恢复；先对账后重试迁移。上传到临时版本目录、校验摘要后切换；previous_binary 不回滚数据库。
+    verification: "ssh-runtime"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_HOST_CLOUD_BOUNDARY "HOST_CLOUD_BOUNDARY"
+    level: "MUST"
+    statement: |
+      登录 ECS 的系统权限与阿里云 RAM/安全组/实例创建权限分离。普通 SSH 场景不需要也不拥有云控制面权限；网络和账户前置条件不满足应阻断。
+    verification: "adapter-preflight"
+    origin: "scenario-review-and-1.0-completion"

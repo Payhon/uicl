@@ -1,0 +1,23 @@
+uicl "1.0"
+
+module #build_module
+  exports: [web_build, release_build]
+use #ui
+  source: @"./ui.uicl"
+use #backend
+  source: @"./backend.uicl"
+
+build #web_build
+  source: @ui::app
+  target: @ui::web_target
+  artifact_type: "application/zip"
+  toolchain_binding: "web_toolchain"
+
+build #release_build
+  source: @backend::service
+  target: @backend::go_target
+  artifact_type: "application/gzip"
+  embed: [@web_build.output]
+  toolchain_binding: "go_api_with_static_bundle"
+  entrypoint: "bin/api"
+  static_mount: "/"

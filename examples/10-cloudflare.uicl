@@ -1,0 +1,46 @@
+uicl "1.0"
+
+parameter #account_id "Cloudflare 账号"
+  type: text
+
+secret #cloudflare_token "资源管理 Token"
+  source: runtime_prompt
+  scope: [cloudflare_adapter]
+
+cloudflare.provider #cf
+  account_id: $account_id
+  token: @cloudflare_token
+  adapter_binding: "cloudflare_adapter"
+
+file #worker_bundle "Worker 源码"
+  source: @"../assets/worker.mjs"
+  media: "text/javascript"
+
+cloudflare.r2_bucket #uploads
+  provider: @cf
+  name: "uicl-example-uploads"
+  on_remove: retain
+
+cloudflare.d1_database #db
+  provider: @cf
+  name: "uicl-example-db"
+  on_remove: retain
+
+cloudflare.worker #api
+  provider: @cf
+  name: "uicl-example-api"
+  entry: @worker_bundle
+  compatibility_date: "2026-09-01"
+  workers_dev: true
+  bindings:
+    DB: @db
+    FILES: @uploads
+
+deployment #production "Cloudflare 示例"
+  resources: [@uploads, @db, @api]
+  state:
+    binding: "infra-state:cloudflare-example"
+    locking: required
+    encryption: required
+  existing_resources: require_import
+  approval: required

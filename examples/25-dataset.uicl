@@ -1,0 +1,22 @@
+uicl "1.0"
+
+file #input_spec
+  source: @"../assets/product-facts.md"
+  media: "text/markdown"
+
+artifact #output_text
+  source: @"../assets/example-answer.md"
+  media: "text/markdown"
+
+dataset #samples "文本样例集"
+  purpose: "格式加载器测试，不是自动获得训练许可。"
+  split_policy: source_group
+  permission: unverified
+  loader: "native-modality-with-uicl-contract"
+  sample #one
+    source_group: "product-example-1"
+    input: @input_spec
+    output: @output_text
+    license: "unverified"
+    consent: "unverified"
+    sensitivity: "public-demo"

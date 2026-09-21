@@ -1,0 +1,135 @@
+uicl "1.0"
+
+profile #profile_mobile "移动端目标和设备能力"
+  id: "uicl.mobile"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    统一业务契约映射多个工程，权限和生命周期显式。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.application@1.0.0"
+  origin: "scenario-review-and-1.0-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "mobile"
+  record_schema #r_MobileBinding "MobileBinding"
+    summary: "平台能力实现。"
+    unknown_fields: "reject"
+    property "target"
+      type: "ref"
+      description: "目标平台配置。"
+      required: true
+      expression: false
+      targets:
+        - "target"
+    property "implementation"
+      type: "text"
+      description: "插件/原生模块绑定名。"
+      required: true
+      expression: false
+  schema #s_mobile_permission "mobile.permission"
+    summary: "设备权限状态处理要求。"
+    primary: "name"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "设备能力名。"
+      required: true
+      expression: false
+    property "usage"
+      type: "text"
+      description: "前台或后台。"
+      required: true
+      expression: false
+      enum:
+        - "foreground"
+        - "background"
+    property "request"
+      type: "text"
+      description: "请求时机。"
+      required: true
+      expression: false
+      enum:
+        - "user_gesture"
+    property "on_denied"
+      type: "text"
+      description: "拒绝路径。"
+      required: true
+      expression: false
+      enum:
+        - "explain_and_stop"
+    property "on_unavailable"
+      type: "text"
+      description: "不支持路径。"
+      required: true
+      expression: false
+      enum:
+        - "show_unavailable"
+  schema #s_mobile_capability "mobile.capability"
+    summary: "跨平台设备接口。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "interface"
+      type: "text"
+      description: "能力接口版本。"
+      required: true
+      expression: false
+    property "permission"
+      type: "ref"
+      description: "权限契约。"
+      required: true
+      expression: false
+      targets:
+        - "mobile.permission"
+    property "bindings"
+      type: "list<record<MobileBinding>>"
+      description: "每目标实现。"
+      required: true
+      expression: false
+    property "input"
+      type: "record"
+      description: "输入类型。"
+      required: true
+      expression: false
+    property "output"
+      type: "text|ref"
+      description: "结果类型。"
+      required: true
+      expression: false
+    property "lifecycle"
+      type: "text"
+      description: "组件销毁后的处理。"
+      required: true
+      expression: false
+      enum:
+        - "cancel_on_unmount"
+    property "errors"
+      type: "list<text>"
+      description: "权限拒绝/取消/不可用等。"
+      required: true
+      expression: false
+    port "output"
+      type: "dynamic"
+      phase: "execution"
+  rule #rule_MOBILE_TARGETS "MOBILE_TARGETS"
+    level: "MUST"
+    statement: |
+      多个 target 分别生成工程，不能把平台能力并集冒充共同能力。未支持的平台/插件报错或要求显式分支。SDK、架构、签名与构建主机锁定。
+    verification: "build-adapter"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_MOBILE_PERMISSIONS "MOBILE_PERMISSIONS"
+    level: "MUST"
+    statement: |
+      声明权限不是用户已授权。处理未询问、允许、拒绝、不可用、取消和后台限制；页面卸载后的回调不能回写失效状态。
+    verification: "device-runtime"
+    origin: "scenario-review-and-1.0-completion"

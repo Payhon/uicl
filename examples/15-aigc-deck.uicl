@@ -1,0 +1,29 @@
+uicl "1.0"
+
+deck #proposal "产品介绍"
+  ratio: "16:9"
+  editable: true
+  slide #intro "产品定位"
+    layout: title_and_body
+    slide.text "减少整理内容所需的重复操作。"
+    notes: "这里不承诺未验证的效率提升数值。"
+  slide #features "核心能力"
+    layout: three_columns
+    slide.text "创建内容"
+    slide.text "检查规则"
+    slide.text "保留来源"
+  require
+    check "deck.slide_count"
+      equals: 2
+    check "deck.text_editable"
+      equals: true
+
+generate #deck_build
+  from: @proposal
+  phase: build
+  output: "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  binding: "deck_export"
+  limits:
+    timeout_ms: 120000
+    attempts: 1
+  approval: required

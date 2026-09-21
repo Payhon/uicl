@@ -1,0 +1,216 @@
+uicl "1.0"
+
+profile #profile_cloudflare "Cloudflare 受管基础设施"
+  id: "uicl.cloudflare"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    提供方专属资源绑定，生命周期服从 Deployment 契约。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.deployment@1.0.0"
+  origin: "scenario-review-and-1.0-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "cloudflare"
+  schema #s_cloudflare_provider "cloudflare.provider"
+    summary: "Cloudflare 账号与凭据句柄。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "account_id"
+      type: "text"
+      description: "账号 ID。"
+      required: true
+      expression: true
+    property "token"
+      type: "ref"
+      description: "最小权限 token 句柄。"
+      required: true
+      expression: false
+      targets:
+        - "secret"
+    property "adapter_binding"
+      type: "text"
+      description: "具体 API/Terraform 等适配器。"
+      required: true
+      expression: false
+  schema #s_cloudflare_r2_bucket "cloudflare.r2_bucket"
+    summary: "明确保留策略的受管云资源。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "provider"
+      type: "ref"
+      description: "账号提供方。"
+      required: true
+      expression: false
+      targets:
+        - "cloudflare.provider"
+    property "name"
+      type: "text"
+      description: "云端名称。"
+      required: true
+      expression: false
+    property "on_remove"
+      type: "text"
+      description: "数据资源删除策略。"
+      required: true
+      expression: false
+      enum:
+        - "retain"
+        - "approval_required"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+    port "resource"
+      type: "CloudResource"
+      phase: "execution"
+  schema #s_cloudflare_d1_database "cloudflare.d1_database"
+    summary: "明确保留策略的受管云资源。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "provider"
+      type: "ref"
+      description: "账号提供方。"
+      required: true
+      expression: false
+      targets:
+        - "cloudflare.provider"
+    property "name"
+      type: "text"
+      description: "云端名称。"
+      required: true
+      expression: false
+    property "on_remove"
+      type: "text"
+      description: "数据资源删除策略。"
+      required: true
+      expression: false
+      enum:
+        - "retain"
+        - "approval_required"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+    port "resource"
+      type: "CloudResource"
+      phase: "execution"
+  schema #s_cloudflare_worker "cloudflare.worker"
+    summary: "Worker 部署单元与绑定。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "provider"
+      type: "ref"
+      description: "账号提供方。"
+      required: true
+      expression: false
+      targets:
+        - "cloudflare.provider"
+    property "name"
+      type: "text"
+      description: "Worker 名称。"
+      required: true
+      expression: false
+    property "entry"
+      type: "ref"
+      description: "已构建 JS/模块产物。"
+      required: true
+      expression: false
+    property "compatibility_date"
+      type: "text"
+      description: "锁定兼容日期，不自动取今天。"
+      required: true
+      expression: false
+    property "workers_dev"
+      type: "bool"
+      description: "是否公开 workers.dev 入口。"
+      required: true
+      expression: false
+    property "bindings"
+      type: "record"
+      description: "绑定名到受管资源/凭据句柄，按接口验证。"
+      required: true
+      expression: false
+    property "on_remove"
+      type: "text"
+      description: "删除门禁。"
+      required: false
+      expression: false
+      default: "approval_required"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  schema #s_cloudflare_hyperdrive "cloudflare.hyperdrive"
+    summary: "连接已有 PostgreSQL 等支持源的连接资源。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "managed-resource"
+    property "provider"
+      type: "ref"
+      description: "账号提供方。"
+      required: true
+      expression: false
+      targets:
+        - "cloudflare.provider"
+    property "name"
+      type: "text"
+      description: "名称。"
+      required: true
+      expression: false
+    property "origin"
+      type: "ref"
+      description: "连接凭据句柄。"
+      required: true
+      expression: false
+      targets:
+        - "secret"
+    property "on_remove"
+      type: "text"
+      description: "移除策略。"
+      required: true
+      expression: false
+      enum:
+        - "retain"
+        - "approval_required"
+    property "depends_on"
+      type: "list<ref>"
+      description: "显式计划前置依赖；兄弟声明顺序不代表部署顺序。"
+      required: false
+      expression: false
+  rule #rule_CF_DIALECT "CF_DIALECT"
+    level: "MUST"
+    statement: |
+      D1 使用独立 SQL 方言，不把 PostgreSQL RLS/类型/索引静默投影为 D1。需要 PostgreSQL 时声明外部数据库与可用连接方案。
+    verification: "adapter"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_CF_MANAGED_STATE "CF_MANAGED_STATE"
+    level: "MUST"
+    statement: |
+      通过已锁定适配器管理每项资源。重复 apply 复用外部 ID，要求 import 接管、state 锁与漂移检测。同字段不能同时由多个管理工具独立覆盖。
+    verification: "provider-runtime"
+    origin: "scenario-review-and-1.0-completion"

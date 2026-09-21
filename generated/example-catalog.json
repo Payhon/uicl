@@ -1,0 +1,556 @@
+[
+  {
+    "path": "examples/01-hello.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "94b63e2e21c2e0366b00d4c2c750906558f7d33a203554252a9c5a630dc78b2e"
+  },
+  {
+    "path": "examples/02-counter.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "8238a465aa599f11b39fc84b46b7470a1f33315079ecfd391015234631b4539a"
+  },
+  {
+    "path": "examples/03-device-notes.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "505f9d07047dde25a25b0a7d0f712d19da9734eccab89a2874740a03b641e098"
+  },
+  {
+    "path": "examples/04-design-system.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "c28d39f8c65d3a5b55d71d4bf624a3e9ab7228eaae858f52894c936c132f71ea"
+  },
+  {
+    "path": "examples/05-component.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "50b0d20e8d2a0e22d6c75a83fc4b6a1c88d04d348418369a2e1e8cdbb5aa09d7"
+  },
+  {
+    "path": "examples/06-mobile-targets.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "a4469d1d25cacdba89083580cf08e9577a07339527d0d595506e825b23298a15"
+  },
+  {
+    "path": "examples/07-mobile-camera.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.mobile@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "1a8d936721c8d2005221975f9f27ee0b5fc3600ef6bc3f1bc8f7962d9a704b39"
+  },
+  {
+    "path": "examples/08-windows-native.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.native@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "d4a7b3918b8782c91671732e3bf18cd0b907d3eebb26d66e6b3ba7b9c23dfea6"
+  },
+  {
+    "path": "examples/09-postgresql.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.postgresql@1.0.0"
+    ],
+    "sha256": "4854a5f7eed58f537676dc54082c0e59f4553af13ecb47c2aacf8b1a91c04469"
+  },
+  {
+    "path": "examples/10-cloudflare.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.cloudflare@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "e044f4ec53ca4e8c0fcca0fb373b4da8afdf40dd7d28692561e247aab10f2b56"
+  },
+  {
+    "path": "examples/11-ecs-ssh.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.host@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "a0ae6fa168c53ad4590b24e299d73f054291703021f547d4e492105bcd7cf108"
+  },
+  {
+    "path": "examples/12-aigc-image.uicl",
+    "profiles": [
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "e22ffb186d6c95d6a1fd6a2e19c2f8dd7945197d47bfd017ccac11303b87117a"
+  },
+  {
+    "path": "examples/13-aigc-text.uicl",
+    "profiles": [
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "dcce8fc264582aa4058fb6793ca8ea3c39a990c6559a27f0ed5808d5194917fa"
+  },
+  {
+    "path": "examples/14-aigc-video.uicl",
+    "profiles": [
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "24c6be00c5f187d4c898314680fb81a79d9a90924a7f6cbd011cc5f8efc81286"
+  },
+  {
+    "path": "examples/15-aigc-deck.uicl",
+    "profiles": [
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "72b0c7a81a21d446ae92876752fe2a3e5c93386687dd32899ab2fe856c15ec23"
+  },
+  {
+    "path": "examples/16-aigc-audio.uicl",
+    "profiles": [
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "7b195084387954d58e8eb00d8f3e63cbd546a0c3371f66ce7ba2fb95631ed2ce"
+  },
+  {
+    "path": "examples/17-design-canvas.uicl",
+    "profiles": [
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0"
+    ],
+    "sha256": "c0b836c961b2812b5f8885251970423f8343fe3e6f4502686b807a4db3d4d30e"
+  },
+  {
+    "path": "examples/18-document-spec.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.document@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "9825244298cadb284a29ae3e2ad713b6b57ff3b9e4e75536631134c3c11245ee"
+  },
+  {
+    "path": "examples/19-agent.uicl",
+    "profiles": [
+      "uicl.agent@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "93043940878619910758915216134f12d600f169a4229411a3d1bf276f68ffd1"
+  },
+  {
+    "path": "examples/20-hybrid-classification.uicl",
+    "profiles": [
+      "uicl.agent@1.0.0",
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.hybrid@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "a637fcdec11cf67f57ad98110e593407f0a7eb5f0ee816749e5f9207e744b25e"
+  },
+  {
+    "path": "examples/21-dynamic-image.uicl",
+    "profiles": [
+      "uicl.agent@1.0.0",
+      "uicl.aigc@1.0.0",
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.hybrid@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "c83d69d91d8e6ec970e2ec76bf96ebf68a2ded726d9f1f42b9b61b12c019274d"
+  },
+  {
+    "path": "examples/22-dynamic-ui-wasm.uicl",
+    "profiles": [
+      "uicl.agent@1.0.0",
+      "uicl.aigc@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.hybrid@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "f2754b66a59e4f5cdf6f15bcf06edeb8466c09a9b29aa38de9c60564e78458ad"
+  },
+  {
+    "path": "examples/23-files-and-code.uicl",
+    "profiles": [
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0"
+    ],
+    "sha256": "20b2289befd3f896c221a9dd592b6691ed63b3b27e9b2c750adc51b9189793f8"
+  },
+  {
+    "path": "examples/24-hexl.uicl",
+    "profiles": [
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0"
+    ],
+    "sha256": "e314018ce39fba2f0307ae9e06793ce760fb2a6b75868ef41fa5e42f7ccbe4c7"
+  },
+  {
+    "path": "examples/25-dataset.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.dataset@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "a6ef27711dce4da4597200f318761ec2ede187408c7533b45f3bcac16d0c11b1"
+  },
+  {
+    "path": "examples/26-workflow.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0"
+    ],
+    "sha256": "4c462b80c9d693c7b2e547bc9e17af462232044bfc8a0c3f6da1a44479d1fceb"
+  },
+  {
+    "path": "examples/27-http-service.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0"
+    ],
+    "sha256": "88eee748b1cd83c005b0b17b0edf0deb3bcf4719494dbe5c42d27b3da25b5d1f"
+  },
+  {
+    "path": "examples/28-fullstack-entry.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.host@1.0.0",
+      "uicl.lifecycle@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.postgresql@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "e84d3675444056bf06d0e3967a56b55d5d74359d8522e094384c7700dcc7873a"
+  },
+  {
+    "path": "examples/fullstack/backend.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0"
+    ],
+    "sha256": "797903816c09a49a31d0c891a222e3a30fd644433251b8611f59fdfb010a3638"
+  },
+  {
+    "path": "examples/fullstack/build.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "223b2507a20bcc6f30a078cf37c9d968740d8b8d2c09eef057f56bde430e1ffd"
+  },
+  {
+    "path": "examples/fullstack/database.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.postgresql@1.0.0"
+    ],
+    "sha256": "667d2cb858283898333d1f5b216c8ee67022a611b32123df53895887b0ff4b7f"
+  },
+  {
+    "path": "examples/fullstack/deploy.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.host@1.0.0",
+      "uicl.lifecycle@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.postgresql@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "23b35d3f38238f6c05bf60b6e8e2cb5516937ebbba153c994aeaf0e07853a8ff"
+  },
+  {
+    "path": "examples/fullstack/design.uicl",
+    "profiles": [
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0"
+    ],
+    "sha256": "9e49f0f36adc46ab6a6876bea1d567beef09bbfa1ccf04ae0b1302640a138011"
+  },
+  {
+    "path": "examples/fullstack/project.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.host@1.0.0",
+      "uicl.lifecycle@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.postgresql@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "7646492b22503ce4c9d7f77f445b58e6bdcd8f956b1d9875080e823fdb36ba49"
+  },
+  {
+    "path": "examples/fullstack/requirements.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.lifecycle@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "94ec7650b334b7c0d157afe085ad58a364a0a6f8396fdc30af81e0058a4f1c5b"
+  },
+  {
+    "path": "examples/fullstack/tests.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.deployment@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.lifecycle@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "4c165a7693a0ef8343a9b0e878c9d22a7831b8a308ef8d0516cce28e48108ccb"
+  },
+  {
+    "path": "examples/fullstack/ui.uicl",
+    "profiles": [
+      "uicl.application@1.0.0",
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "cb82bb8fcca9aac1c6f914d8a33897ffa472fdc8169621392009f8c07274b651"
+  },
+  {
+    "path": "examples/hosted/article.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.document@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "0354d1c0ff301c0be42af4c28f08af1bf29a384062391d6d4cf0d472e028d7d5"
+  },
+  {
+    "path": "examples/hosted/data-block.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.document@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "3ee78b432b66170b98641de7b92c7ac0321c4544a906a34f4bd9b136033d93b2"
+  },
+  {
+    "path": "examples/hosted/page.uicl",
+    "profiles": [
+      "uicl.backend@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.design@1.0.0",
+      "uicl.document@1.0.0",
+      "uicl.meta@1.0.0",
+      "uicl.resource@1.0.0",
+      "uicl.testing@1.0.0",
+      "uicl.ui@1.0.0"
+    ],
+    "sha256": "3ddf7ebf59e20e1ef9835da5fb44253bb2bc58d0392170a119f8b0eb81499e1f"
+  },
+  {
+    "path": "examples/profile-authoring/measurement-example.uicl",
+    "profiles": [
+      "example.measurement@1.0.0",
+      "uicl.core@1.0.0",
+      "uicl.meta@1.0.0"
+    ],
+    "sha256": "dfa31e82592a4d648a1a4db610bf9f98f9c3b92cdb17a5fcea627332ed893f46"
+  },
+  {
+    "path": "examples/profile-authoring/measurement-profile.uicl",
+    "profiles": [
+      "uicl.meta@1.0.0"
+    ],
+    "sha256": "430a511240c2d71e370f9e7a230165e81b07e938d6533a7e839eb2b048acf5ef"
+  }
+]

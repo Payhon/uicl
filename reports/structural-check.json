@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "scope": "syntax, registered shapes, primary slots, module exports, reference identity/port existence, selected static rules",
+  "documents": 60,
+  "node_schemas": 162,
+  "record_schemas": 20,
+  "profiles": 20,
+  "references_checked": 227,
+  "external_resources": [
+    {
+      "file": "examples/08-windows-native.uicl",
+      "node": "native_source",
+      "uri": "../assets/ServiceActions.cs",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/10-cloudflare.uicl",
+      "node": "worker_bundle",
+      "uri": "../assets/worker.mjs",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/11-ecs-ssh.uicl",
+      "node": "release",
+      "uri": "artifact://host-supplied/example-api",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/13-aigc-text.uicl",
+      "node": "facts",
+      "uri": "../assets/product-facts.md",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/21-dynamic-image.uicl",
+      "node": "fallback",
+      "uri": "../assets/fallback.svg",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/22-dynamic-ui-wasm.uicl",
+      "node": "verified_component",
+      "uri": "artifact://host-supplied/verified-example-component",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/23-files-and-code.uicl",
+      "node": "existing_binary",
+      "uri": "file:///C:/Example/native.dll",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/25-dataset.uicl",
+      "node": "input_spec",
+      "uri": "../assets/product-facts.md",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/25-dataset.uicl",
+      "node": "output_text",
+      "uri": "../assets/example-answer.md",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    },
+    {
+      "file": "examples/28-fullstack-entry.uicl",
+      "node": "project_source",
+      "uri": "./fullstack/project.uicl",
+      "status": "NOT_RESOLVED_BY_CHECKER"
+    }
+  ],
+  "not_evaluated": [
+    "runtime binding type system",
+    "generic port type compatibility",
+    "permission/effect soundness",
+    "domain runtimes",
+    "real build/deployment",
+    "full host-document conformance",
+    "complete grammar-driven independent parser"
+  ]
+}

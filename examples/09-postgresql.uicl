@@ -1,0 +1,65 @@
+uicl "1.0"
+
+pg.database #business
+  name: "business"
+  engine_major: 18
+  schema: public
+
+  pg.table #customers
+    name: "customers"
+    columns:
+      - name: id
+        type: uuid
+        nullable: false
+      - name: email
+        type: text
+        nullable: false
+    primary_key: [id]
+    unique:
+      - columns: [email]
+
+  pg.table #orders
+    name: "orders"
+    columns:
+      - name: id
+        type: uuid
+        nullable: false
+      - name: customer_id
+        type: uuid
+        nullable: false
+      - name: amount
+        type: "numeric(12,2)"
+        nullable: false
+      - name: status
+        type: text
+        nullable: false
+        default: "pending"
+    primary_key: [id]
+    foreign_keys:
+      - columns: [customer_id]
+        target: @customers
+        target_columns: [id]
+        on_delete: restrict
+    checks:
+      - name: amount_nonnegative
+        sql: "amount >= 0"
+    indexes:
+      - name: pending_orders_by_customer
+        columns: [customer_id]
+        method: btree
+        where_sql: "status = 'pending'"
+        build: concurrently
+
+pg.migration #index_migration
+  database: @business
+  from_version: "1"
+  to_version: "2"
+  atomic: split_allowed
+  destructive: deny
+  lock_timeout_ms: 5000
+  statement_timeout_ms: 120000
+  steps:
+    - operation: create_index
+      target: @orders
+      name: "pending_orders_by_customer"
+      build: concurrently

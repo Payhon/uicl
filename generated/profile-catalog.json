@@ -1,0 +1,265 @@
+[
+  {
+    "id": "uicl.meta",
+    "path": "profiles/00-meta.uicl",
+    "version": "1.0.0",
+    "nodes": 16,
+    "records": 0,
+    "rules": 2,
+    "title": "Profile 与语言自描述",
+    "requires": []
+  },
+  {
+    "id": "uicl.core",
+    "path": "profiles/01-core.uicl",
+    "version": "1.0.0",
+    "nodes": 11,
+    "records": 1,
+    "rules": 4,
+    "title": "核心类型、模块与执行上下文",
+    "requires": [
+      "meta"
+    ]
+  },
+  {
+    "id": "uicl.resource",
+    "path": "profiles/02-resource.uicl",
+    "version": "1.0.0",
+    "nodes": 4,
+    "records": 0,
+    "rules": 3,
+    "title": "文件、产物与任意字节",
+    "requires": [
+      "core"
+    ]
+  },
+  {
+    "id": "uicl.design",
+    "path": "profiles/03-design.uicl",
+    "version": "1.0.0",
+    "nodes": 6,
+    "records": 1,
+    "rules": 2,
+    "title": "设计系统与设计稿",
+    "requires": [
+      "resource"
+    ]
+  },
+  {
+    "id": "uicl.ui",
+    "path": "profiles/04-ui.uicl",
+    "version": "1.0.0",
+    "nodes": 23,
+    "records": 0,
+    "rules": 3,
+    "title": "界面与交互",
+    "requires": [
+      "core",
+      "design"
+    ]
+  },
+  {
+    "id": "uicl.backend",
+    "path": "profiles/05-backend.uicl",
+    "version": "1.0.0",
+    "nodes": 25,
+    "records": 0,
+    "rules": 4,
+    "title": "后端业务与 API",
+    "requires": [
+      "core"
+    ]
+  },
+  {
+    "id": "uicl.application",
+    "path": "profiles/06-application.uicl",
+    "version": "1.0.0",
+    "nodes": 3,
+    "records": 0,
+    "rules": 2,
+    "title": "应用组合与渐进默认",
+    "requires": [
+      "ui",
+      "backend"
+    ]
+  },
+  {
+    "id": "uicl.postgresql",
+    "path": "profiles/07-postgresql.uicl",
+    "version": "1.0.0",
+    "nodes": 6,
+    "records": 5,
+    "rules": 3,
+    "title": "PostgreSQL 关系结构与迁移",
+    "requires": [
+      "core",
+      "backend"
+    ]
+  },
+  {
+    "id": "uicl.testing",
+    "path": "profiles/08-testing.uicl",
+    "version": "1.0.0",
+    "nodes": 17,
+    "records": 0,
+    "rules": 2,
+    "title": "测试与验收证据",
+    "requires": [
+      "ui",
+      "backend",
+      "resource"
+    ]
+  },
+  {
+    "id": "uicl.deployment",
+    "path": "profiles/09-deployment.uicl",
+    "version": "1.0.0",
+    "nodes": 5,
+    "records": 1,
+    "rules": 3,
+    "title": "构建、受管资源与部署计划",
+    "requires": [
+      "core",
+      "resource",
+      "testing"
+    ]
+  },
+  {
+    "id": "uicl.aigc",
+    "path": "profiles/10-aigc.uicl",
+    "version": "1.0.0",
+    "nodes": 18,
+    "records": 1,
+    "rules": 3,
+    "title": "生成内容规格与任务",
+    "requires": [
+      "resource",
+      "design",
+      "testing"
+    ]
+  },
+  {
+    "id": "uicl.agent",
+    "path": "profiles/11-agent.uicl",
+    "version": "1.0.0",
+    "nodes": 4,
+    "records": 2,
+    "rules": 2,
+    "title": "Agent 定义与工具契约",
+    "requires": [
+      "core",
+      "resource",
+      "testing"
+    ]
+  },
+  {
+    "id": "uicl.hybrid",
+    "path": "profiles/12-hybrid.uicl",
+    "version": "1.0.0",
+    "nodes": 5,
+    "records": 0,
+    "rules": 2,
+    "title": "推断、生成槽位与沙箱子应用",
+    "requires": [
+      "core",
+      "ui",
+      "backend",
+      "aigc",
+      "agent"
+    ]
+  },
+  {
+    "id": "uicl.document",
+    "path": "profiles/13-document.uicl",
+    "version": "1.0.0",
+    "nodes": 3,
+    "records": 0,
+    "rules": 3,
+    "title": "原生文档与结构化文档规格",
+    "requires": [
+      "core",
+      "resource",
+      "testing"
+    ]
+  },
+  {
+    "id": "uicl.dataset",
+    "path": "profiles/14-dataset.uicl",
+    "version": "1.0.0",
+    "nodes": 2,
+    "records": 0,
+    "rules": 2,
+    "title": "训练样本与来源血缘",
+    "requires": [
+      "resource",
+      "testing"
+    ]
+  },
+  {
+    "id": "uicl.native",
+    "path": "profiles/15-native.uicl",
+    "version": "1.0.0",
+    "nodes": 1,
+    "records": 2,
+    "rules": 2,
+    "title": "桌面原生 API 与系统操作",
+    "requires": [
+      "core",
+      "resource"
+    ]
+  },
+  {
+    "id": "uicl.mobile",
+    "path": "profiles/16-mobile.uicl",
+    "version": "1.0.0",
+    "nodes": 2,
+    "records": 1,
+    "rules": 2,
+    "title": "移动端目标和设备能力",
+    "requires": [
+      "core",
+      "application"
+    ]
+  },
+  {
+    "id": "uicl.cloudflare",
+    "path": "profiles/17-cloudflare.uicl",
+    "version": "1.0.0",
+    "nodes": 5,
+    "records": 0,
+    "rules": 2,
+    "title": "Cloudflare 受管基础设施",
+    "requires": [
+      "core",
+      "deployment"
+    ]
+  },
+  {
+    "id": "uicl.host",
+    "path": "profiles/18-host.uicl",
+    "version": "1.0.0",
+    "nodes": 2,
+    "records": 6,
+    "rules": 3,
+    "title": "SSH 主机操作与 ECS 发布",
+    "requires": [
+      "core",
+      "deployment"
+    ]
+  },
+  {
+    "id": "uicl.lifecycle",
+    "path": "profiles/19-lifecycle.uicl",
+    "version": "1.0.0",
+    "nodes": 4,
+    "records": 0,
+    "rules": 2,
+    "title": "需求、项目与观测",
+    "requires": [
+      "core",
+      "application",
+      "testing",
+      "deployment"
+    ]
+  }
+]

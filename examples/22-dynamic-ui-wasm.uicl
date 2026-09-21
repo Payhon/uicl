@@ -1,0 +1,36 @@
+uicl "1.0"
+
+file #fallback
+  media: "text/plain"
+  body: "这里显示静态说明。"
+
+generator #panel_generator
+  input:
+    topic: text
+  output: "Artifact<ui.tree>"
+  binding: "ui_tree_model"
+  instructions: "用受限组件解释主题，并展示两个示例。"
+  limits:
+    timeout_ms: 60000
+    attempts: 1
+  constraints:
+    components: [ui.column, ui.heading, ui.text, ui.card]
+    max_nodes: 40
+    max_depth: 6
+    actions: []
+
+artifact #verified_component
+  media: "application/wasm"
+  source: @"artifact://host-supplied/verified-example-component"
+
+wasm.sandbox #mini_app
+  artifact: @verified_component
+  interface: "example.ui_bridge@1"
+  imports: [ui.render, ui.events]
+  network: deny
+  filesystem: deny
+  memory_mib: 64
+  fuel: 5000000
+  timeout_ms: 3000
+  max_nesting: 1
+  approval: required

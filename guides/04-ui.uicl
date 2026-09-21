@@ -1,0 +1,331 @@
+<!-- uicl:markdown 1.0 -->
+
+<!-- uicl
+document #guide_ui "界面与交互 Profile 1.0"
+  version: "1.0"
+  status: "consolidated-specification"
+  authority: "UICL 项目整合规范；不是外部标准组织认证或完整运行时声明。"
+-->
+
+# 界面与交互 Profile 1.0
+
+标识：`uicl.ui@1.0.0`。状态：规范整合稿。依赖：core, design。
+
+有序界面树、状态绑定、事件、查询资源、表单列表与组件。
+
+
+## `ui.column`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.row`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.stack`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.scroll`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.card`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.grid`
+
+有序布局容器，顺序保留。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, if, each, form, list, component.use。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `gap` | `number` | 否 | 否 | 逻辑间距。 |
+| `columns` | `int` | 否 | 否 | grid 的列数。 |
+| `padding` | `number` | 否 | 否 | 内边距。 |
+
+## `ui.text`
+
+显示文字或显式可格式化标量。
+
+主文本：`value`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `value` | `value` | 是 | 允许，仍需业务检查 | 显示值，不是执行代码。 |
+| `size` | `number` | 否 | 否 | 字号。 |
+
+## `ui.heading`
+
+具有标题语义的文字。
+
+主文本：`value`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `value` | `text` | 是 | 允许，仍需业务检查 | 标题文字。 |
+| `level` | `int` | 否 | 否 | 标题层级。 |
+
+## `ui.button`
+
+用户手势触发的按钮。
+
+主文本：`label`；身份：`optional`；允许子节点：on。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `label` | `text` | 是 | 否 | 按钮文案。 |
+| `disabled` | `bool` | 否 | 允许，仍需业务检查 | 是否可操作。 |
+
+## `ui.input`
+
+绑定可写 state 的输入框。
+
+主文本：`label`；身份：`optional`；允许子节点：on。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `label` | `text` | 是 | 否 | 无障碍标签。 |
+| `bind` | `ref` | 是 | 否 | 可写状态句柄。 |
+| `max_length` | `int` | 否 | 否 | 客户端字符数限制，不替代服务端校验。 |
+| `input_type` | `text` | 否 | 否 | text/password/email 等输入提示。 |
+
+## `ui.image`
+
+显示已有图片产物，不接受图片 Spec 本身。
+
+主文本：`None`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `visible` | `bool` | 否 | 允许，仍需业务检查 | 是否显示，不代表权限。 |
+| `style` | `ref` | 否 | 否 | 视觉样式引用。 |
+| `test_id` | `text` | 否 | 否 | 可选稳定测试辅助标识。 |
+| `src` | `ref` | 是 | 否 | 图片资源或已验证图片产物端口。 |
+| `alt` | `text` | 是 | 否 | 替代文字。 |
+
+## `on`
+
+事件顺序处理器，默认等待每一步。
+
+主文本：`event`；身份：`optional`；允许子节点：set, call, invoke, refresh, navigate, notify, let, if。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `event` | `text` | 是 | 否 | 按组件注册表定义的事件。 |
+
+## `set`
+
+更新可写客户端状态。
+
+主文本：`None`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `target` | `ref` | 是 | 否 | state 句柄。 |
+| `value` | `value` | 是 | 允许，仍需业务检查 | 赋值表达式或字面值。 |
+
+## `navigate`
+
+按已声明页面跳转。
+
+主文本：`None`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `page` | `ref` | 是 | 否 | 目标页面。 |
+| `args` | `record` | 否 | 允许，仍需业务检查 | 路由参数。 |
+
+## `notify`
+
+用户可见反馈。
+
+主文本：`None`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `message` | `text` | 是 | 允许，仍需业务检查 | 提示内容，不得含秘密。 |
+
+## `refresh`
+
+显式刷新查询或动态槽位。
+
+主文本：`None`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `target` | `ref` | 是 | 否 | 已声明的 resource 或 ui.slot。 |
+
+## `resource`
+
+客户端查询资源及 loading/error/items/cursor 状态。
+
+主文本：`None`；身份：`required`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `query` | `ref` | 是 | 否 | 只读后端 query。 |
+| `args` | `record` | 否 | 允许，仍需业务检查 | 查询输入。 |
+
+输出端口：`snapshot: QuerySnapshot`，可用阶段 `execution`。
+
+## `form`
+
+标准组合表单。
+
+主文本：`title`；身份：`required`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `title` | `text` | 否 | 否 | 表单标题。 |
+| `create` | `ref` | 是 | 否 | collection 或 create action。 |
+| `on_success_refresh` | `list<ref>` | 否 | 否 | 仅写成功后显式刷新；刷新失败不撤销写成功。 |
+| `fields` | `list<text>` | 否 | 否 | 白名单表单字段，禁止 owner/version 等服务端字段。 |
+
+## `list`
+
+具有加载、空态、错误和有界分页的组合列表。
+
+主文本：`None`；身份：`required`；允许子节点：ui.*。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `source` | `ref` | 是 | 否 | collection 或客户端 resource。 |
+| `empty_text` | `text` | 否 | 否 | 空态文案。 |
+| `key` | `text` | 否 | 否 | 稳定行身份字段。 |
+
+## `component`
+
+类型化复用界面组件。
+
+主文本：`name`；身份：`required`；允许子节点：ui.*, slot, state, computed。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `name` | `text` | 否 | 否 | 组件说明。 |
+| `props` | `record` | 是 | 否 | 属性名到业务类型。 |
+| `events` | `record` | 否 | 否 | 事件名到事件载荷类型。 |
+
+## `slot`
+
+组件内容插槽，不是动态生成槽位。
+
+主文本：`name`；身份：`optional`；允许子节点：无。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `name` | `text` | 是 | 否 | 插槽名。 |
+
+## `component.use`
+
+组件实例，属性按组件契约检查。
+
+主文本：`None`；身份：`optional`；允许子节点：ui.*, fill_slot。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `component` | `ref` | 是 | 否 | 组件声明。 |
+| `props` | `record` | 是 | 允许，仍需业务检查 | 输入参数。 |
+
+## `fill_slot`
+
+填充已声明插槽。
+
+主文本：`name`；身份：`optional`；允许子节点：ui.*。
+
+| 属性 | 形状类型 | 必需 | 表达式 | 语义 |
+|---|---|---|---|---|
+| `name` | `text` | 是 | 否 | 插槽名。 |
+
+## 规则 UI_LIFECYCLE
+
+页面卸载后不得回写已销毁状态。资源刷新与生成采用请求版本/latest-wins，取消不等于回滚已提交服务端效果。表单提交保存输入快照，成功后只清空仍等于快照的输入。
+
+
+验证类别：`runtime`。
+
+## 规则 UI_BINDINGS
+
+ui.input.bind/set.target 只能引用可写 state；props、actor、query 行和产物不可写。@ 与 $ 的区别不可通过框架映射抹去。
+
+
+验证类别：`type-effect`。
+
+## 规则 UI_LIST_FORMS
+
+form/list 按锁定 recipe 展开，提供校验、加载、错误、分页和请求去重。控件出现或隐藏不得隐式开放或撤销后端权限。
+
+
+验证类别：`recipe-runtime`。

@@ -1,0 +1,182 @@
+uicl "1.0"
+
+profile #profile_resource "文件、产物与任意字节"
+  id: "uicl.resource"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    原文、字节与语义投影分别建模，引用不隐式执行。
+  requires:
+    - "uicl.core@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "artifact"
+    - "bytes"
+    - "file"
+    - "projection"
+  schema #s_file "file"
+    summary: "现有文件的受控引用或内嵌原文。"
+    primary: "label"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "resource"
+    property "label"
+      type: "text"
+      description: "可读名称。"
+      required: false
+      expression: false
+    property "source"
+      type: "ref"
+      description: "源 URI。"
+      required: false
+      expression: false
+    property "media"
+      type: "text"
+      description: "媒体类型。"
+      required: true
+      expression: false
+    property "body"
+      type: "text"
+      description: "内嵌原文，与 source 互斥。"
+      required: false
+      expression: false
+    property "digest"
+      type: "text"
+      description: "原始字节摘要；实际值不能伪造。"
+      required: false
+      expression: false
+    property "verification"
+      type: "text"
+      description: "需由构建锁固定真实摘要。"
+      required: false
+      expression: false
+      enum:
+        - "locked_digest"
+    property "encoding"
+      type: "text"
+      description: "文本编码说明，不隐式转码。"
+      required: false
+      expression: false
+  schema #s_bytes "bytes"
+    summary: "内嵌 HEXL 或已有字节资源。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "resource"
+    property "media"
+      type: "text"
+      description: "媒体类型。"
+      required: true
+      expression: false
+    property "transport"
+      type: "text"
+      description: "独立字节封装协议。"
+      required: true
+      expression: false
+      enum:
+        - "hexl1"
+    property "body"
+      type: "text"
+      description: "HEXL 原文。"
+      required: true
+      expression: false
+  schema #s_projection "projection"
+    summary: "绑定原始字节的语义投影。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "source"
+      type: "ref"
+      description: "来源文件。"
+      required: true
+      expression: false
+      targets:
+        - "file"
+        - "bytes"
+    property "adapter"
+      type: "text"
+      description: "投影适配器。"
+      required: true
+      expression: false
+    property "fidelity"
+      type: "text"
+      description: "保真声明。"
+      required: true
+      expression: false
+      enum:
+        - "byte_exact"
+        - "semantic"
+        - "lossy"
+    property "editable"
+      type: "bool"
+      description: "是否允许修改投影。"
+      required: true
+      expression: false
+    property "known_loss"
+      type: "list<text>"
+      description: "已知损失，未知不能写无损。"
+      required: true
+      expression: false
+    property "source_digest"
+      type: "text"
+      description: "执行时核验的来源摘要。"
+      required: false
+      expression: false
+    port "output"
+      type: "Projection"
+      phase: "execution"
+  schema #s_artifact "artifact"
+    summary: "已经存在或外部交付的不可变产物。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "artifact"
+    property "media"
+      type: "text"
+      description: "产物媒体类型。"
+      required: true
+      expression: false
+    property "source"
+      type: "ref"
+      description: "产物 URI。"
+      required: true
+      expression: false
+    property "digest"
+      type: "text"
+      description: "真实摘要或执行绑定前置条件。"
+      required: false
+      expression: false
+    property "producer"
+      type: "text"
+      description: "来源执行回执标识。"
+      required: false
+      expression: false
+  rule #rule_RESOURCE_BYTES "RESOURCE_BYTES"
+    level: "MUST"
+    statement: |
+      原始字节可以承载任何有限文件，但不包括权限、目录关系、扩展属性等文件系统元数据。没有格式适配器只报告不透明资源；不能声称理解内部结构。
+    verification: "codec-adapter"
+    origin: "conversation-design"
+  rule #rule_RESOURCE_URI "RESOURCE_URI"
+    level: "MUST"
+    statement: |
+      相对 URI 以声明模块为基准。解析/编辑不打开任意资源；受控解析限制路径、协议、重定向、大小和递归。内容摘要不等于来源签名。
+    verification: "resolver"
+    origin: "conversation-design"
+  rule #rule_RESOURCE_PROJECTION "RESOURCE_PROJECTION"
+    level: "MUST"
+    statement: |
+      投影记录源摘要、适配器版本、损失和编辑事实来源。修改投影生成新产物；byte_exact 只能由字节往返验证证明。
+    verification: "adapter"
+    origin: "conversation-design"

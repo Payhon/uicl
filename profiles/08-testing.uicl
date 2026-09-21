@@ -1,0 +1,423 @@
+uicl "1.0"
+
+profile #profile_testing "测试与验收证据"
+  id: "uicl.testing"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    测试声明、夹具、断言和验证记录；不会在读取时执行。
+  requires:
+    - "uicl.ui@1.0.0"
+    - "uicl.backend@1.0.0"
+    - "uicl.resource@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "check"
+    - "criterion"
+    - "evidence"
+    - "expect"
+    - "given"
+    - "require"
+    - "review"
+    - "test"
+    - "when"
+  schema #s_test "test"
+    summary: "有隔离级别与目标的测试。"
+    primary: "title"
+    identity: "required"
+    children:
+      - "given"
+      - "when"
+      - "then"
+      - "expect"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "title"
+      type: "text"
+      description: "测试意图。"
+      required: true
+      expression: false
+    property "kind"
+      type: "text"
+      description: "测试种类。"
+      required: true
+      expression: false
+      enum:
+        - "unit"
+        - "integration"
+        - "e2e"
+        - "visual"
+        - "a11y"
+        - "adapter"
+        - "security"
+    property "verifies"
+      type: "list<ref>"
+      description: "关联的需求或规则。"
+      required: false
+      expression: false
+    property "isolation"
+      type: "text"
+      description: "测试实例隔离。"
+      required: true
+      expression: false
+      enum:
+        - "ephemeral"
+        - "sandbox"
+    property "timeout_ms"
+      type: "int"
+      description: "测试超时。"
+      required: false
+      expression: false
+      default: 30000
+    port "evidence"
+      type: "Evidence"
+      phase: "execution"
+  schema #s_given "given"
+    summary: "测试阶段，动作仅作用于隔离环境。"
+    primary: null
+    identity: "optional"
+    children:
+      - "test.reset"
+      - "test.open"
+      - "test.fill"
+      - "test.submit"
+      - "test.click"
+      - "test.execute"
+      - "test.fixture"
+      - "test.actor"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_when "when"
+    summary: "测试阶段，动作仅作用于隔离环境。"
+    primary: null
+    identity: "optional"
+    children:
+      - "test.reset"
+      - "test.open"
+      - "test.fill"
+      - "test.submit"
+      - "test.click"
+      - "test.execute"
+      - "test.fixture"
+      - "test.actor"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_test_reset "test.reset"
+    summary: "清空隔离测试数据，禁止生产实例。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "resource"
+      type: "ref"
+      description: "测试数据源。"
+      required: true
+      expression: false
+  schema #s_test_open "test.open"
+    summary: "打开指定页面。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "page"
+      type: "ref"
+      description: "目标页面。"
+      required: true
+      expression: false
+      targets:
+        - "page"
+  schema #s_test_fill "test.fill"
+    summary: "向指定表单字段输入。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "input/form。"
+      required: true
+      expression: false
+      targets:
+        - "ui.input"
+        - "form"
+    property "field"
+      type: "text"
+      description: "form 字段名。"
+      required: false
+      expression: false
+    property "value"
+      type: "value"
+      description: "输入值。"
+      required: true
+      expression: false
+  schema #s_test_submit "test.submit"
+    summary: "提交指定表单。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "表单。"
+      required: true
+      expression: false
+      targets:
+        - "form"
+  schema #s_test_click "test.click"
+    summary: "点击交互对象。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "按钮。"
+      required: true
+      expression: false
+      targets:
+        - "ui.button"
+  schema #s_test_execute "test.execute"
+    summary: "调用动作并捕获结果或错误。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "action"
+      type: "ref"
+      description: "后端动作。"
+      required: true
+      expression: false
+      targets:
+        - "action"
+    property "args"
+      type: "record"
+      description: "输入。"
+      required: true
+      expression: false
+    port "result"
+      type: "TestResult"
+      phase: "execution"
+  schema #s_test_fixture "test.fixture"
+    summary: "隔离数据夹具；不绕过被测业务授权路径。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "model"
+      type: "ref"
+      description: "模型。"
+      required: true
+      expression: false
+      targets:
+        - "model"
+        - "collection"
+    property "rows"
+      type: "list<record>"
+      description: "初始记录。"
+      required: true
+      expression: false
+  schema #s_test_actor "test.actor"
+    summary: "注入测试身份，生产禁用。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "id"
+      type: "text"
+      description: "测试用户 ID。"
+      required: true
+      expression: false
+    property "roles"
+      type: "list<text>"
+      description: "角色集合。"
+      required: false
+      expression: false
+      default: []
+  schema #s_expect "expect"
+    summary: "测试断言；未评估不是通过。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "ref"
+      description: "目标对象或测试结果。"
+      required: false
+      expression: false
+    property "contains"
+      type: "text"
+      description: "包含的可见文本。"
+      required: false
+      expression: false
+    property "count"
+      type: "int"
+      description: "数量。"
+      required: false
+      expression: false
+    property "equals"
+      type: "value"
+      description: "结构/标量期望值。"
+      required: false
+      expression: false
+    property "error"
+      type: "text"
+      description: "预期错误码。"
+      required: false
+      expression: false
+    property "test"
+      type: "bool"
+      description: "布尔表达式。"
+      required: false
+      expression: true
+  schema #s_check "check"
+    summary: "登记验证器的硬检查。"
+    primary: "rule"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "rule"
+      type: "text"
+      description: "验证器标识。"
+      required: true
+      expression: false
+    property "target"
+      type: "ref"
+      description: "待验证对象；缺省为外层产物。"
+      required: false
+      expression: false
+    property "equals"
+      type: "value"
+      description: "期望值。"
+      required: false
+      expression: false
+    property "min"
+      type: "number"
+      description: "下界。"
+      required: false
+      expression: false
+    property "max"
+      type: "number"
+      description: "上界。"
+      required: false
+      expression: false
+    property "required"
+      type: "bool"
+      description: "是否阻断发布。"
+      required: false
+      expression: false
+      default: true
+    port "evidence"
+      type: "Evidence"
+      phase: "execution"
+  schema #s_require "require"
+    summary: "所有必需检查必须 PASS 才满足。"
+    primary: null
+    identity: "optional"
+    children:
+      - "check"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+  schema #s_review "review"
+    summary: "自然语言评审，必须记录评估者及证据。"
+    primary: null
+    identity: "optional"
+    children:
+      - "criterion"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "evaluator"
+      type: "text"
+      description: "评估器绑定或 human。"
+      required: false
+      expression: false
+      default: "human"
+  schema #s_criterion "criterion"
+    summary: "自然语言评价维度。"
+    primary: "text"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "text"
+      type: "text"
+      description: "评审标准，不会直接编译为确定性检查。"
+      required: true
+      expression: false
+  schema #s_evidence "evidence"
+    summary: "绑定真实检查输入和结果的记录。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "subject_digest"
+      type: "text"
+      description: "被测产物摘要。"
+      required: true
+      expression: false
+    property "contract_digest"
+      type: "text"
+      description: "规格摘要。"
+      required: true
+      expression: false
+    property "validator"
+      type: "text"
+      description: "验证器与版本。"
+      required: true
+      expression: false
+    property "status"
+      type: "text"
+      description: "实际状态。"
+      required: true
+      expression: false
+      enum:
+        - "PASS"
+        - "FAIL"
+        - "ERROR"
+        - "NOT_EVALUATED"
+    property "report"
+      type: "ref"
+      description: "具体报告。"
+      required: false
+      expression: false
+  rule #rule_TEST_ISOLATION "TEST_ISOLATION"
+    level: "MUST"
+    statement: |
+      reset/fixture/actor 注入只能作用于隔离测试实例。测试文件不能授予生产权限；自动生成的测试不代替独立业务验收。
+    verification: "runtime"
+    origin: "conversation-design"
+  rule #rule_TEST_EVIDENCE "TEST_EVIDENCE"
+    level: "MUST"
+    statement: |
+      证据绑定实际产物、契约、验证器版本及输入摘要。旧产物的通过记录不能用于新产物。NOT_EVALUATED/ERROR 不满足 require；被测 Agent 不能自行删除门禁。
+    verification: "runtime"
+    origin: "conversation-design"

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- uicl:html 1.0 -->
+  <title>UICL 原生 HTML</title>
+</head>
+<body>
+  <h1>产品说明</h1>
+  <p id="summary">保留 <strong>HTML</strong> 格式。</p>
+  <!-- uicl
+doc.block #summary_contract
+  target: {html_id: "summary"}
+  intent: "不自动改写正文。"
+  -->
+</body>
+</html>

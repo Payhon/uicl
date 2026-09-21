@@ -1,0 +1,12 @@
+uicl "1.0"
+
+app #counter "计数器"
+  state #count
+    value: 0
+  ui.text
+    value: $count
+  ui.button #increase "加一"
+    on click
+      set
+        target: @count
+        value: = $count + 1

@@ -1,0 +1,9 @@
+uicl "1.0"
+
+use #demo
+  source: @"./fullstack/project.uicl"
+
+// 该声明只引用项目入口，不会自动构建或部署。
+file #project_source "全流程示例入口"
+  source: @"./fullstack/project.uicl"
+  media: "text/plain"

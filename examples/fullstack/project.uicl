@@ -1,0 +1,30 @@
+uicl "1.0"
+
+module #root
+  exports: [demo]
+use #req
+  source: @"./requirements.uicl"
+use #design
+  source: @"./design.uicl"
+use #backend
+  source: @"./backend.uicl"
+use #database
+  source: @"./database.uicl"
+use #ui
+  source: @"./ui.uicl"
+use #tests
+  source: @"./tests.uicl"
+use #build
+  source: @"./build.uicl"
+use #deploy
+  source: @"./deploy.uicl"
+
+project #demo "全流程个人待办"
+  requirements: [@req::create_note, @req::private_notes]
+  design: @design::brand
+  app: @ui::app
+  service: @backend::service
+  database: @database::database
+  tests: [@tests::create_visible, @tests::no_cross_user_update]
+  builds: [@build::web_build, @build::release_build]
+  deployment: @deploy::production

@@ -1,0 +1,224 @@
+uicl "1.0"
+
+profile #profile_design "设计系统与设计稿"
+  id: "uicl.design"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    设计 token、主题、样式、响应式、多语言与可编辑画布。
+  requires:
+    - "uicl.resource@1.0.0"
+  origin: "conversation-design"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "a11y"
+    - "design"
+    - "style"
+    - "theme"
+  record_schema #r_Breakpoint "Breakpoint"
+    summary: "响应式断点。"
+    unknown_fields: "reject"
+    property "name"
+      type: "text"
+      description: "断点名。"
+      required: true
+      expression: false
+    property "min_width"
+      type: "int"
+      description: "最小逻辑宽度。"
+      required: true
+      expression: false
+    property "columns"
+      type: "int"
+      description: "布局列数。"
+      required: true
+      expression: false
+  schema #s_design "design"
+    summary: "可复用设计系统。"
+    primary: "label"
+    identity: "required"
+    children:
+      - "theme"
+      - "style"
+      - "a11y"
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "label"
+      type: "text"
+      description: "系统名称。"
+      required: false
+      expression: false
+    property "preset"
+      type: "text"
+      description: "可选锁定预设。"
+      required: false
+      expression: false
+    property "mode"
+      type: "text"
+      description: "主题模式。"
+      required: false
+      expression: false
+      default: "system"
+      enum:
+        - "light"
+        - "dark"
+        - "system"
+    property "tokens"
+      type: "record"
+      description: "分类的 token 值；类型由设计适配器校验。"
+      required: true
+      expression: false
+    property "locales"
+      type: "list<text>"
+      description: "支持语言。"
+      required: false
+      expression: false
+    property "breakpoints"
+      type: "list<record<Breakpoint>>"
+      description: "有序响应式规则。"
+      required: false
+      expression: false
+    port "tokens"
+      type: "DesignTokens"
+      phase: "compile"
+  schema #s_theme "theme"
+    summary: "对基础 token 的主题覆盖。"
+    primary: "name"
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "主题名。"
+      required: true
+      expression: false
+    property "tokens"
+      type: "record"
+      description: "覆盖相同 token 类型，不改变权限。"
+      required: true
+      expression: false
+  schema #s_style "style"
+    summary: "可复用视觉属性集合。"
+    primary: "name"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "name"
+      type: "text"
+      description: "样式名。"
+      required: true
+      expression: false
+    property "values"
+      type: "record"
+      description: "布局与视觉属性，禁止业务副作用。"
+      required: true
+      expression: true
+  schema #s_a11y "a11y"
+    summary: "可访问性目标，不自动构成达标证据。"
+    primary: null
+    identity: "optional"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "target"
+      type: "text"
+      description: "验收基线名称。"
+      required: true
+      expression: false
+    property "reduce_motion"
+      type: "text"
+      description: "减少动画偏好。"
+      required: false
+      expression: false
+      default: "respect_system"
+    property "keyboard"
+      type: "bool"
+      description: "要求键盘可操作。"
+      required: false
+      expression: false
+      default: true
+  schema #s_design_canvas "design.canvas"
+    summary: "可编辑设计画布。"
+    primary: "label"
+    identity: "required"
+    children:
+      - "design.layer"
+    unknown_properties: "reject"
+    effects: []
+    category: "spec"
+    property "label"
+      type: "text"
+      description: "设计稿标题。"
+      required: false
+      expression: false
+    property "size"
+      type: "list<int>"
+      description: "二维尺寸，必须两个正整数。"
+      required: true
+      expression: false
+    property "editable"
+      type: "bool"
+      description: "要求对象可编辑。"
+      required: true
+      expression: false
+  schema #s_design_layer "design.layer"
+    summary: "带几何和语义的独立图层。"
+    primary: "label"
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects: []
+    category: "declaration"
+    property "label"
+      type: "text"
+      description: "图层说明。"
+      required: false
+      expression: false
+    property "kind"
+      type: "text"
+      description: "图层种类。"
+      required: true
+      expression: false
+      enum:
+        - "text"
+        - "shape"
+        - "image"
+    property "bounds"
+      type: "list<number>"
+      description: "[x,y,w,h]，单位由画布固定。"
+      required: true
+      expression: false
+    property "text"
+      type: "text"
+      description: "文字层正文。"
+      required: false
+      expression: false
+    property "source"
+      type: "ref"
+      description: "图片层资源。"
+      required: false
+      expression: false
+    property "fill"
+      type: "text"
+      description: "颜色或 token 名。"
+      required: false
+      expression: false
+  rule #rule_DESIGN_NO_BUSINESS_EFFECT "DESIGN_NO_BUSINESS_EFFECT"
+    level: "MUST"
+    statement: |
+      主题、断点和样式只能改变布局或视觉；不得改变动作授权、字段类型或后端行为。token 类型冲突报错。
+    verification: "type-effect"
+    origin: "conversation-design"
+  rule #rule_DESIGN_EDITABILITY "DESIGN_EDITABILITY"
+    level: "MUST"
+    statement: |
+      editable 要求输出保留指定的文字/对象/图层。截图不能冒充可编辑设计稿；a11y 目标必须经独立检查或评审。
+    verification: "artifact-validation"
+    origin: "conversation-design"

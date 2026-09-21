@@ -1,0 +1,38 @@
+uicl "1.0"
+
+target #uni
+  adapter: "mobile.uniapp_x"
+  platforms: [android, ios]
+  toolchain: locked
+
+target #rn
+  adapter: "mobile.react_native"
+  platforms: [android, ios]
+  toolchain: locked
+
+mobile.permission #camera_permission "camera"
+  usage: foreground
+  request: user_gesture
+  on_denied: explain_and_stop
+  on_unavailable: show_unavailable
+
+mobile.capability #camera
+  interface: "device.camera.capture@1"
+  permission: @camera_permission
+  bindings:
+    - target: @uni
+      implementation: "host.uts.camera"
+    - target: @rn
+      implementation: "host.rn.camera"
+  input: {}
+  output: "Artifact<image>"
+  lifecycle: cancel_on_unmount
+  errors: [CANCELLED, PERMISSION_DENIED, UNAVAILABLE]
+
+app #camera_app "拍照示例"
+  targets: [@uni, @rn]
+  ui.button #capture "拍照"
+    on click
+      invoke #photo
+        capability: @camera
+        args: {}

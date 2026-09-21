@@ -1,0 +1,26 @@
+uicl "1.0"
+
+action #greet "问候"
+  input "name"
+    type: text
+    normalize: trim
+    min: 1
+    max: 40
+  returns: text
+  allow: true
+  transaction: none
+  idempotency: none
+  run
+    return
+      value: = "你好，" + $input.name
+
+endpoint #hello
+  method: POST
+  path: "/api/hello"
+  action: @greet
+  auth: public
+  body: json
+  rate_limit:
+    requests: 30
+    window_seconds: 60
+    key: ip

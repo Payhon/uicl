@@ -1,0 +1,774 @@
+{
+  "rule_count": 96,
+  "note": "Selected checks may cover parts of a rule; these are not full domain/runtime conformance results.",
+  "rules": [
+    {
+      "id": "core_IDENTITY",
+      "name": "UICL_IDENTITY",
+      "source": "meta/core-rules.uicl",
+      "origin": "最终命名与品牌分离讨论",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_SCOPE",
+      "name": "UICL_SCOPE",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_AUTHORITY",
+      "name": "UICL_AUTHORITY",
+      "source": "meta/core-rules.uicl",
+      "origin": "1.0 编辑细化",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_ARCHITECTURE",
+      "name": "UICL_ARCHITECTURE",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_DOCUMENT_MODES",
+      "name": "UICL_DOCUMENT_MODES",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_LEXICAL",
+      "name": "UICL_LEXICAL",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_NODES",
+      "name": "UICL_NODES",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_VALUE_CONTEXT",
+      "name": "UICL_VALUE_CONTEXT",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_COLLECTIONS",
+      "name": "UICL_COLLECTIONS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_SCALARS",
+      "name": "UICL_SCALARS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_IDENTIFIERS",
+      "name": "UICL_IDENTIFIERS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_BINDINGS",
+      "name": "UICL_BINDINGS",
+      "source": "meta/core-rules.uicl",
+      "origin": "既有语义及 1.0 绑定细化",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_TYPE_SYSTEM",
+      "name": "UICL_TYPE_SYSTEM",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_NUMERIC",
+      "name": "UICL_NUMERIC",
+      "source": "meta/core-rules.uicl",
+      "origin": "1.0 编辑细化：此前未冻结的数值及跨端字符串细节",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_EXPRESSIONS",
+      "name": "UICL_EXPRESSIONS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_RESOURCE_MODEL",
+      "name": "UICL_RESOURCE_MODEL",
+      "source": "meta/core-rules.uicl",
+      "origin": "资源讨论与五场景验证",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_FILE_FORMS",
+      "name": "UICL_FILE_FORMS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_HEXL",
+      "name": "UICL_HEXL",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_MD_HOST",
+      "name": "UICL_MD_HOST",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_HTML_HOST",
+      "name": "UICL_HTML_HOST",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_DOC_EDITING",
+      "name": "UICL_DOC_EDITING",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_PROFILE_PROTOCOL",
+      "name": "UICL_PROFILE_PROTOCOL",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_PROFILE_CATALOG",
+      "name": "UICL_PROFILE_CATALOG",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_APPLICATION",
+      "name": "UICL_APPLICATION",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_DESIGN_UI",
+      "name": "UICL_DESIGN_UI",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_BACKEND",
+      "name": "UICL_BACKEND",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_ACTIONS",
+      "name": "UICL_ACTIONS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_DATABASE",
+      "name": "UICL_DATABASE",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证及本次结构化细化",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_CONTENT",
+      "name": "UICL_CONTENT",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_AGENTS",
+      "name": "UICL_AGENTS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_HYBRID",
+      "name": "UICL_HYBRID",
+      "source": "meta/core-rules.uicl",
+      "origin": "混合程序讨论及 1.0 分派细化",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_WASM",
+      "name": "UICL_WASM",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_TARGET_NATIVE",
+      "name": "UICL_TARGET_NATIVE",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_TARGET_MOBILE",
+      "name": "UICL_TARGET_MOBILE",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_MANAGED_DEPLOY",
+      "name": "UICL_MANAGED_DEPLOY",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证及 1.0 编辑细化",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_CLOUDFLARE",
+      "name": "UICL_CLOUDFLARE",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证；非本轮平台在线验证",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_SSH",
+      "name": "UICL_SSH",
+      "source": "meta/core-rules.uicl",
+      "origin": "五场景验证",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_TESTING",
+      "name": "UICL_TESTING",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_OBSERVABILITY",
+      "name": "UICL_OBSERVABILITY",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_IR_EXCHANGE",
+      "name": "UICL_IR_EXCHANGE",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_COMPILER",
+      "name": "UICL_COMPILER",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_DIAGNOSTICS",
+      "name": "UICL_DIAGNOSTICS",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_GOVERNANCE",
+      "name": "UICL_GOVERNANCE",
+      "source": "meta/core-rules.uicl",
+      "origin": "品牌与开放政策讨论；不新增法律结论",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_MIGRATION",
+      "name": "UICL_MIGRATION",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "core_IMPLEMENTATION",
+      "name": "UICL_IMPLEMENTATION",
+      "source": "meta/core-rules.uicl",
+      "origin": "历史讨论与候选规范",
+      "verification": "see-compiler-conformance",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_PROFILE_SELF_DESCRIPTION",
+      "name": "PROFILE_SELF_DESCRIPTION",
+      "source": "profiles/00-meta.uicl",
+      "origin": "1.0-editorial-completion",
+      "verification": "static",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_PROFILE_BOOTSTRAP",
+      "name": "PROFILE_BOOTSTRAP",
+      "source": "profiles/00-meta.uicl",
+      "origin": "1.0-editorial-completion",
+      "verification": "tooling",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CORE_PURE",
+      "name": "CORE_PURE",
+      "source": "profiles/01-core.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CORE_REF_SCOPE",
+      "name": "CORE_REF_SCOPE",
+      "source": "profiles/01-core.uicl",
+      "origin": "conversation-design",
+      "verification": "static-and-type",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CORE_SECRET",
+      "name": "CORE_SECRET",
+      "source": "profiles/01-core.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CORE_TARGET",
+      "name": "CORE_TARGET",
+      "source": "profiles/01-core.uicl",
+      "origin": "conversation-design",
+      "verification": "adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_RESOURCE_BYTES",
+      "name": "RESOURCE_BYTES",
+      "source": "profiles/02-resource.uicl",
+      "origin": "conversation-design",
+      "verification": "codec-adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_RESOURCE_URI",
+      "name": "RESOURCE_URI",
+      "source": "profiles/02-resource.uicl",
+      "origin": "conversation-design",
+      "verification": "resolver",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_RESOURCE_PROJECTION",
+      "name": "RESOURCE_PROJECTION",
+      "source": "profiles/02-resource.uicl",
+      "origin": "conversation-design",
+      "verification": "adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DESIGN_NO_BUSINESS_EFFECT",
+      "name": "DESIGN_NO_BUSINESS_EFFECT",
+      "source": "profiles/03-design.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DESIGN_EDITABILITY",
+      "name": "DESIGN_EDITABILITY",
+      "source": "profiles/03-design.uicl",
+      "origin": "conversation-design",
+      "verification": "artifact-validation",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_UI_LIFECYCLE",
+      "name": "UI_LIFECYCLE",
+      "source": "profiles/04-ui.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_UI_BINDINGS",
+      "name": "UI_BINDINGS",
+      "source": "profiles/04-ui.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_UI_LIST_FORMS",
+      "name": "UI_LIST_FORMS",
+      "source": "profiles/04-ui.uicl",
+      "origin": "conversation-design",
+      "verification": "recipe-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_BACKEND_AUTH",
+      "name": "BACKEND_AUTH",
+      "source": "profiles/05-backend.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_BACKEND_ATOMICITY",
+      "name": "BACKEND_ATOMICITY",
+      "source": "profiles/05-backend.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_BACKEND_IDEMPOTENCY",
+      "name": "BACKEND_IDEMPOTENCY",
+      "source": "profiles/05-backend.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_BACKEND_FLOW",
+      "name": "BACKEND_FLOW",
+      "source": "profiles/05-backend.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_APP_PROGRESSIVE",
+      "name": "APP_PROGRESSIVE",
+      "source": "profiles/06-application.uicl",
+      "origin": "conversation-design",
+      "verification": "recipe",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_APP_STORAGE",
+      "name": "APP_STORAGE",
+      "source": "profiles/06-application.uicl",
+      "origin": "conversation-design",
+      "verification": "recipe-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_PG_TYPED_SQL",
+      "name": "PG_TYPED_SQL",
+      "source": "profiles/07-postgresql.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_PG_TRANSACTION_CONFLICT",
+      "name": "PG_TRANSACTION_CONFLICT",
+      "source": "profiles/07-postgresql.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "planner",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_PG_IDENTITY_AND_RLS",
+      "name": "PG_IDENTITY_AND_RLS",
+      "source": "profiles/07-postgresql.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "adapter-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_TEST_ISOLATION",
+      "name": "TEST_ISOLATION",
+      "source": "profiles/08-testing.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_TEST_EVIDENCE",
+      "name": "TEST_EVIDENCE",
+      "source": "profiles/08-testing.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DEPLOY_PLAN",
+      "name": "DEPLOY_PLAN",
+      "source": "profiles/09-deployment.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "planner-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DEPLOY_RECOVERY",
+      "name": "DEPLOY_RECOVERY",
+      "source": "profiles/09-deployment.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DEPLOY_SINGLE_OWNER",
+      "name": "DEPLOY_SINGLE_OWNER",
+      "source": "profiles/09-deployment.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "planner-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_AIGC_CONTRACT",
+      "name": "AIGC_CONTRACT",
+      "source": "profiles/10-aigc.uicl",
+      "origin": "conversation-design",
+      "verification": "type-effect-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_AIGC_GATES",
+      "name": "AIGC_GATES",
+      "source": "profiles/10-aigc.uicl",
+      "origin": "conversation-design",
+      "verification": "adapter-validation",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_AIGC_TIMELINE",
+      "name": "AIGC_TIMELINE",
+      "source": "profiles/10-aigc.uicl",
+      "origin": "conversation-design",
+      "verification": "artifact-validation",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_AGENT_AUTHORITY",
+      "name": "AGENT_AUTHORITY",
+      "source": "profiles/11-agent.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime-security",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_AGENT_EDIT",
+      "name": "AGENT_EDIT",
+      "source": "profiles/11-agent.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime-security",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HYBRID_INFER",
+      "name": "HYBRID_INFER",
+      "source": "profiles/12-hybrid.uicl",
+      "origin": "conversation-design",
+      "verification": "type-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HYBRID_UI",
+      "name": "HYBRID_UI",
+      "source": "profiles/12-hybrid.uicl",
+      "origin": "conversation-design",
+      "verification": "adapter-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_PARSE_FIRST",
+      "name": "HOST_PARSE_FIRST",
+      "source": "profiles/13-document.uicl",
+      "origin": "conversation-design",
+      "verification": "host-parser",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_PRESERVATION",
+      "name": "HOST_PRESERVATION",
+      "source": "profiles/13-document.uicl",
+      "origin": "conversation-design",
+      "verification": "host-editor",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_BOUNDARY",
+      "name": "HOST_BOUNDARY",
+      "source": "profiles/13-document.uicl",
+      "origin": "conversation-design",
+      "verification": "host-parser",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DATASET_RIGHTS",
+      "name": "DATASET_RIGHTS",
+      "source": "profiles/14-dataset.uicl",
+      "origin": "conversation-design",
+      "verification": "governance-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_DATASET_MODALITY",
+      "name": "DATASET_MODALITY",
+      "source": "profiles/14-dataset.uicl",
+      "origin": "conversation-design",
+      "verification": "loader-evaluation",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_NATIVE_BROKER",
+      "name": "NATIVE_BROKER",
+      "source": "profiles/15-native.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "os-adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_NATIVE_LIFETIME",
+      "name": "NATIVE_LIFETIME",
+      "source": "profiles/15-native.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "os-adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_MOBILE_TARGETS",
+      "name": "MOBILE_TARGETS",
+      "source": "profiles/16-mobile.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "build-adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_MOBILE_PERMISSIONS",
+      "name": "MOBILE_PERMISSIONS",
+      "source": "profiles/16-mobile.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "device-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CF_DIALECT",
+      "name": "CF_DIALECT",
+      "source": "profiles/17-cloudflare.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_CF_MANAGED_STATE",
+      "name": "CF_MANAGED_STATE",
+      "source": "profiles/17-cloudflare.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "provider-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_AUTH",
+      "name": "HOST_AUTH",
+      "source": "profiles/18-host.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "ssh-adapter",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_RECONCILE",
+      "name": "HOST_RECONCILE",
+      "source": "profiles/18-host.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "ssh-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_HOST_CLOUD_BOUNDARY",
+      "name": "HOST_CLOUD_BOUNDARY",
+      "source": "profiles/18-host.uicl",
+      "origin": "scenario-review-and-1.0-completion",
+      "verification": "adapter-preflight",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_LIFECYCLE_GATES",
+      "name": "LIFECYCLE_GATES",
+      "source": "profiles/19-lifecycle.uicl",
+      "origin": "conversation-design",
+      "verification": "planner-runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    },
+    {
+      "id": "rule_LIFECYCLE_OBSERVE",
+      "name": "LIFECYCLE_OBSERVE",
+      "source": "profiles/19-lifecycle.uicl",
+      "origin": "conversation-design",
+      "verification": "runtime",
+      "full_semantics_status": "NOT_EVALUATED"
+    }
+  ]
+}

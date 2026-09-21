@@ -1,0 +1,31 @@
+uicl "1.0"
+
+target #uni
+  adapter: "mobile.uniapp_x"
+  framework: uniapp_x
+  platforms:
+    - android
+    - ios
+  toolchain: locked
+
+target #rn
+  adapter: "mobile.react_native"
+  framework: react_native
+  platforms:
+    - android
+    - ios
+  toolchain: locked
+
+app #mobile_notes "跨端便签"
+  targets:
+    - @uni
+    - @rn
+  collection #notes
+    storage: device
+    field "content"
+      type: text
+      min: 1
+  form #editor "新增"
+    create: @notes
+  list #entries
+    source: @notes

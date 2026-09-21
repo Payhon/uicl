@@ -1,0 +1,18 @@
+uicl "1.0"
+
+design.canvas #screen "登录页设计稿"
+  size: [390, 844]
+  editable: true
+  design.layer #background "背景"
+    kind: shape
+    bounds: [0, 0, 390, 844]
+    fill: "#FFFFFF"
+  design.layer #title "标题"
+    kind: text
+    bounds: [24, 80, 342, 56]
+    text: "欢迎回来"
+    fill: "#172033"
+  design.layer #button "按钮区域"
+    kind: shape
+    bounds: [24, 300, 342, 48]
+    fill: "#315BEA"

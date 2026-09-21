@@ -1,0 +1,217 @@
+{
+  "language": "uicl",
+  "core": "1.0",
+  "status": "package-source-lock-not-production-plan",
+  "catalog": [
+    {
+      "id": "uicl.agent",
+      "version": "1.0.0",
+      "source": "profiles/11-agent.uicl",
+      "sha256": "31afccf229815befdb6251fe8ec1339a5b50f854fb05e52d329af154b817233a",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.resource@1.0.0",
+        "uicl.testing@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.aigc",
+      "version": "1.0.0",
+      "source": "profiles/10-aigc.uicl",
+      "sha256": "6265bc45a911d7e4b359c1d2803cd5789f0fd2d1886d62bf1df3744a86d477cd",
+      "requires": [
+        "uicl.resource@1.0.0",
+        "uicl.design@1.0.0",
+        "uicl.testing@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.application",
+      "version": "1.0.0",
+      "source": "profiles/06-application.uicl",
+      "sha256": "4b447bcb28a848743182538cfbe5f1376bbf07584324c83b478dccd99d419865",
+      "requires": [
+        "uicl.ui@1.0.0",
+        "uicl.backend@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.backend",
+      "version": "1.0.0",
+      "source": "profiles/05-backend.uicl",
+      "sha256": "0e2c830dfbfe53393fb94047db4fdba63436ca464df8ee807c4ecf7a39cf063f",
+      "requires": [
+        "uicl.core@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.cloudflare",
+      "version": "1.0.0",
+      "source": "profiles/17-cloudflare.uicl",
+      "sha256": "4eb4e2bd31f043b77664a5ed93902d4fc15084ab8ab224eeda1477f2136d8083",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.deployment@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.core",
+      "version": "1.0.0",
+      "source": "profiles/01-core.uicl",
+      "sha256": "52111dc693259dc9615151b28dce77bd9abb53b3c2c281b7b1f0365fd516f568",
+      "requires": [
+        "uicl.meta@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.dataset",
+      "version": "1.0.0",
+      "source": "profiles/14-dataset.uicl",
+      "sha256": "8537ac5ce2af446161153402e176333289651845631d622d99d71cc55894462a",
+      "requires": [
+        "uicl.resource@1.0.0",
+        "uicl.testing@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.deployment",
+      "version": "1.0.0",
+      "source": "profiles/09-deployment.uicl",
+      "sha256": "2e2d7dc2c07918addb09d4800d56ecd4f0c4aed9a2dd4434550b96410bf9e486",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.resource@1.0.0",
+        "uicl.testing@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.design",
+      "version": "1.0.0",
+      "source": "profiles/03-design.uicl",
+      "sha256": "dcffd2e53a6438cebf0dc0bb0c57d8d8fe8903d744d46306ff93eb2011dc834a",
+      "requires": [
+        "uicl.resource@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.document",
+      "version": "1.0.0",
+      "source": "profiles/13-document.uicl",
+      "sha256": "ac12b5492182c92d3cee891f36b747af4b60bc2110800f101e7a2902cdaeea92",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.resource@1.0.0",
+        "uicl.testing@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.host",
+      "version": "1.0.0",
+      "source": "profiles/18-host.uicl",
+      "sha256": "03619b177f49a9f57e4aa5361739a3a74f4317a62ad7a140fd47bb6141872af5",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.deployment@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.hybrid",
+      "version": "1.0.0",
+      "source": "profiles/12-hybrid.uicl",
+      "sha256": "c8ab837de5be68f45a32c0f9f553e71a984e675b21515595b046970401fff747",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.ui@1.0.0",
+        "uicl.backend@1.0.0",
+        "uicl.aigc@1.0.0",
+        "uicl.agent@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.lifecycle",
+      "version": "1.0.0",
+      "source": "profiles/19-lifecycle.uicl",
+      "sha256": "b8c48f5aacb22913da04b6ad6f7a3063e07862861caef1baae52663364d451c2",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.application@1.0.0",
+        "uicl.testing@1.0.0",
+        "uicl.deployment@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.meta",
+      "version": "1.0.0",
+      "source": "profiles/00-meta.uicl",
+      "sha256": "550d88e3722cc1867cee75d3dd40ef89a762341afbbc89c2bf01b1498336ce74",
+      "requires": []
+    },
+    {
+      "id": "uicl.mobile",
+      "version": "1.0.0",
+      "source": "profiles/16-mobile.uicl",
+      "sha256": "9ee7580e4e40ebb764e296849ac2288704259cfb3138c2a03e0adda15c0566d8",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.application@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.native",
+      "version": "1.0.0",
+      "source": "profiles/15-native.uicl",
+      "sha256": "376001f4b9ab9af15d48a4ff5238ffa8d9ff1f5f5334a27f17762a3364d4dd12",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.resource@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.postgresql",
+      "version": "1.0.0",
+      "source": "profiles/07-postgresql.uicl",
+      "sha256": "429387e8a92f7d0ebf4e0e43aa01befd74abb0d7f983a12185440e75d9db19f0",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.backend@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.resource",
+      "version": "1.0.0",
+      "source": "profiles/02-resource.uicl",
+      "sha256": "67f4b763c33f7139e6f5e7c95f995afc6c3ef82e704c518acdd746cb5e369bd7",
+      "requires": [
+        "uicl.core@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.testing",
+      "version": "1.0.0",
+      "source": "profiles/08-testing.uicl",
+      "sha256": "912017e12c8022e217f3cfe6c698571fcdef927eaad9bc0e97f94a1ee57763de",
+      "requires": [
+        "uicl.ui@1.0.0",
+        "uicl.backend@1.0.0",
+        "uicl.resource@1.0.0"
+      ]
+    },
+    {
+      "id": "uicl.ui",
+      "version": "1.0.0",
+      "source": "profiles/04-ui.uicl",
+      "sha256": "0db33ffdfe611968e21fd22eedf46b5d71087bcf3c2bacd75049e95c1342a396",
+      "requires": [
+        "uicl.core@1.0.0",
+        "uicl.design@1.0.0"
+      ]
+    }
+  ],
+  "verification_environment": {
+    "python": "3.13.5",
+    "markdown_it_py": "4.2.0"
+  },
+  "runtime_adapters": "UNBOUND",
+  "credentials": "UNBOUND",
+  "network_access_performed": false
+}

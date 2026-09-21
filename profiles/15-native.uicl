@@ -1,0 +1,131 @@
+uicl "1.0"
+
+profile #profile_native "桌面原生 API 与系统操作"
+  id: "uicl.native"
+  version: "1.0.0"
+  core: "1.0"
+  status: "consolidated-draft"
+  summary: |
+    原生 API 通过受限类型边界、进程、ABI 和恢复契约接入。
+  requires:
+    - "uicl.core@1.0.0"
+    - "uicl.resource@1.0.0"
+  origin: "scenario-review-and-1.0-completion"
+  implementation: "syntax-shape-prototype; domain-runtime-not-implemented"
+  namespaces:
+    - "native"
+  record_schema #r_NativePolicy "NativePolicy"
+    summary: "允许系统对象与权限。"
+    unknown_fields: "reject"
+    property "allowed_objects"
+      type: "list<text>"
+      description: "允许操作的对象白名单。"
+      required: true
+      expression: false
+    property "execution"
+      type: "text"
+      description: "执行进程位置。"
+      required: true
+      expression: false
+      enum:
+        - "user_process"
+        - "elevated_broker"
+    property "approval"
+      type: "text"
+      description: "每次系统写操作须外部批准。"
+      required: true
+      expression: false
+      enum:
+        - "each_invocation"
+  record_schema #r_NativeRecovery "NativeRecovery"
+    summary: "系统修改恢复条件。"
+    unknown_fields: "reject"
+    property "capture_before"
+      type: "bool"
+      description: "先保存旧值。"
+      required: true
+      expression: false
+    property "restore"
+      type: "text"
+      description: "仅当前值仍为本次写入值时恢复。"
+      required: true
+      expression: false
+      enum:
+        - "compare_and_set"
+        - "not_supported"
+  schema #s_native_operation "native.operation"
+    summary: "有 ABI/权限边界的原生能力。"
+    primary: null
+    identity: "required"
+    children: []
+    unknown_properties: "reject"
+    effects:
+      - "native.invoke"
+    category: "declaration"
+    property "interface"
+      type: "text"
+      description: "版本化系统操作接口。"
+      required: true
+      expression: false
+    property "implementation"
+      type: "ref"
+      description: "源码文件。"
+      required: true
+      expression: false
+      targets:
+        - "file"
+    property "entry"
+      type: "text"
+      description: "已知入口。"
+      required: true
+      expression: false
+    property "input"
+      type: "record"
+      description: "输入类型。"
+      required: true
+      expression: false
+    property "output"
+      type: "text|ref"
+      description: "结果类型。"
+      required: true
+      expression: false
+    property "effects"
+      type: "list<text>"
+      description: "系统副作用。"
+      required: true
+      expression: false
+    property "policy"
+      type: "record<NativePolicy>"
+      description: "白名单与执行权限。"
+      required: true
+      expression: false
+    property "recovery"
+      type: "record<NativeRecovery>"
+      description: "恢复。"
+      required: true
+      expression: false
+    property "threading"
+      type: "text"
+      description: "线程/单元模型要求。"
+      required: true
+      expression: false
+    property "errors"
+      type: "list<text>"
+      description: "失败分类。"
+      required: true
+      expression: false
+    port "output"
+      type: "dynamic"
+      phase: "execution"
+  rule #rule_NATIVE_BROKER "NATIVE_BROKER"
+    level: "MUST"
+    statement: |
+      界面按普通权限运行；提权由受控 broker 和操作系统授权完成。IPC 验证调用方和输入白名单。effects 是声明，不是任意原生代码的隔离证明。
+    verification: "os-adapter"
+    origin: "scenario-review-and-1.0-completion"
+  rule #rule_NATIVE_LIFETIME "NATIVE_LIFETIME"
+    level: "MUST"
+    statement: |
+      ABI、架构、线程、句柄所有权、回调、取消与错误映射必须在接口中固定。恢复 compare-and-set，外部已修改时返回 CONFLICT，不盲目覆盖。
+    verification: "os-adapter"
+    origin: "scenario-review-and-1.0-completion"
