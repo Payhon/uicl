@@ -1,23 +1,27 @@
-name: One-time verified UICL source import
+name: Resume verified UICL source import
 
 on:
   push:
     branches: [main]
     paths:
-      - '.uicl-import/manifest.json'
+      - '.github/workflows/uicl-import.yml'
 
 permissions:
   contents: write
 
+concurrency:
+  group: uicl-one-time-import
+  cancel-in-progress: false
+
 jobs:
   import:
-    if: github.event.head_commit.message == 'chore: upload UICL import payload'
+    if: github.event.head_commit.message == 'chore: resume verified UICL source import'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Verify and import the authorized source snapshot
+      - name: Recover, verify and publish the authorized source snapshot
         shell: bash
         run: |
           python3 - <<'PY'
@@ -34,89 +38,136 @@ jobs:
           repo = os.environ['GITHUB_REPOSITORY']
           assert repo == 'Payhon/uicl', 'Unexpected target repository'
           base = os.environ['GITHUB_SHA']
-          api_root = 'https://api.github.com/repos/' + repo
+          root = 'https://api.github.com/repos/' + repo
           expected_archive = '4f2490ff300a7e9f1da0a96f5be4d2fbacb61687c08096d5ea1fbb386ad8717b'
+          expected_manifest = '0e834e38186cf03525ffe77c0ec91ea5e26e89807894a00aab61e6dbfd128125'
+          part_shas = [
+              '2db0caa547e1d3f7f93ee053e69b646cdea5f677',
+              '8f954e3a1db78d8c90cbe45ee4ed56041fd84141',
+              '2bd443ef8e4cdb1d97c1ff4b87590ae3e3f22384',
+              '1af92ee8d467c163ed1c7f2c3fba25eef1126da5',
+              'bd3b5260c1ae7b474b8d6fff25d8d85ab80e6787',
+              'fcd4742f6287f15d7f5d2a67e09da661e84ac9f7',
+              'c515152600ca798312a572e7eb3a8c84ea1bf40b',
+              '31878624907eb206009be8f5dbe8fd3e12b6822c',
+              '407f2fd064bb370f3efa195caad98ffeeffda2ea',
+              '0b8d5d833ab987ddf4992b78b73600ea1c2a1a5e',
+              '9a271951235cc348025832bb1569c1bd22e3784a',
+              '3c125b89d1730813bf749eb6101dea582ffdad6d',
+              '3f47cf4905c664cbca8532750301fea9cf0384e4',
+              '9cfba5e9f918d75cc85f7b8c74ce3a69f66626f6',
+              'd6c245de19eac239f530937886944112a6abcbe6',
+              'a0f285541e6fad454a52308649be1ed4bf8d3f36',
+          ]
 
           def api(method, path, body=None):
               data = None if body is None else json.dumps(body, ensure_ascii=False).encode('utf-8')
-              request = urllib.request.Request(api_root + path, data=data, method=method, headers={
+              req = urllib.request.Request(root + path, data=data, method=method, headers={
                   'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
                   'Accept': 'application/vnd.github+json',
                   'Content-Type': 'application/json',
                   'X-GitHub-Api-Version': '2022-11-28',
-                  'User-Agent': 'uicl-one-time-source-import',
+                  'User-Agent': 'uicl-verified-source-import',
               })
-              with urllib.request.urlopen(request, timeout=120) as response:
+              with urllib.request.urlopen(req, timeout=120) as response:
                   return json.load(response)
 
-          def content(path):
-              item = api('GET', '/contents/' + path + '?ref=' + base)
-              assert item['encoding'] == 'base64', 'Unexpected contents encoding'
-              return base64.b64decode(item['content'])
+          def git_blob_sha(data):
+              return hashlib.sha1(b'blob ' + str(len(data)).encode('ascii') + b'\0' + data).hexdigest()
 
-          manifest = json.loads(content('.uicl-import/manifest.json'))
-          assert manifest['repository'] == repo
-          assert manifest['archive_sha256'] == expected_archive
-          assert manifest['file_count'] == 170
-          assert manifest['compressed_bytes'] == 138196
-          assert manifest['tar_bytes'] == 1382400
           pieces = []
-          for part in manifest['parts']:
-              assert part['path'].startswith('.uicl-import/part-')
-              piece = content(part['path'])
-              assert len(piece) == part['bytes'], 'Part size mismatch'
-              assert hashlib.sha256(piece).hexdigest() == part['sha256'], 'Part digest mismatch'
+          for index, sha in enumerate(part_shas):
+              item = api('GET', '/git/blobs/' + sha)
+              assert item['encoding'] == 'base64'
+              piece = base64.b64decode(item['content'])
+              assert git_blob_sha(piece) == sha, 'Git blob checksum mismatch'
               pieces.append(piece.strip())
+              print('Recovered part', index + 1, 'of', len(part_shas), flush=True)
           compressed = base64.b64decode(b''.join(pieces), validate=True)
-          assert len(compressed) == manifest['compressed_bytes']
-          assert hashlib.sha256(compressed).hexdigest() == expected_archive
+          assert len(compressed) == 138196, 'Compressed archive size mismatch'
+          assert hashlib.sha256(compressed).hexdigest() == expected_archive, 'Archive checksum mismatch'
           raw = lzma.decompress(compressed, memlimit=512 * 1024 * 1024)
-          assert len(raw) == manifest['tar_bytes']
+          assert len(raw) == 1382400, 'Tar size mismatch'
           files = {}
           with tarfile.open(fileobj=io.BytesIO(raw), mode='r:') as archive:
               for member in archive.getmembers():
-                  name = PurePosixPath(member.name)
-                  assert member.isfile() and not name.is_absolute()
-                  assert '..' not in name.parts and '.git' not in name.parts
-                  assert '.github' not in name.parts and '.uicl-import' not in name.parts
-                  assert member.name not in files
-                  assert member.size <= 2 * 1024 * 1024
+                  path = PurePosixPath(member.name)
+                  assert member.isfile() and not path.is_absolute()
+                  assert '..' not in path.parts and '.git' not in path.parts
+                  assert '.github' not in path.parts and '.uicl-import' not in path.parts
+                  assert str(path) == member.name and member.name not in files
+                  assert 0 <= member.size <= 2 * 1024 * 1024
                   with archive.extractfile(member) as source:
-                      files[member.name] = source.read()
-          assert len(files) == manifest['file_count']
-
-          # The original distribution carries per-file hashes. No source code is executed.
-          for line in files['SHA256SUMS.txt'].decode('utf-8').splitlines():
+                      data = source.read()
+                  assert len(data) == member.size
+                  files[member.name] = data
+          assert len(files) == 170, 'Source file count mismatch'
+          manifest = files['SHA256SUMS.txt']
+          assert hashlib.sha256(manifest).hexdigest() == expected_manifest, 'Distribution manifest changed'
+          verified = 0
+          for line in manifest.decode('utf-8').splitlines():
               if not line.strip():
                   continue
               digest, path = line.split(None, 1)
               path = path.lstrip('* ')
-              assert path in files, 'Missing distribution file: ' + path
-              assert hashlib.sha256(files[path]).hexdigest() == digest, 'Distribution digest mismatch: ' + path
+              assert path in files, 'Missing source: ' + path
+              assert hashlib.sha256(files[path]).hexdigest() == digest, 'Source mismatch: ' + path
+              verified += 1
+          assert verified == 167, 'Unexpected original manifest coverage'
+          print('Verified 168 original distribution files and 2 repository support files.', flush=True)
 
           parent = api('GET', '/git/commits/' + base)
+          old_tree = api('GET', '/git/trees/' + parent['tree']['sha'] + '?recursive=1')
+          assert not old_tree.get('truncated'), 'Incomplete initial tree'
           entries = []
           for path, data in sorted(files.items()):
               entry = {'path': path, 'mode': '100644', 'type': 'blob'}
               try:
                   text = data.decode('utf-8')
                   if '\x00' in text:
-                      raise UnicodeError('Binary file')
+                      raise UnicodeError('Binary data')
                   entry['content'] = text
               except UnicodeError:
-                  blob = api('POST', '/git/blobs', {'content': base64.b64encode(data).decode('ascii'), 'encoding': 'base64'})
+                  blob = api('POST', '/git/blobs', {
+                      'content': base64.b64encode(data).decode('ascii'),
+                      'encoding': 'base64',
+                  })
+                  assert blob['sha'] == git_blob_sha(data)
                   entry['sha'] = blob['sha']
               entries.append(entry)
+          for entry in old_tree['tree']:
+              if entry['type'] == 'blob' and entry['path'].startswith('.uicl-import/'):
+                  entries.append({'path': entry['path'], 'mode': entry['mode'], 'type': 'blob', 'sha': None})
+          current = api('GET', '/git/ref/heads/main')
+          assert current['object']['sha'] == base, 'Concurrent update detected; refusing to overwrite'
           tree = api('POST', '/git/trees', {'base_tree': parent['tree']['sha'], 'tree': entries})
+          stored = api('GET', '/git/trees/' + tree['sha'] + '?recursive=1')
+          assert not stored.get('truncated'), 'Incomplete staged tree'
+          actual = {entry['path']: entry['sha'] for entry in stored['tree'] if entry['type'] == 'blob'}
+          for path, data in files.items():
+              assert actual.get(path) == git_blob_sha(data), 'Remote source mismatch: ' + path
+          assert not any(path.startswith('.uicl-import/') for path in actual)
           commit = api('POST', '/git/commits', {
-              'message': 'feat: import UICL 1.0 specification, profiles, examples and reference tools',
+              'message': 'feat: import verified UICL 1.0 specification, profiles, examples and tools',
               'tree': tree['sha'],
               'parents': [base],
           })
           current = api('GET', '/git/ref/heads/main')
-          assert current['object']['sha'] == base, 'Branch changed; refusing to overwrite concurrent work'
-          api('PATCH', '/git/refs/heads/main', {'sha': commit['sha'], 'force': False})
-          print(json.dumps({'status': 'IMPORTED', 'files': len(files), 'commit': commit['sha'], 'tree': tree['sha']}))
-          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
-              summary.write('Imported 170 verified files without executing source examples.\n\nCommit: `' + commit['sha'] + '`\n')
+          assert current['object']['sha'] == base, 'Concurrent update detected before publication'
+          updated = api('PATCH', '/git/refs/heads/main', {'sha': commit['sha'], 'force': False})
+          assert updated['object']['sha'] == commit['sha']
+          receipt = {
+              'status': 'IMPORTED_AND_VERIFIED',
+              'repository': repo,
+              'files': len(files),
+              'original_distribution_files': 168,
+              'commit': commit['sha'],
+              'tree': tree['sha'],
+              'archive_sha256': expected_archive,
+              'temporary_payloads_removed': True,
+              'source_code_executed': False,
+          }
+          print(json.dumps(receipt, ensure_ascii=False), flush=True)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'w', encoding='utf-8') as summary:
+              summary.write('# Verified UICL source import\n\n```json\n' + json.dumps(receipt, indent=2) + '\n```\n')
           PY
