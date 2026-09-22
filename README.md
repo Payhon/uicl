@@ -4,7 +4,7 @@
 
 UICL 是用于描述意图、内容、资源、应用与执行契约的开放语言设计，标准文件后缀为 `.uicl`。Semaquil 是一种实现品牌，不是该格式的唯一入口。
 
-本仓库收录 UICL 1.0 规范整合稿、20 个领域 Profile、42 份示例文档，以及 Python 参考解析与检查工具。版本 1.0 指规范整合版本，不代表完整编译器、运行时或云部署适配器已经实现。
+本仓库收录 UICL 1.0 规范整合稿、20 个领域 Profile、42 份示例文档、Go 语言核心与 CLI，以及保留的 Python 参考工具。版本 1.0 指规范整合版本，不代表完整编译器、运行时或云部署适配器已经实现。
 
 ## 阅读入口
 
@@ -26,7 +26,32 @@ app "你好"
   ui.text "我的第一个 UICL 应用"
 ```
 
-## 本地验证
+## Go CLI
+
+使用 Go 1.24 或更高版本构建。二进制内嵌标准 Profile，运行不需要 Go、Python 或仓库目录，不自动联网加载模块。
+
+```bash
+go build -o bin/uicl ./cmd/uicl
+./bin/uicl check examples/fullstack/project.uicl --json
+./bin/uicl check examples/hosted/article.uicl examples/hosted/page.html
+./bin/uicl fmt --check examples/02-counter.uicl
+./bin/uicl profile inspect uicl.ui --json
+./bin/uicl explain PRIMARY_CONFLICT
+./bin/uicl lock --check
+
+go test ./...
+go vet ./...
+```
+
+`check` 支持结构化 UICL 和带标记的 Markdown/HTML 契约。`fmt` 默认输出单个文件，`--check` 只检查，`--write` 显式写入；只调整结构空白，保留原文块、注释和宿主正文。详细命令、扩展、标准输入、退出码与 Go API 见 [工具与验证](website/pages/tooling.md)。
+
+## CI/CD
+
+[CLI CI and Release](.github/workflows/ci.yml) 在 PR、推送 `main` 和手动触发时执行三系统原生测试、CLI 冒烟、Linux 短时 fuzz、Python 参考测试与规范派生文件检查。通过后构建 Linux amd64/arm64、macOS amd64/arm64、Windows amd64 压缩包及 `SHA256SUMS`，作为工作流产物保留 14 天。
+
+推送 `v*` 标签会运行同一检查流程，通过后自动创建 GitHub Release 并上传安装包。标签必须与 `types.go` 的 CLI `Version` 一致，例如 `v0.1.0`；发布前先更新版本并提交，再执行 `git tag v0.1.0` 和 `git push origin v0.1.0`。普通分支推送不发布 CLI 正式版本。文档站仍由现有 [Documentation](.github/workflows/docs.yml) 工作流发布到 GitHub Pages。
+
+## Python 参考工具与规范包验证
 
 需要 Python 3.10 或更高版本。Markdown 宿主检查另需安装已固定的依赖。
 

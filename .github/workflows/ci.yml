@@ -1,0 +1,153 @@
+name: CLI CI and Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cli-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  GOTOOLCHAIN: local
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - name: Preserve source bytes for lock verification
+        run: git config --global core.autocrlf false
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - run: go mod verify
+      - name: Check Go formatting
+        if: runner.os == 'Linux'
+        run: |
+          unformatted="$(gofmt -l .)"
+          if [[ -n "$unformatted" ]]; then
+            printf '%s\n' "$unformatted"
+            exit 1
+          fi
+      - run: go test ./...
+      - run: go vet ./...
+      - name: Native CLI smoke tests
+        run: |
+          cli=./bin/uicl
+          if [[ "$RUNNER_OS" == Windows ]]; then cli+=.exe; fi
+          go build -trimpath -o "$cli" ./cmd/uicl
+          "$cli" version
+          "$cli" check examples/fullstack/project.uicl examples/hosted/article.md examples/hosted/page.html examples/hosted/data-block.html --json
+          "$cli" check --extra-profile examples/profile-authoring/measurement-profile.uicl examples/profile-authoring/measurement-example.uicl
+          "$cli" lock --check
+          "$cli" fmt examples/02-counter.uicl > bin/formatted.uicl
+          "$cli" fmt --check bin/formatted.uicl
+      - name: Short fuzz checks
+        if: runner.os == 'Linux'
+        run: |
+          for target in FuzzParseCore FuzzHostParsing FuzzFormat; do
+            go test -run '^$' -fuzz "^${target}$" -fuzztime 5s -parallel 2 .
+          done
+
+  reference:
+    name: Python reference and source consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-host.txt
+      - run: python -m pip install -r requirements-host.txt
+      - run: python tools/rebuild_views.py --check
+      - run: python -m unittest discover -s tests -v
+
+  package:
+    name: Build release archives
+    needs: [test, reference]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Package five platform targets
+        env:
+          CGO_ENABLED: '0'
+        run: |
+          version="$(go run ./cmd/uicl version --json | jq -r '.version')"
+          if [[ "$GITHUB_REF_TYPE" == tag && "$GITHUB_REF_NAME" != "v$version" ]]; then
+            printf 'Tag %s does not match CLI version v%s\n' "$GITHUB_REF_NAME" "$version" >&2
+            exit 1
+          fi
+          mkdir -p dist
+          for target in linux_amd64 linux_arm64 darwin_amd64 darwin_arm64 windows_amd64; do
+            binary=uicl
+            if [[ "$target" == windows_* ]]; then binary+=.exe; fi
+            stage="bin/package/$target"
+            mkdir -p "$stage"
+            GOOS="${target%_*}" GOARCH="${target#*_}" go build -trimpath -o "$stage/$binary" ./cmd/uicl
+            cp README.md "$stage/README.md"
+            cp website/pages/tooling.md "$stage/USAGE.md"
+            if [[ "$target" == windows_* ]]; then
+              zip -j "dist/uicl_${version}_${target}.zip" "$stage/$binary" "$stage/README.md" "$stage/USAGE.md"
+            else
+              tar -czf "dist/uicl_${version}_${target}.tar.gz" -C "$stage" "$binary" README.md USAGE.md
+            fi
+          done
+          cd dist
+          sha256sum ./*.tar.gz ./*.zip > SHA256SUMS
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@v7
+        with:
+          name: uicl-cli-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+  release:
+    name: Publish GitHub Release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: uicl-cli-${{ github.sha }}
+          path: dist
+      - name: Verify downloaded archives
+        working-directory: dist
+        run: sha256sum --check SHA256SUMS
+      - name: Publish versioned binaries and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes --title "UICL CLI $GITHUB_REF_NAME"

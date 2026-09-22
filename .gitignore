@@ -26,3 +26,7 @@ doc_build/
 .rspress/
 website/docs/
 website/sidebar.json
+
+# Local Go CLI binaries
+bin/
+dist/
