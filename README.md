@@ -8,6 +8,7 @@ UICL 是用于描述意图、内容、资源、应用与执行契约的开放语
 
 ## 阅读入口
 
+- [在线文档](https://payhon.github.io/uicl/)
 - [完整使用说明](README.zh-CN.md)
 - [语言规范](spec/UICL-1.0.md) · [UICL 原生文档](spec/UICL-1.0.uicl)
 - [结构化单文件全集](UICL-1.0-Structured.uicl)
@@ -42,6 +43,25 @@ python tools/verify_package.py
 工具只执行其说明的语法、结构、引用与有限静态检查。不会连接示例服务器、调用模型、修改数据库或部署应用。完整类型与效果验证、UI/后端/AIGC/Agent/Wasm 运行时、平台构建和部署适配器尚未实现。
 
 ## 源码与派生文件
+
+### 文档站开发
+
+文档站使用 Rspress，需要 Node.js 24+ 和 pnpm 12.5.1。
+
+```bash
+pnpm install
+pnpm dev
+pnpm check
+pnpm preview
+```
+
+开发及预览地址以命令输出为准，站点路径为 `/uicl/`。`pnpm check` 检查内容接入并构建静态站点，输出到 `doc_build/`。
+
+首页与工具页维护在 `website/pages/`，主题在 `theme/`，静态资源在 `website/public/`。`scripts/prepare-docs.mjs` 从现有规范、Profile 指南与示例生成 `website/docs/`，请勿直接修改生成目录。修改规范源后重新运行 `pnpm dev`，或运行 `pnpm build` 生成发布版本。
+
+GitHub Pages 使用 `.github/workflows/docs.yml` 发布：PR 执行检查，推送 `main` 后构建并部署。首次发布需在仓库 **Settings → Pages → Source** 选择 **GitHub Actions**。站点固定使用 `/uicl/` 前缀；更换仓库名或域名时同步修改 `rspress.config.ts` 的 `base` 和 `siteOrigin`。
+
+### 语言规范派生文件
 
 `spec/`、`profiles/`、`meta/grammar.uicl` 和 `examples/` 是各自的维护入口。单文件全集、文法阅读视图和示例索引由工具派生，不应另行手工编辑。修改规范后运行 `python tools/rebuild_views.py` 并重新验证。
 

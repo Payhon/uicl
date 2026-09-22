@@ -1,0 +1,65 @@
+---
+pageType: doc-wide
+outline: false
+footer: false
+title: UICL 1.0 文档
+description: UICL 通用意图与契约语言文档。包含语言规范、快速入门、领域 Profile、示例及参考检查工具。
+---
+
+<div className="uicl-document-home">
+
+<p className="uicl-document-home__name">Universal Intent and Contract Language · 通用意图与契约语言</p>
+
+UICL 用于描述意图、内容、资源、应用与执行契约，标准文件后缀为 `.uicl`。本网站提供语言规范、领域定义和配套工具的阅读入口。
+
+<div className="uicl-document-home__status">
+<strong>文档版本：1.0 · 规范整合稿</strong><br />
+当前仓库包含规范、示例与 Python 参考检查工具。1.0 表示规范整合版本，完整编译器、运行时与部署适配器尚未实现。
+</div>
+
+<div className="uicl-document-home__columns">
+<div>
+
+## 开始使用
+
+- [语言概览](/overview) — 语言定位、文档结构与实现范围。
+- [快速入门](/spec/Quickstart) — 从最小文档开始，逐步加入状态、事件与集合。
+- [示例目录](/examples/) — 独立领域示例与完整应用契约。
+- [完整应用示例说明](/spec/Fullstack-Walkthrough) — 需求、设计、数据、界面、测试与部署的衔接。
+
+## 语言规范
+
+- [UICL 1.0 语言规范](/spec/UICL-1.0) — 语法、引用、约束与核心规则。
+- [Profile 索引](/spec/Profile-Index) — 20 个领域 Profile 的字段与语义入口。
+- [Profile 作者指南](/spec/Profile-Authoring) — 定义领域词汇、记录、端口与规则。
+- [领域语义与编辑细化](/spec/Domain-Semantics) — 领域语义的解释及编辑边界。
+
+</div>
+<div>
+
+## 最小文档
+
+```text title="hello.uicl"
+uicl "1.0"
+
+app "你好"
+  ui.text "我的第一个 UICL 应用"
+```
+
+这段文档声明一个应用及文本节点。它描述应用契约；实际显示界面需要相应运行时。
+
+## 工具与一致性
+
+- [参考工具与验证范围](/tooling) — 本地解析、结构检查、宿主提取与可重复验证。
+- [编译器与一致性](/spec/Compiler-Conformance) — 检查阶段、结果状态与尚未实现的能力。
+- [来源与迁移](/spec/Migration-Provenance) — 规范来源、迁移规则及维护边界。
+- [GitHub 仓库](https://github.com/Payhon/uicl) — 源文件、工具和问题反馈。
+
+</div>
+</div>
+
+<div className="uicl-document-home__footer">
+文档以仓库规范源为准。Semaquil 是一种实现品牌，UICL 格式保持厂商中立。授权范围与尚待落实的事项见 <a href="https://github.com/Payhon/uicl/blob/main/README.zh-CN.md#维护与开放边界">仓库说明</a>。
+</div>
+
+</div>

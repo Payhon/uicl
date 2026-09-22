@@ -1,0 +1,18 @@
+{
+  "name": "uicl-docs",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node scripts/prepare-docs.mjs && rspress dev",
+    "build": "node scripts/prepare-docs.mjs && rspress build",
+    "preview": "rspress preview",
+    "check": "node scripts/check-docs.mjs && pnpm run build"
+  },
+  "devDependencies": {
+    "@rspress/core": "2.0.22"
+  }
+}
